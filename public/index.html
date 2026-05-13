@@ -854,7 +854,7 @@ ${hasMedia?`מדיה: ${mediaType==='video'?'סרטון (פריים ראשון �
     const res=await fetch('/api/analyze',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,system:SYSTEM_PROMPT,messages:[{role:'user',content:parts}]})
+      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:2000,system:SYSTEM_PROMPT,messages:[{role:'user',content:parts}]})
     });
 
     if(!res.ok){let em='שגיאה '+res.status;try{const e=await res.json();em=e?.error?.message||e?.error||em;}catch(x){}throw new Error(em);}
