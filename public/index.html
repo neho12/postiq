@@ -1314,6 +1314,25 @@ let mediaType = null;
 let fileType  = 'image/jpeg';
 let selPlanId = 'monthly';
 
+/* ══ MAIN TAB SWITCHING ══ */
+function swMainTab(btn,pane){
+  document.querySelectorAll('.main-tab').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.tool-pane').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById(pane).classList.add('on');
+}
+
+/* ══ COMPETITOR TOGGLE ══ */
+function toggleComp(){
+  const sec=document.getElementById('compSection');
+  const arrow=document.getElementById('compToggleArrow');
+  if(!sec||!arrow) return;
+  const isOpen=sec.style.display!=='none';
+  sec.style.display=isOpen?'none':'block';
+  arrow.textContent=isOpen?'(לחץ להוספה)':'(לחץ לסגירה)';
+  arrow.style.color=isOpen?'var(--muted)':'var(--accent2)';
+}
+
 /* ══ CALCULATOR ══ */
 function calcLoss(){
   const posts = parseInt(document.getElementById('postsPerWeek').value)||5;
