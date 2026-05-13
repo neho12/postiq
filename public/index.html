@@ -632,7 +632,7 @@ textarea:focus{border-color:var(--accent);}
 let selectedPlatform = 'instagram';
 let mediaBase64 = null;
 let mediaType   = null;
-let selectedPlan = 'monthly';
+let selectedPlan = 'monthly'; let currentFileType = 'image/jpeg';
 
 const FREE_LIMIT = 3;
 const PAYMENT_URL_MONTHLY = 'https://YOUR-PAYMENT-LINK-MONTHLY'; // ← תחליף בלינק Stripe / PayPlus
@@ -724,7 +724,7 @@ function handleDragOver(e){e.preventDefault();document.getElementById('uploadZon
 function handleDragLeave(){document.getElementById('uploadZone').classList.remove('drag-over');}
 function handleDrop(e){e.preventDefault();document.getElementById('uploadZone').classList.remove('drag-over');const f=e.dataTransfer.files[0];if(f)processMediaFile(f);}
 function handleMediaSelect(e){const f=e.target.files[0];if(f)processMediaFile(f);}
-function processMediaFile(file){
+function processMediaFile(file){ currentFileType = file.type;
   const isVideo=file.type.startsWith('video/'),isImage=file.type.startsWith('image/');
   if(!isVideo&&!isImage){showError('פורמט לא נתמך');return;}
   document.getElementById('mediaNameBadge').textContent=file.name;
@@ -751,7 +751,7 @@ function processMediaFile(file){
         const c=document.createElement('canvas');
         c.width=vid.videoWidth||640;c.height=vid.videoHeight||360;
         c.getContext('2d').drawImage(vid,0,0,c.width,c.height);
-        mediaBase64=c.toDataURL('image/jpeg',.85).split(',')[1];
+        mediaBase64=c.toDataURL('image/png').split(',')[1];
         vid.removeEventListener('seeked',h);
       },{once:true});
     },{once:true});
@@ -848,7 +848,7 @@ ${hasMedia?`מדיה: ${mediaType==='video'?'סרטון (פריים ראשון �
 
   try{
     const parts=[];
-    if(hasMedia&&mediaBase64)parts.push({type:'image',source:{type:'base64',media_type:'image/jpeg',data:mediaBase64}});
+    if(hasMedia&&mediaBase64)parts.push({type:'image',source:{type:'base64',media_type:mediaType==='video'?'image/png':(currentFileType||'image/jpeg'),data:mediaBase64}});
     parts.push({type:'text',text:prompt});
 
     const res=await fetch('/api/analyze',{
