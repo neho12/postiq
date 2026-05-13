@@ -3,620 +3,788 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>PostIQ – מנתח פוסטים חכם</title>
+<title>PostIQ – כל פוסט חלש עולה לך לקוחות</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --bg:#0a0a0f;--surface:#12121a;--surface2:#1a1a26;--border:#2a2a3d;
+  --bg:#07070f;--surface:#0f0f1a;--surface2:#161624;--border:#252538;
   --accent:#7c5cfc;--accent2:#fc5c9c;--accent3:#5cf4fc;
-  --text:#e8e8f0;--text-muted:#7070a0;
+  --text:#eeeef8;--muted:#6868a0;
   --green:#4ade80;--yellow:#facc15;--red:#f87171;
-  --radius:16px;--radius-sm:8px;
+  --r:14px;--rs:8px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:'Heebo',sans-serif;min-height:100vh;overflow-x:hidden;}
-body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+
+/* Ambient glow */
+.glow-bg{position:fixed;inset:0;pointer-events:none;z-index:0;
   background:
-    radial-gradient(ellipse 60% 40% at 80% 10%,rgba(124,92,252,.13) 0%,transparent 60%),
-    radial-gradient(ellipse 50% 30% at 10% 90%,rgba(252,92,156,.09) 0%,transparent 60%),
-    radial-gradient(ellipse 40% 50% at 50% 50%,rgba(92,244,252,.05) 0%,transparent 70%);
-}
+    radial-gradient(ellipse 70% 50% at 80% 0%,rgba(124,92,252,.15) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 40% at 0% 80%,rgba(252,92,156,.1) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 60% at 50% 50%,rgba(92,244,252,.04) 0%,transparent 70%);}
 
-/* ═══════════════════════════════
-   LANDING PAGE
-═══════════════════════════════ */
-#landingPage{position:relative;z-index:1;}
+/* ── NAV ── */
+.nav{display:flex;align-items:center;justify-content:space-between;
+  padding:18px 40px;max-width:1100px;margin:0 auto;position:relative;z-index:10;}
+.nav-logo{font-family:'Space Mono',monospace;font-size:20px;font-weight:700;
+  background:linear-gradient(135deg,#fff 40%,#7c5cfc);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.nav-cta{background:linear-gradient(135deg,#7c5cfc,#fc5c9c);border:none;
+  border-radius:100px;padding:9px 22px;color:#fff;font-family:'Heebo',sans-serif;
+  font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,92,252,.4);}
 
-.hero{text-align:center;padding:80px 24px 60px;}
-.logo-badge{display:inline-flex;align-items:center;gap:8px;
-  background:linear-gradient(135deg,rgba(124,92,252,.2),rgba(252,92,156,.2));
-  border:1px solid rgba(124,92,252,.4);border-radius:100px;
-  padding:6px 18px;font-size:13px;color:var(--accent);
-  font-family:'Space Mono',monospace;margin-bottom:24px;letter-spacing:1px;}
-.logo-badge::before{content:'◈';animation:spin 4s linear infinite;display:inline-block;}
-.hero h1{font-size:clamp(38px,8vw,72px);font-weight:900;line-height:1.05;
-  background:linear-gradient(135deg,#fff 30%,var(--accent) 70%,var(--accent2) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  margin-bottom:20px;}
-.hero-sub{color:var(--text-muted);font-size:18px;font-weight:300;max-width:500px;
-  margin:0 auto 48px;line-height:1.65;}
+/* ── HERO ── */
+.hero{text-align:center;padding:64px 20px 72px;max-width:820px;margin:0 auto;position:relative;z-index:1;}
+.live-badge{display:inline-flex;align-items:center;gap:8px;
+  background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2);
+  border-radius:100px;padding:6px 16px;font-size:13px;color:#4ade80;margin-bottom:28px;}
+.live-dot{width:7px;height:7px;background:#4ade80;border-radius:50%;animation:pulse 2s infinite;}
+.hero-h1{font-size:clamp(40px,8vw,76px);font-weight:900;line-height:1.02;
+  letter-spacing:-2px;margin-bottom:12px;}
+.hero-h1 em{font-style:normal;
+  background:linear-gradient(135deg,#fc5c9c,#7c5cfc);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:18px;color:var(--muted);line-height:1.7;max-width:520px;
+  margin:0 auto 36px;font-weight:300;}
+.hero-cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;}
+.btn-primary{padding:16px 38px;background:linear-gradient(135deg,#7c5cfc,#5c3fdc);
+  border:none;border-radius:12px;color:#fff;font-family:'Heebo',sans-serif;
+  font-size:18px;font-weight:700;cursor:pointer;transition:all .25s;
+  box-shadow:0 10px 36px rgba(124,92,252,.45);}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 18px 48px rgba(124,92,252,.55);}
+.hero-note{font-size:13px;color:rgba(255,255,255,.22);}
 
-/* Features */
-.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:16px;max-width:900px;margin:0 auto 64px;padding:0 24px;}
-.feature-card{background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--radius);padding:24px;text-align:center;
-  transition:border-color .2s,transform .2s;}
-.feature-card:hover{border-color:rgba(124,92,252,.4);transform:translateY(-3px);}
-.feature-icon{font-size:32px;margin-bottom:12px;}
-.feature-title{font-size:15px;font-weight:700;margin-bottom:8px;}
-.feature-desc{font-size:13px;color:var(--text-muted);line-height:1.55;}
+/* ── LOSS CALCULATOR ── */
+.calc-section{max-width:780px;margin:0 auto 90px;padding:0 20px;position:relative;z-index:1;}
+.calc-card{background:linear-gradient(135deg,rgba(252,92,156,.08),rgba(124,92,252,.06));
+  border:1px solid rgba(252,92,156,.25);border-radius:20px;padding:40px;text-align:center;}
+.calc-label{font-size:13px;color:#fc5c9c;font-weight:600;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;}
+.calc-title{font-size:clamp(22px,4vw,34px);font-weight:900;margin-bottom:8px;line-height:1.2;}
+.calc-sub{font-size:15px;color:var(--muted);margin-bottom:32px;}
+.calc-inputs{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;}
+.calc-input-group label{display:block;font-size:12px;color:var(--muted);margin-bottom:8px;text-align:right;}
+.calc-input-group input{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);
+  border-radius:var(--rs);padding:12px 16px;color:var(--text);font-family:'Heebo',sans-serif;
+  font-size:16px;outline:none;transition:border-color .2s;text-align:center;}
+.calc-input-group input:focus{border-color:var(--accent);}
+.calc-result{background:rgba(0,0,0,.3);border-radius:12px;padding:24px;margin-bottom:24px;}
+.calc-result-label{font-size:14px;color:var(--muted);margin-bottom:8px;}
+.calc-result-num{font-size:clamp(36px,7vw,64px);font-weight:900;color:#fc5c9c;font-family:'Space Mono',monospace;}
+.calc-result-sub{font-size:14px;color:var(--muted);margin-top:4px;}
+.calc-result-year{font-size:16px;color:var(--text);margin-top:12px;font-weight:600;}
 
-/* Pricing */
-.pricing-section{max-width:900px;margin:0 auto 80px;padding:0 24px;}
-.pricing-title{text-align:center;font-size:28px;font-weight:900;margin-bottom:8px;}
-.pricing-sub{text-align:center;color:var(--text-muted);font-size:15px;margin-bottom:40px;}
-.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;}
+/* ── STATS BAR ── */
+.stats-bar{background:rgba(255,255,255,.03);border-top:1px solid rgba(255,255,255,.06);
+  border-bottom:1px solid rgba(255,255,255,.06);padding:24px;margin-bottom:90px;position:relative;z-index:1;}
+.stats-inner{max-width:860px;margin:0 auto;display:flex;
+  align-items:center;justify-content:center;gap:0;flex-wrap:wrap;}
+.stat-item{text-align:center;padding:0 32px;}
+.stat-num{font-size:28px;font-weight:900;color:#fff;font-family:'Space Mono',monospace;}
+.stat-label{font-size:12px;color:var(--muted);margin-top:4px;}
+.stat-div{width:1px;height:40px;background:rgba(255,255,255,.08);}
 
-.plan-card{background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--radius);padding:28px;position:relative;transition:transform .2s;}
-.plan-card:hover{transform:translateY(-4px);}
-.plan-card.popular{border-color:var(--accent);background:linear-gradient(135deg,rgba(124,92,252,.08),var(--surface));}
-.popular-badge{position:absolute;top:-12px;right:50%;transform:translateX(50%);
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  border-radius:100px;padding:4px 14px;font-size:12px;font-weight:700;color:#fff;white-space:nowrap;}
-.plan-name{font-size:14px;font-weight:600;color:var(--text-muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;}
-.plan-price{font-size:42px;font-weight:900;margin-bottom:4px;line-height:1;}
-.plan-price span{font-size:16px;font-weight:400;color:var(--text-muted);}
-.plan-period{font-size:13px;color:var(--text-muted);margin-bottom:24px;}
+/* ── BEFORE/AFTER ── */
+.ba-section{max-width:900px;margin:0 auto 90px;padding:0 20px;position:relative;z-index:1;}
+.section-eyebrow{font-size:12px;font-weight:700;color:var(--accent);
+  text-transform:uppercase;letter-spacing:2px;margin-bottom:14px;text-align:center;}
+.section-title{font-size:clamp(26px,5vw,44px);font-weight:900;
+  text-align:center;margin-bottom:12px;line-height:1.15;}
+.section-sub{text-align:center;color:var(--muted);font-size:16px;margin-bottom:44px;line-height:1.6;}
+.ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.ba-card{border-radius:16px;padding:24px;position:relative;overflow:hidden;}
+.ba-before{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);}
+.ba-after{background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.2);}
+.ba-tag{display:inline-flex;align-items:center;gap:6px;border-radius:100px;
+  padding:4px 14px;font-size:12px;font-weight:700;margin-bottom:16px;}
+.ba-tag-before{background:rgba(248,113,113,.15);color:#f87171;}
+.ba-tag-after{background:rgba(74,222,128,.15);color:#4ade80;}
+.ba-post{font-size:14px;line-height:1.75;color:var(--muted);margin-bottom:16px;white-space:pre-line;}
+.ba-post strong{color:var(--text);}
+.ba-metrics{display:flex;gap:10px;flex-wrap:wrap;}
+.ba-metric{background:rgba(255,255,255,.06);border-radius:8px;
+  padding:6px 12px;font-size:12px;color:var(--muted);}
+.ba-metric span{color:var(--text);font-weight:700;}
+.ba-arrow{display:flex;align-items:center;justify-content:center;
+  font-size:28px;color:var(--muted);}
+
+/* ── HOW IT WORKS ── */
+.hiw-section{max-width:860px;margin:0 auto 90px;padding:0 20px;position:relative;z-index:1;}
+.hiw-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.hiw-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;
+  transition:border-color .25s,transform .25s;}
+.hiw-card:hover{border-color:rgba(124,92,252,.4);transform:translateY(-4px);}
+.hiw-num{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;margin-bottom:14px;}
+.hiw-icon{font-size:32px;margin-bottom:14px;}
+.hiw-title{font-size:16px;font-weight:700;margin-bottom:8px;}
+.hiw-desc{font-size:13px;color:var(--muted);line-height:1.65;}
+
+/* ── WHAT YOU GET ── */
+.wyg-section{max-width:860px;margin:0 auto 90px;padding:0 20px;position:relative;z-index:1;}
+.wyg-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+.wyg-item{background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:22px;display:flex;gap:16px;align-items:flex-start;
+  transition:border-color .2s;}
+.wyg-item:hover{border-color:rgba(124,92,252,.35);}
+.wyg-icon{font-size:26px;flex-shrink:0;margin-top:2px;}
+.wyg-title{font-size:15px;font-weight:700;margin-bottom:5px;}
+.wyg-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+
+/* ── TESTIMONIALS ── */
+.testi-section{max-width:900px;margin:0 auto 90px;padding:0 20px;position:relative;z-index:1;}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.testi-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;}
+.testi-stars{color:#facc15;font-size:15px;margin-bottom:14px;}
+.testi-text{font-size:14px;line-height:1.75;color:#b0b0cc;margin-bottom:18px;}
+.testi-text strong{color:var(--text);}
+.testi-author{display:flex;align-items:center;gap:10px;}
+.testi-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.testi-name{font-size:14px;font-weight:700;}
+.testi-role{font-size:12px;color:var(--muted);}
+.testi-result{display:inline-flex;align-items:center;gap:6px;
+  background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.15);
+  border-radius:100px;padding:3px 10px;font-size:11px;color:#4ade80;margin-top:6px;}
+
+/* ── PRICING ── */
+.pricing-section{max-width:860px;margin:0 auto 90px;padding:0 20px;position:relative;z-index:1;}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.plan{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:30px;position:relative;}
+.plan.popular{background:linear-gradient(160deg,rgba(124,92,252,.1),var(--surface));border-color:rgba(124,92,252,.5);}
+.popular-tag{position:absolute;top:-13px;right:50%;transform:translateX(50%);
+  background:linear-gradient(135deg,#7c5cfc,#fc5c9c);
+  border-radius:100px;padding:4px 18px;font-size:12px;font-weight:700;color:#fff;white-space:nowrap;}
+.plan-name{font-size:12px;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;}
+.plan-price{font-size:44px;font-weight:900;line-height:1;margin-bottom:4px;}
+.plan-price sub{font-size:16px;font-weight:400;color:var(--muted);}
+.plan-period{font-size:13px;color:var(--muted);margin-bottom:24px;}
 .plan-features{list-style:none;margin-bottom:28px;}
-.plan-features li{font-size:14px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);
-  display:flex;align-items:center;gap:10px;}
+.plan-features li{font-size:14px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);
+  display:flex;align-items:flex-start;gap:9px;line-height:1.5;}
 .plan-features li:last-child{border-bottom:none;}
-.plan-features li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;}
+.plan-features li::before{content:'✓';color:#4ade80;font-weight:700;flex-shrink:0;margin-top:1px;}
+.plan-btn{width:100%;padding:14px;border-radius:10px;font-family:'Heebo',sans-serif;
+  font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;}
+.plan-btn-outline{background:transparent;border:1px solid var(--border);color:var(--text);}
+.plan-btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+.plan-btn-fill{background:linear-gradient(135deg,#7c5cfc,#5c3fdc);border:none;color:#fff;
+  box-shadow:0 6px 24px rgba(124,92,252,.35);}
+.plan-btn-fill:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(124,92,252,.5);}
+.plan-guarantee{text-align:center;margin-top:24px;font-size:13px;color:var(--muted);}
 
-.plan-btn{width:100%;padding:14px;border:none;border-radius:var(--radius-sm);
-  font-family:'Heebo',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;}
-.plan-btn.outline{background:transparent;border:1px solid var(--border);color:var(--text);}
-.plan-btn.outline:hover{border-color:var(--accent);color:var(--accent);}
-.plan-btn.filled{background:linear-gradient(135deg,var(--accent),#5c3fdc);color:#fff;}
-.plan-btn.filled:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(124,92,252,.4);}
+/* ── FAQ ── */
+.faq-section{max-width:640px;margin:0 auto 90px;padding:0 20px;position:relative;z-index:1;}
+.faq-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  padding:20px 24px;cursor:pointer;transition:border-color .2s;margin-bottom:10px;}
+.faq-item:hover{border-color:rgba(124,92,252,.35);}
+.faq-q{font-size:15px;font-weight:700;display:flex;justify-content:space-between;
+  align-items:center;gap:12px;}
+.faq-arrow{font-size:12px;color:var(--muted);transition:transform .2s;flex-shrink:0;}
+.faq-a{font-size:14px;color:var(--muted);line-height:1.7;margin-top:12px;display:none;}
+.faq-item.open .faq-arrow{transform:rotate(180deg);}
+.faq-item.open .faq-a{display:block;}
 
-/* Free trial */
-.free-trial-banner{
-  max-width:700px;margin:0 auto 80px;padding:0 24px;text-align:center;}
-.free-trial-inner{background:linear-gradient(135deg,rgba(124,92,252,.1),rgba(252,92,156,.08));
-  border:1px solid rgba(124,92,252,.3);border-radius:var(--radius);padding:32px;}
-.free-trial-inner h3{font-size:22px;font-weight:900;margin-bottom:8px;}
-.free-trial-inner p{color:var(--text-muted);font-size:14px;margin-bottom:24px;line-height:1.6;}
-.try-free-btn{display:inline-block;padding:14px 36px;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  border:none;border-radius:var(--radius-sm);color:#fff;
-  font-family:'Heebo',sans-serif;font-size:17px;font-weight:700;
-  cursor:pointer;transition:all .2s;}
-.try-free-btn:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(124,92,252,.45);}
+/* ── FINAL CTA ── */
+.final-cta{text-align:center;padding:60px 20px 100px;position:relative;z-index:1;}
+.final-cta h2{font-size:clamp(28px,6vw,56px);font-weight:900;
+  margin-bottom:16px;line-height:1.1;letter-spacing:-1px;}
+.final-cta p{font-size:17px;color:var(--muted);margin-bottom:36px;}
 
-/* ═══════════════════════════════
-   TOOL PAGE
-═══════════════════════════════ */
+/* ══════════ TOOL PAGE ══════════ */
 #toolPage{display:none;position:relative;z-index:1;}
-.container{max-width:860px;margin:0 auto;padding:40px 24px 80px;}
-
-.tool-header{text-align:center;margin-bottom:36px;}
-.tool-header h2{font-size:28px;font-weight:900;margin-bottom:8px;}
-.tool-header p{color:var(--text-muted);font-size:15px;}
-.back-btn{display:inline-flex;align-items:center;gap:6px;background:var(--surface2);
-  border:1px solid var(--border);border-radius:100px;padding:6px 14px;
-  font-size:13px;color:var(--text-muted);cursor:pointer;transition:all .2s;
-  margin-bottom:20px;font-family:'Heebo',sans-serif;}
+.tool-wrap{max-width:860px;margin:0 auto;padding:32px 20px 80px;}
+.tool-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px;}
+.back-btn{display:inline-flex;align-items:center;gap:6px;background:var(--surface);
+  border:1px solid var(--border);border-radius:100px;padding:7px 16px;
+  font-size:13px;color:var(--muted);cursor:pointer;transition:all .2s;font-family:'Heebo',sans-serif;}
 .back-btn:hover{border-color:var(--accent);color:var(--accent);}
-
-/* Usage counter */
-.usage-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
-  padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
-.usage-text{font-size:13px;color:var(--text-muted);}
-.usage-text strong{color:var(--text);}
-.usage-dots{display:flex;gap:5px;}
-.usage-dot{width:10px;height:10px;border-radius:50%;background:var(--border);transition:background .3s;}
-.usage-dot.used{background:var(--accent);}
-.upgrade-link{font-size:12px;color:var(--accent);cursor:pointer;text-decoration:underline;}
+.usage-pill{background:var(--surface);border:1px solid var(--border);border-radius:100px;
+  padding:7px 18px;font-size:13px;display:flex;align-items:center;gap:10px;}
+.usage-dots{display:flex;gap:4px;}
+.udot{width:9px;height:9px;border-radius:50%;background:var(--border);transition:background .3s;}
+.udot.used{background:var(--accent);}
+.upgrade-link{font-size:12px;color:var(--accent);cursor:pointer;text-decoration:underline;white-space:nowrap;}
 
 /* Input card */
-.input-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+.input-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;
   padding:28px;margin-bottom:20px;position:relative;overflow:hidden;}
 .input-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
   background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3));}
-.input-label{font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;
-  letter-spacing:1.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
-.input-label span{width:6px;height:6px;background:var(--accent);border-radius:50%;display:inline-block;}
+.lbl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;
+  letter-spacing:1.5px;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.lbl::before{content:'';width:5px;height:5px;background:var(--accent);border-radius:50%;}
 
-.platform-selector{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
-.platform-btn{background:var(--surface2);border:1px solid var(--border);border-radius:100px;
-  padding:8px 16px;font-family:'Heebo',sans-serif;font-size:13px;color:var(--text-muted);
+.plat-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px;}
+.plat-btn{background:var(--surface2);border:1px solid var(--border);border-radius:100px;
+  padding:7px 15px;font-family:'Heebo',sans-serif;font-size:13px;color:var(--muted);
   cursor:pointer;transition:all .2s;}
-.platform-btn:hover{border-color:var(--accent);color:var(--text);}
-.platform-btn.active{background:rgba(124,92,252,.15);border-color:var(--accent);color:var(--accent);}
+.plat-btn:hover{border-color:var(--accent);color:var(--text);}
+.plat-btn.on{background:rgba(124,92,252,.15);border-color:var(--accent);color:var(--accent);}
 
-.meta-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
-select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);
-  padding:11px 14px;color:var(--text);font-family:'Heebo',sans-serif;font-size:14px;
-  outline:none;cursor:pointer;transition:border-color .2s;appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%237070a0' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+.meta-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;}
+select{width:100%;background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--rs);padding:11px 14px;color:var(--text);
+  font-family:'Heebo',sans-serif;font-size:14px;outline:none;cursor:pointer;
+  transition:border-color .2s;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236868a0' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:left 12px center;}
 select:focus{border-color:var(--accent);}
 select option{background:var(--surface2);}
 
-textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);
-  padding:16px;color:var(--text);font-family:'Heebo',sans-serif;font-size:15px;
-  line-height:1.75;resize:vertical;min-height:150px;transition:border-color .2s;outline:none;}
-textarea::placeholder{color:var(--text-muted);}
+textarea{width:100%;background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--rs);padding:14px;color:var(--text);
+  font-family:'Heebo',sans-serif;font-size:15px;line-height:1.75;
+  resize:vertical;min-height:140px;transition:border-color .2s;outline:none;}
+textarea::placeholder{color:var(--muted);}
 textarea:focus{border-color:var(--accent);}
-.char-counter{text-align:left;font-family:'Space Mono',monospace;font-size:11px;color:var(--text-muted);margin-top:8px;}
+.char-c{text-align:left;font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);margin-top:6px;}
 
-/* Media */
-.media-type-tabs{display:flex;gap:8px;margin-bottom:12px;}
-.media-tab{background:var(--surface2);border:1px solid var(--border);border-radius:100px;
-  padding:6px 14px;font-family:'Heebo',sans-serif;font-size:12px;color:var(--text-muted);cursor:pointer;transition:all .2s;}
-.media-tab:hover{border-color:var(--accent);color:var(--text);}
-.media-tab.active{background:rgba(124,92,252,.15);border-color:var(--accent);color:var(--accent);}
-.upload-zone{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:24px;
+.media-tabs{display:flex;gap:7px;margin-bottom:10px;}
+.mtab{background:var(--surface2);border:1px solid var(--border);border-radius:100px;
+  padding:6px 14px;font-family:'Heebo',sans-serif;font-size:12px;color:var(--muted);cursor:pointer;transition:all .2s;}
+.mtab:hover{border-color:var(--accent);}
+.mtab.on{background:rgba(124,92,252,.15);border-color:var(--accent);color:var(--accent);}
+.upload-zone{border:2px dashed var(--border);border-radius:var(--rs);padding:22px;
   text-align:center;cursor:pointer;transition:all .25s;position:relative;background:var(--surface2);}
-.upload-zone:hover,.upload-zone.drag-over{border-color:var(--accent);background:rgba(124,92,252,.06);}
-.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-.upload-icon{font-size:26px;margin-bottom:8px;}
-.upload-title{font-size:14px;font-weight:600;margin-bottom:4px;}
-.upload-sub{font-size:12px;color:var(--text-muted);}
-.video-note{background:rgba(250,204,21,.07);border:1px solid rgba(250,204,21,.2);
-  border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;color:var(--yellow);margin-top:10px;display:none;}
-.video-note.visible{display:block;}
-.media-preview-wrap{display:none;position:relative;border-radius:var(--radius-sm);overflow:hidden;background:#000;margin-top:4px;}
-.media-preview-wrap.visible{display:block;}
-.media-preview-wrap img,.media-preview-wrap video{width:100%;max-height:300px;object-fit:contain;display:block;}
-.media-remove-btn{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.75);
-  border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:4px 12px;
-  font-size:12px;color:#fff;cursor:pointer;font-family:'Heebo',sans-serif;}
-.media-remove-btn:hover{background:rgba(248,113,113,.6);}
-.media-name-badge{position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.7);
-  border-radius:100px;padding:4px 12px;font-size:11px;color:var(--text-muted);font-family:'Space Mono',monospace;}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:rgba(124,92,252,.05);}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.video-note{background:rgba(250,204,21,.06);border:1px solid rgba(250,204,21,.2);
+  border-radius:var(--rs);padding:10px 14px;font-size:13px;color:#facc15;margin-top:8px;display:none;}
+.video-note.on{display:block;}
+.media-prev{display:none;position:relative;border-radius:var(--rs);overflow:hidden;background:#000;margin-top:4px;}
+.media-prev.on{display:block;}
+.media-prev img,.media-prev video{width:100%;max-height:280px;object-fit:contain;display:block;}
+.rm-btn{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.75);
+  border:1px solid rgba(255,255,255,.15);border-radius:100px;padding:4px 10px;
+  font-size:11px;color:#fff;cursor:pointer;font-family:'Heebo',sans-serif;}
+.rm-btn:hover{background:rgba(248,113,113,.6);}
+.media-name{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.7);
+  border-radius:100px;padding:3px 10px;font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;}
 
-.analyze-btn{width:100%;margin-top:20px;padding:16px;
-  background:linear-gradient(135deg,var(--accent),#5c3fdc);
-  border:none;border-radius:var(--radius-sm);color:#fff;
-  font-family:'Heebo',sans-serif;font-size:17px;font-weight:700;
-  cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;align-items:center;justify-content:center;gap:10px;}
-.analyze-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 40px rgba(124,92,252,.4);}
-.analyze-btn:disabled{opacity:.55;cursor:not-allowed;transform:none;}
+.analyze-btn{width:100%;margin-top:18px;padding:15px;
+  background:linear-gradient(135deg,#7c5cfc,#5c3fdc);border:none;
+  border-radius:var(--rs);color:#fff;font-family:'Heebo',sans-serif;
+  font-size:17px;font-weight:700;cursor:pointer;
+  transition:transform .2s,box-shadow .2s;
+  display:flex;align-items:center;justify-content:center;gap:8px;}
+.analyze-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 36px rgba(124,92,252,.45);}
+.analyze-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 
-.error-msg{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.3);
-  border-radius:var(--radius-sm);padding:14px 18px;color:var(--red);font-size:14px;display:none;margin-top:12px;}
-.error-msg.visible{display:block;}
+.err{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.25);
+  border-radius:var(--rs);padding:12px 16px;color:var(--red);font-size:14px;display:none;margin-top:12px;}
+.err.on{display:block;}
 
 /* Loading */
-.loading-state{display:none;text-align:center;padding:50px 20px;}
-.loading-state.visible{display:block;}
-.loader-ring{width:60px;height:60px;border:3px solid var(--border);border-top-color:var(--accent);
+.loading{display:none;text-align:center;padding:48px 20px;}
+.loading.on{display:block;}
+.ring{width:56px;height:56px;border:3px solid var(--border);border-top-color:var(--accent);
   border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 20px;}
-.loading-text{color:var(--text-muted);font-size:15px;}
-.loading-steps{display:flex;flex-direction:column;gap:8px;margin-top:14px;align-items:center;}
-.loading-step{font-size:13px;color:var(--text-muted);opacity:0;transition:opacity .3s;}
-.loading-step.active{opacity:1;color:var(--accent);}
-.loading-step.done{opacity:.5;}
-.loading-step.done::before{content:'✓ ';color:var(--green);}
+.loading-txt{color:var(--muted);font-size:15px;}
+.loading-steps{display:flex;flex-direction:column;gap:7px;margin-top:14px;align-items:center;}
+.lstep{font-size:13px;color:var(--muted);opacity:0;transition:opacity .3s;}
+.lstep.on{opacity:1;color:var(--accent);}
+.lstep.done{opacity:.5;}
+.lstep.done::before{content:'✓ ';color:var(--green);}
 
 /* Results */
 #results{display:none;}
-#results.visible{display:block;animation:fadeUp .5s ease both;}
-.result-tabs{display:flex;margin-bottom:18px;background:var(--surface);
-  border:1px solid var(--border);border-radius:var(--radius-sm);padding:4px;}
-.result-tab{flex:1;padding:10px;text-align:center;font-size:14px;font-weight:600;
-  cursor:pointer;border-radius:6px;transition:all .2s;color:var(--text-muted);
-  border:none;background:none;font-family:'Heebo',sans-serif;}
-.result-tab.active{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
-.tab-pane{display:none;}
-.tab-pane.active{display:block;}
+#results.on{display:block;animation:fadeUp .5s ease both;}
 
-.score-hero{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+/* Score hero */
+.score-hero{background:var(--surface);border:1px solid var(--border);border-radius:16px;
   padding:28px;margin-bottom:18px;display:flex;align-items:center;gap:28px;}
 .score-circle{position:relative;flex-shrink:0;}
 .score-svg{width:110px;height:110px;transform:rotate(-90deg);}
 .score-track{fill:none;stroke:var(--border);stroke-width:8;}
 .score-fill{fill:none;stroke-width:8;stroke-linecap:round;
-  transition:stroke-dashoffset 1.3s cubic-bezier(.4,0,.2,1);stroke:url(#scoreGrad);}
-.score-number{position:absolute;inset:0;display:flex;flex-direction:column;
+  transition:stroke-dashoffset 1.3s cubic-bezier(.4,0,.2,1);stroke:url(#sg);}
+.score-num{position:absolute;inset:0;display:flex;flex-direction:column;
   align-items:center;justify-content:center;font-weight:900;font-size:26px;line-height:1;}
-.score-label-sm{font-size:11px;color:var(--text-muted);font-weight:400;font-family:'Space Mono',monospace;}
-.score-details{flex:1;}
+.score-num small{font-size:10px;color:var(--muted);font-weight:400;font-family:'Space Mono',monospace;}
+.score-info{flex:1;}
 .score-verdict{font-size:20px;font-weight:700;margin-bottom:8px;}
-.score-summary{color:var(--text-muted);font-size:14px;line-height:1.65;}
+.score-summary{color:var(--muted);font-size:14px;line-height:1.65;}
 
-.categories-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-bottom:18px;}
-.category-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;transition:border-color .2s,transform .2s;}
-.category-card:hover{border-color:rgba(124,92,252,.4);transform:translateY(-2px);}
-.cat-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
-.cat-name{font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px;}
-.cat-icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;}
-.cat-score{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;}
-.progress-bar{height:4px;background:var(--border);border-radius:100px;overflow:hidden;}
-.progress-fill{height:100%;border-radius:100px;transition:width 1s cubic-bezier(.4,0,.2,1);}
-.cat-desc{font-size:12px;color:var(--text-muted);margin-top:8px;line-height:1.5;}
+/* Loss banner */
+.loss-banner{background:linear-gradient(135deg,rgba(248,113,113,.1),rgba(252,92,156,.06));
+  border:1px solid rgba(248,113,113,.25);border-radius:12px;padding:16px 20px;
+  margin-bottom:18px;display:flex;align-items:center;gap:14px;}
+.loss-icon{font-size:28px;flex-shrink:0;}
+.loss-text{font-size:14px;line-height:1.6;}
+.loss-text strong{color:#fc5c9c;font-size:16px;}
 
-.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:14px;overflow:hidden;}
-.panel-header{padding:15px 20px;font-size:14px;font-weight:600;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);}
-.panel-body{padding:16px 20px;}
-.insight-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:14px;line-height:1.6;}
-.insight-item:last-child{border-bottom:none;padding-bottom:0;}
-.insight-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:7px;}
+/* Before/After in results */
+.ba-result{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;}
+.ba-result-card{border-radius:12px;padding:18px;}
+.bar-before{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);}
+.bar-after{background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.2);}
+.bar-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+.bar-before .bar-label{color:#f87171;}
+.bar-after .bar-label{color:#4ade80;}
+.bar-text{font-size:14px;line-height:1.7;color:var(--muted);}
+.bar-text strong{color:var(--text);}
 
-.improved-post{background:rgba(124,92,252,.06);border:1px solid rgba(124,92,252,.25);
-  border-radius:var(--radius-sm);padding:20px;font-size:15px;line-height:1.8;white-space:pre-wrap;position:relative;}
-.copy-btn{position:absolute;top:12px;left:12px;background:var(--surface2);border:1px solid var(--border);
-  border-radius:6px;padding:5px 11px;font-size:12px;color:var(--text-muted);
-  cursor:pointer;font-family:'Heebo',sans-serif;transition:all .2s;}
+/* Categories */
+.cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:18px;}
+.cat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:15px;
+  transition:border-color .2s,transform .2s;}
+.cat:hover{border-color:rgba(124,92,252,.4);transform:translateY(-2px);}
+.cat-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.cat-name{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;}
+.cat-ico{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;}
+.cat-sc{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;}
+.prog{height:3px;background:var(--border);border-radius:100px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:100px;transition:width 1s cubic-bezier(.4,0,.2,1);}
+.cat-desc{font-size:12px;color:var(--muted);margin-top:7px;line-height:1.5;}
+
+/* Panels */
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;margin-bottom:14px;overflow:hidden;}
+.panel-head{padding:14px 18px;font-size:14px;font-weight:600;
+  display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);}
+.panel-body{padding:16px 18px;}
+.insight{display:flex;gap:10px;padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,.04);font-size:14px;line-height:1.6;}
+.insight:last-child{border-bottom:none;padding-bottom:0;}
+.idot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:7px;}
+
+.improved-box{background:rgba(124,92,252,.06);border:1px solid rgba(124,92,252,.2);
+  border-radius:var(--rs);padding:18px;font-size:15px;line-height:1.8;
+  white-space:pre-wrap;position:relative;}
+.copy-btn{position:absolute;top:10px;left:10px;background:var(--surface2);
+  border:1px solid var(--border);border-radius:6px;padding:5px 10px;
+  font-size:12px;color:var(--muted);cursor:pointer;font-family:'Heebo',sans-serif;transition:all .2s;}
 .copy-btn:hover{border-color:var(--accent);color:var(--accent);}
 
-.tag{display:inline-flex;align-items:center;padding:4px 10px;border-radius:100px;font-size:12px;font-weight:500;}
-.tag-good{background:rgba(74,222,128,.1);color:var(--green);border:1px solid rgba(74,222,128,.2);}
-.tag-warn{background:rgba(250,204,21,.1);color:var(--yellow);border:1px solid rgba(250,204,21,.2);}
-.tag-bad{background:rgba(248,113,113,.1);color:var(--red);border:1px solid rgba(248,113,113,.2);}
-.hashtag-list{display:flex;flex-wrap:wrap;gap:8px;}
-.hashtag{background:var(--surface2);border:1px solid var(--border);border-radius:100px;
-  padding:5px 13px;font-size:13px;color:var(--accent3);cursor:pointer;
+.tags-row{display:flex;flex-wrap:wrap;gap:7px;}
+.htag{background:var(--surface2);border:1px solid var(--border);border-radius:100px;
+  padding:5px 12px;font-size:12px;color:var(--accent3);cursor:pointer;
   transition:all .2s;font-family:'Space Mono',monospace;}
-.hashtag:hover{border-color:var(--accent3);background:rgba(92,244,252,.08);}
+.htag:hover{border-color:var(--accent3);background:rgba(92,244,252,.07);}
 
-.media-thumb{width:100%;border-radius:var(--radius-sm);overflow:hidden;background:#000;
-  max-height:250px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
-.media-thumb img,.media-thumb video{width:100%;max-height:250px;object-fit:contain;}
-.visual-score-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.04);}
-.visual-score-row:last-child{border-bottom:none;}
-.visual-score-label{flex:1;font-size:14px;}
-.visual-score-label small{display:block;color:var(--text-muted);font-size:12px;margin-top:2px;}
-.visual-score-val{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;min-width:36px;text-align:center;}
-.visual-bar-wrap{width:100px;}
+/* Visual */
+.vtab-row{display:flex;margin-bottom:16px;background:var(--surface);
+  border:1px solid var(--border);border-radius:var(--rs);padding:3px;}
+.vtab{flex:1;padding:9px;text-align:center;font-size:14px;font-weight:600;
+  cursor:pointer;border-radius:6px;color:var(--muted);
+  border:none;background:none;font-family:'Heebo',sans-serif;transition:all .2s;}
+.vtab.on{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+.vpane{display:none;}
+.vpane.on{display:block;}
+.media-thumb{border-radius:var(--rs);overflow:hidden;background:#000;
+  max-height:240px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+.media-thumb img,.media-thumb video{width:100%;max-height:240px;object-fit:contain;}
+.vrow{display:flex;align-items:center;gap:12px;padding:11px 0;
+  border-bottom:1px solid rgba(255,255,255,.04);}
+.vrow:last-child{border-bottom:none;}
+.vrow-label{flex:1;font-size:14px;}
+.vrow-label small{display:block;color:var(--muted);font-size:12px;margin-top:2px;}
+.vrow-val{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;min-width:32px;text-align:center;}
+.vbar{width:90px;}
 
-.share-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
-  padding:16px 20px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+/* Share */
+.share-row{background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:16px 18px;margin-bottom:14px;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;flex-wrap:wrap;}
 .share-btns{display:flex;gap:8px;flex-wrap:wrap;}
-.share-btn{background:var(--surface2);border:1px solid var(--border);border-radius:100px;
-  padding:8px 14px;font-size:13px;color:var(--text-muted);cursor:pointer;
+.sbtn{background:var(--surface2);border:1px solid var(--border);border-radius:100px;
+  padding:8px 14px;font-size:13px;color:var(--muted);cursor:pointer;
   transition:all .2s;font-family:'Heebo',sans-serif;}
-.share-btn:hover{border-color:var(--accent);color:var(--accent);}
-.share-btn.primary{background:rgba(124,92,252,.15);border-color:var(--accent);color:var(--accent);}
+.sbtn:hover{border-color:var(--accent);color:var(--accent);}
+.sbtn.p{background:rgba(124,92,252,.15);border-color:var(--accent);color:var(--accent);}
 
 /* Paywall modal */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);
-  z-index:1000;display:none;align-items:center;justify-content:center;padding:24px;}
-.modal-overlay.visible{display:flex;}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);
+  z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;}
+.overlay.on{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;
   padding:36px;max-width:480px;width:100%;text-align:center;position:relative;}
-.modal-icon{font-size:48px;margin-bottom:16px;}
-.modal h3{font-size:24px;font-weight:900;margin-bottom:10px;}
-.modal p{color:var(--text-muted);font-size:15px;line-height:1.65;margin-bottom:28px;}
-.modal-plans{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
-.modal-plan{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);
-  padding:18px;cursor:pointer;transition:all .2s;text-align:center;}
-.modal-plan:hover,.modal-plan.selected{border-color:var(--accent);background:rgba(124,92,252,.1);}
-.modal-plan-name{font-size:13px;color:var(--text-muted);margin-bottom:6px;}
-.modal-plan-price{font-size:26px;font-weight:900;}
-.modal-plan-price span{font-size:13px;font-weight:400;color:var(--text-muted);}
-.modal-plan-desc{font-size:12px;color:var(--text-muted);margin-top:4px;}
-.modal-pay-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),#5c3fdc);
-  border:none;border-radius:var(--radius-sm);color:#fff;
-  font-family:'Heebo',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;}
-.modal-pay-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(124,92,252,.4);}
-.modal-close{position:absolute;top:14px;left:14px;background:var(--surface2);border:1px solid var(--border);
-  border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;
-  cursor:pointer;font-size:14px;color:var(--text-muted);transition:all .2s;}
-.modal-close:hover{border-color:var(--red);color:var(--red);}
-.modal-note{font-size:12px;color:var(--text-muted);margin-top:12px;}
+.modal-x{position:absolute;top:14px;left:14px;background:var(--surface2);
+  border:1px solid var(--border);border-radius:50%;width:28px;height:28px;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  font-size:13px;color:var(--muted);}
+.modal-x:hover{border-color:var(--red);color:var(--red);}
+.modal-emoji{font-size:48px;margin-bottom:16px;}
+.modal h3{font-size:22px;font-weight:900;margin-bottom:10px;}
+.modal p{color:var(--muted);font-size:15px;line-height:1.65;margin-bottom:28px;}
+.modal-plans{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;}
+.mplan{background:var(--surface2);border:1px solid var(--border);border-radius:10px;
+  padding:16px;cursor:pointer;transition:all .2s;text-align:center;}
+.mplan:hover,.mplan.on{border-color:var(--accent);background:rgba(124,92,252,.1);}
+.mplan-name{font-size:12px;color:var(--muted);margin-bottom:6px;}
+.mplan-price{font-size:24px;font-weight:900;}
+.mplan-price span{font-size:13px;font-weight:400;color:var(--muted);}
+.mplan-desc{font-size:12px;color:var(--muted);margin-top:3px;}
+.modal-pay{width:100%;padding:14px;background:linear-gradient(135deg,#7c5cfc,#5c3fdc);
+  border:none;border-radius:10px;color:#fff;font-family:'Heebo',sans-serif;
+  font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;}
+.modal-pay:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(124,92,252,.45);}
+.modal-note{font-size:12px;color:var(--muted);margin-top:10px;}
 
-@keyframes fadeDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
+/* Misc */
+.tag-chip{display:inline-flex;align-items:center;padding:4px 10px;border-radius:100px;font-size:12px;font-weight:500;}
+.tc-g{background:rgba(74,222,128,.1);color:#4ade80;border:1px solid rgba(74,222,128,.2);}
+.tc-y{background:rgba(250,204,21,.1);color:#facc15;border:1px solid rgba(250,204,21,.2);}
+.tc-r{background:rgba(248,113,113,.1);color:#f87171;border:1px solid rgba(248,113,113,.2);}
+
+@keyframes fadeDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+@keyframes countup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar{width:5px;}
 ::-webkit-scrollbar-track{background:var(--bg);}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
 
-@media(max-width:768px){
-  /* Landing page nav */
-  nav{padding:16px 20px!important;}
-
-  /* Hero */
-  .hero{padding:40px 16px 50px!important;}
-
-  /* Stats bar - stack on mobile */
-  .stats-bar-inner{flex-direction:column!important;gap:16px!important;}
-  .stats-divider{display:none!important;}
-
-  /* How it works - single column */
-  .how-grid{grid-template-columns:1fr!important;}
-
-  /* Testimonials - single column */
-  .testimonials-grid{grid-template-columns:1fr!important;}
-
-  /* Pricing - single column */
-  .pricing-grid-new{grid-template-columns:1fr!important;}
-
-  /* FAQ */
-  .faq-item{padding:16px!important;}
-
-  /* Nav buttons */
-  .nav-btn-outline,.nav-btn-filled{padding:7px 14px!important;font-size:13px!important;}
-}
-
-@media(max-width:600px){
+/* ── MOBILE ── */
+@media(max-width:700px){
+  .nav{padding:14px 18px;}
+  .hero{padding:44px 16px 56px;}
+  .calc-inputs{grid-template-columns:1fr;}
+  .stats-inner{gap:0;}
+  .stat-item{padding:12px 18px;}
+  .stat-div{width:100%;height:1px;margin:0;}
+  .ba-grid,.ba-result{grid-template-columns:1fr;}
+  .ba-arrow{transform:rotate(90deg);}
+  .hiw-grid{grid-template-columns:1fr;}
+  .wyg-grid{grid-template-columns:1fr;}
+  .testi-grid{grid-template-columns:1fr;}
+  .pricing-grid{grid-template-columns:1fr;}
+  .modal-plans{grid-template-columns:1fr;}
   .score-hero{flex-direction:column;text-align:center;}
-  .categories-grid{grid-template-columns:1fr;}
+  .cats{grid-template-columns:1fr;}
   #swGrid,#visualSwGrid{grid-template-columns:1fr!important;}
   .meta-row{grid-template-columns:1fr;}
-  .modal-plans{grid-template-columns:1fr;}
-  .visual-bar-wrap{width:70px;}
-  .platform-selector{gap:6px;}
-  .platform-btn{padding:6px 12px;font-size:12px;}
-  .usage-bar{flex-wrap:wrap;gap:8px;}
-  .share-panel{flex-direction:column;}
+  .plat-btn{padding:6px 11px;font-size:12px;}
+  .share-row{flex-direction:column;}
+  .vbar{width:70px;}
+  .ba-result{grid-template-columns:1fr;}
+  .loss-banner{flex-direction:column;text-align:center;}
 }
 </style>
 </head>
 <body>
+<div class="glow-bg"></div>
 
-<!-- ══════════════ LANDING PAGE ══════════════ -->
+<!-- ══ LANDING ══ -->
 <div id="landingPage">
 
-  <!-- NAV -->
-  <nav style="display:flex;align-items:center;justify-content:space-between;padding:20px 40px;position:relative;z-index:10;max-width:1100px;margin:0 auto;flex-wrap:wrap;gap:12px;">
-    <div style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;background:linear-gradient(135deg,#fff,#7c5cfc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">PostIQ</div>
-    <div style="display:flex;align-items:center;gap:12px;">
-      <button onclick="startFreeTrial()" style="background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:100px;padding:8px 20px;color:#fff;font-family:'Heebo',sans-serif;font-size:14px;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='rgba(124,92,252,.6)'" onmouseout="this.style.borderColor='rgba(255,255,255,.15)'">התחברות</button>
-      <button onclick="startFreeTrial()" style="background:linear-gradient(135deg,#7c5cfc,#fc5c9c);border:none;border-radius:100px;padding:8px 20px;color:#fff;font-family:'Heebo',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">נסה חינם</button>
-    </div>
+  <nav class="nav">
+    <div class="nav-logo">PostIQ</div>
+    <button class="nav-cta" onclick="startTrial()">נסה חינם ←</button>
   </nav>
 
   <!-- HERO -->
-  <div style="text-align:center;padding:60px 24px 80px;position:relative;max-width:900px;margin:0 auto;">
-
-    <!-- Live badge -->
-    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.25);border-radius:100px;padding:6px 16px;font-size:13px;color:#4ade80;margin-bottom:32px;">
-      <span style="width:7px;height:7px;background:#4ade80;border-radius:50%;display:inline-block;animation:pulse 2s infinite;"></span>
-      נוסה על ידי 1,240+ בעלי עסקים ישראלים
+  <div class="hero">
+    <div class="live-badge"><div class="live-dot"></div> 1,240+ בעלי עסקים משתמשים</div>
+    <h1 class="hero-h1">כל פוסט חלש<br/>עולה לך <em>לקוחות.</em></h1>
+    <p class="hero-sub">PostIQ מנתח את הפוסט, התמונה והסרטון שלך ברמת מומחה שיווק — ומחזיר פוסט משופר מוכן להעתקה תוך 15 שניות.</p>
+    <div class="hero-cta-row">
+      <button class="btn-primary" onclick="startTrial()">נתח פוסט אחד חינם ←</button>
     </div>
-
-    <h1 style="font-size:clamp(42px,8vw,80px);font-weight:900;line-height:1;margin-bottom:24px;letter-spacing:-1px;">
-      הפוסט שלך מפסיד<br/>
-      <span style="background:linear-gradient(135deg,#7c5cfc,#fc5c9c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">לקוחות בכל יום.</span>
-    </h1>
-
-    <p style="color:#9090b8;font-size:19px;font-weight:300;max-width:520px;margin:0 auto 40px;line-height:1.7;">
-      PostIQ מנתח את הפוסט, התמונה והסרטון שלך ברמת מומחה שיווק — ומחזיר פוסט משופר מוכן להעתקה תוך 10 שניות.
-    </p>
-
-    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:40px;">
-      <button onclick="startFreeTrial()" style="padding:16px 36px;background:linear-gradient(135deg,#7c5cfc,#5c3fdc);border:none;border-radius:12px;color:#fff;font-family:'Heebo',sans-serif;font-size:18px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 8px 32px rgba(124,92,252,.4);" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 16px 48px rgba(124,92,252,.5)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 8px 32px rgba(124,92,252,.4)'">
-        נסה 3 ניתוחים חינם ←
-      </button>
-      <button onclick="startFreeTrial()" style="padding:16px 36px;background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:12px;color:#fff;font-family:'Heebo',sans-serif;font-size:18px;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='rgba(124,92,252,.5)'" onmouseout="this.style.borderColor='rgba(255,255,255,.15)'">
-        ראה דוגמה ▶
-      </button>
-    </div>
-
-    <p style="font-size:13px;color:#5050708;color:rgba(255,255,255,.3);">ללא כרטיס אשראי · ללא הרשמה · 3 ניתוחים מלאים חינם</p>
+    <p class="hero-note">ניתוח אחד חינם · ללא כרטיס אשראי · ללא הרשמה</p>
   </div>
 
-  <!-- SOCIAL PROOF BAR -->
-  <div style="background:rgba(255,255,255,.03);border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);padding:20px 24px;margin-bottom:80px;">
-    <div style="max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;">
-      <div style="text-align:center;">
-        <div style="font-size:26px;font-weight:900;color:#fff;">1,240+</div>
-        <div style="font-size:12px;color:#7070a0;">בעלי עסקים</div>
+  <!-- LOSS CALCULATOR -->
+  <div class="calc-section">
+    <div class="calc-card">
+      <div class="calc-label">מחשבון הפסדים</div>
+      <h2 class="calc-title">כמה לקוחות אתה מפסיד<br/>בגלל פוסטים חלשים?</h2>
+      <p class="calc-sub">הכנס את הנתונים שלך — תופתע מהתוצאה</p>
+      <div class="calc-inputs">
+        <div class="calc-input-group">
+          <label>כמה פוסטים אתה מפרסם בשבוע?</label>
+          <input type="number" id="postsPerWeek" value="5" min="1" max="50" oninput="calcLoss()"/>
+        </div>
+        <div class="calc-input-group">
+          <label>ממוצע עוקבים / חשיפה לפוסט</label>
+          <input type="number" id="followers" value="1000" min="100" oninput="calcLoss()"/>
+        </div>
       </div>
-      <div style="width:1px;height:36px;background:rgba(255,255,255,.08);"></div>
-      <div style="text-align:center;">
-        <div style="font-size:26px;font-weight:900;color:#fff;">18,500+</div>
-        <div style="font-size:12px;color:#7070a0;">פוסטים נותחו</div>
+      <div class="calc-result">
+        <div class="calc-result-label">לקוחות פוטנציאליים שאתה מפסיד כל חודש</div>
+        <div class="calc-result-num" id="calcNum">0</div>
+        <div class="calc-result-sub">בגלל פוסטים שלא עובדים כמו שצריך</div>
+        <div class="calc-result-year" id="calcYear"></div>
       </div>
-      <div style="width:1px;height:36px;background:rgba(255,255,255,.08);"></div>
-      <div style="text-align:center;">
-        <div style="font-size:26px;font-weight:900;color:#fff;">4.9 ★</div>
-        <div style="font-size:12px;color:#7070a0;">דירוג משתמשים</div>
-      </div>
-      <div style="width:1px;height:36px;background:rgba(255,255,255,.08);"></div>
-      <div style="text-align:center;">
-        <div style="font-size:26px;font-weight:900;color:#fff;">+340%</div>
-        <div style="font-size:12px;color:#7070a0;">עלייה ממוצעת במעורבות</div>
-      </div>
+      <button class="btn-primary" onclick="startTrial()" style="width:100%;font-size:16px;">
+        תפסיק להפסיד — נתח פוסט עכשיו ←
+      </button>
     </div>
   </div>
 
-  <!-- PROBLEM SECTION -->
-  <div style="max-width:800px;margin:0 auto 80px;padding:0 24px;text-align:center;">
-    <div style="font-size:13px;color:#7c5cfc;font-weight:600;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;">הבעיה האמיתית</div>
-    <h2 style="font-size:clamp(28px,5vw,48px);font-weight:900;margin-bottom:20px;line-height:1.15;">רוב הפוסטים של בעלי עסקים<br/>לא עובדים — והם לא יודעים למה</h2>
-    <p style="color:#7070a0;font-size:17px;line-height:1.7;">האלגוריתמים השתנו. הקהל השתנה. מה שעבד לפני שנה כבר לא עובד היום. בלי לדעת מה שגוי — אי אפשר לתקן.</p>
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stats-inner">
+      <div class="stat-item"><div class="stat-num">1,240+</div><div class="stat-label">בעלי עסקים</div></div>
+      <div class="stat-div"></div>
+      <div class="stat-item"><div class="stat-num">18,500+</div><div class="stat-label">פוסטים נותחו</div></div>
+      <div class="stat-div"></div>
+      <div class="stat-item"><div class="stat-num">4.9★</div><div class="stat-label">דירוג ממוצע</div></div>
+      <div class="stat-div"></div>
+      <div class="stat-item"><div class="stat-num">+340%</div><div class="stat-label">עלייה ממוצעת במעורבות</div></div>
+    </div>
+  </div>
+
+  <!-- BEFORE/AFTER -->
+  <div class="ba-section">
+    <div class="section-eyebrow">לפני ואחרי</div>
+    <h2 class="section-title">ראה את ההבדל בעצמך</h2>
+    <p class="section-sub">אותו עסק, אותו מוצר — פוסט שונה לגמרי</p>
+    <div class="ba-grid">
+      <div class="ba-card ba-before">
+        <div class="ba-tag ba-tag-before">✗ לפני PostIQ</div>
+        <div class="ba-post">סלון יופי שמח להודיע על מבצע מניקור!
+השירות שלנו הכי טוב בעיר.
+בואו לבקר אותנו 😊
+#מניקור #סלוןיופי #מבצע</div>
+        <div class="ba-metrics">
+          <div class="ba-metric">❤️ <span>12</span> לייקים</div>
+          <div class="ba-metric">💬 <span>1</span> תגובה</div>
+          <div class="ba-metric">👁️ <span>89</span> צפיות</div>
+        </div>
+      </div>
+      <div class="ba-card ba-after">
+        <div class="ba-tag ba-tag-after">✓ אחרי PostIQ</div>
+        <div class="ba-post"><strong>הציפורניים שלך מספרות עליך — מה הן אומרות?</strong>
+
+מניקור ג'ל שמחזיק 3 שבועות, בלי סדקים ובלי להתקלף — כי אנחנו משתמשות רק בחומרים מקצועיים.
+
+📍 נשארו 3 מקומות לשבוע הבא
+⏰ הזמיני עכשיו בלינק בביו
+
+#מניקורמקצועי #סלוןיופיתלאביב #ציפורניים</div>
+        <div class="ba-metrics">
+          <div class="ba-metric">❤️ <span>247</span> לייקים</div>
+          <div class="ba-metric">💬 <span>43</span> תגובות</div>
+          <div class="ba-metric">👁️ <span>3,200</span> צפיות</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- HOW IT WORKS -->
-  <div style="max-width:900px;margin:0 auto 80px;padding:0 24px;">
-    <div style="text-align:center;margin-bottom:48px;">
-      <div style="font-size:13px;color:#7c5cfc;font-weight:600;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;">איך זה עובד</div>
-      <h2 style="font-size:clamp(28px,5vw,44px);font-weight:900;">3 שלבים פשוטים</h2>
+  <div class="hiw-section">
+    <div class="section-eyebrow">איך זה עובד</div>
+    <h2 class="section-title">3 שלבים. 15 שניות.</h2>
+    <p class="section-sub">מהדבקת הפוסט ועד פוסט משופר מוכן להעתקה</p>
+    <div class="hiw-grid">
+      <div class="hiw-card">
+        <div class="hiw-num" style="color:#7c5cfc">01 ──</div>
+        <div class="hiw-icon">📋</div>
+        <div class="hiw-title">הדבק את הפוסט</div>
+        <div class="hiw-desc">כיתוב + תמונה או סרטון. בחר פלטפורמה, תחום עסק ומטרת הפוסט.</div>
+      </div>
+      <div class="hiw-card">
+        <div class="hiw-num" style="color:#fc5c9c">02 ──</div>
+        <div class="hiw-icon">🧠</div>
+        <div class="hiw-title">AI מנתח ברמת מומחה</div>
+        <div class="hiw-desc">ניתוח Hook, אלגוריתם, ויזואל, קריאה לפעולה, מסר ועוד — ביחס ל-benchmark אמיתי.</div>
+      </div>
+      <div class="hiw-card">
+        <div class="hiw-num" style="color:#5cf4fc">03 ──</div>
+        <div class="hiw-icon">🚀</div>
+        <div class="hiw-title">קבל פוסט משופר</div>
+        <div class="hiw-desc">פוסט חדש מוכן להעתקה, ציון מ-0 עד 100, האשטגים, והצעד הבא.</div>
+      </div>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;">
-      <div style="background:rgba(124,92,252,.06);border:1px solid rgba(124,92,252,.2);border-radius:16px;padding:28px;position:relative;">
-        <div style="font-family:'Space Mono',monospace;font-size:11px;color:#7c5cfc;margin-bottom:16px;letter-spacing:2px;">01</div>
-        <div style="font-size:32px;margin-bottom:14px;">📋</div>
-        <div style="font-size:17px;font-weight:700;margin-bottom:8px;">הדבק את הפוסט</div>
-        <div style="font-size:14px;color:#7070a0;line-height:1.6;">כיתוב + תמונה או סרטון. בחר את הפלטפורמה ומטרת הפוסט.</div>
+  </div>
+
+  <!-- WHAT YOU GET -->
+  <div class="wyg-section">
+    <div class="section-eyebrow">מה מקבלים</div>
+    <h2 class="section-title">ניתוח שלם — לא רק ציון</h2>
+    <p class="section-sub">כל ניתוח כולל 7 דברים שיגרמו לפוסט הבא שלך לעבוד</p>
+    <div class="wyg-grid">
+      <div class="wyg-item">
+        <div class="wyg-icon">🎯</div>
+        <div><div class="wyg-title">ניתוח Hook ופתיחה</div><div class="wyg-desc">האם 3 המילים הראשונות עוצרות את הגלילה? מה לשנות ואיך.</div></div>
       </div>
-      <div style="background:rgba(252,92,156,.06);border:1px solid rgba(252,92,156,.2);border-radius:16px;padding:28px;">
-        <div style="font-family:'Space Mono',monospace;font-size:11px;color:#fc5c9c;margin-bottom:16px;letter-spacing:2px;">02</div>
-        <div style="font-size:32px;margin-bottom:14px;">🧠</div>
-        <div style="font-size:17px;font-weight:700;margin-bottom:8px;">AI מנתח ברמת מומחה</div>
-        <div style="font-size:14px;color:#7070a0;line-height:1.6;">ניתוח hook, אלגוריתם, ויזואל, קריאה לפעולה ועוד 6 פרמטרים.</div>
+      <div class="wyg-item">
+        <div class="wyg-icon">⚡</div>
+        <div><div class="wyg-title">התאמה לאלגוריתם</div><div class="wyg-desc">האם הפוסט מותאם לאיך שהאלגוריתם של הפלטפורמה שלך עובד עכשיו.</div></div>
       </div>
-      <div style="background:rgba(92,244,252,.06);border:1px solid rgba(92,244,252,.2);border-radius:16px;padding:28px;">
-        <div style="font-family:'Space Mono',monospace;font-size:11px;color:#5cf4fc;margin-bottom:16px;letter-spacing:2px;">03</div>
-        <div style="font-size:32px;margin-bottom:14px;">🚀</div>
-        <div style="font-size:17px;font-weight:700;margin-bottom:8px;">קבל פוסט משופר</div>
-        <div style="font-size:14px;color:#7070a0;line-height:1.6;">פוסט מוכן להעתקה, האשטגים, ציון מ-0 עד 100 ואסטרטגיה.</div>
+      <div class="wyg-item">
+        <div class="wyg-icon">🖼️</div>
+        <div><div class="wyg-title">ניתוח תמונה וסרטון</div><div class="wyg-desc">עיצוב, קומפוזיציה, hook ויזואלי ומיתוג — המלצות ספציפיות לתמונה שלך.</div></div>
+      </div>
+      <div class="wyg-item">
+        <div class="wyg-icon">✨</div>
+        <div><div class="wyg-title">פוסט משופר מוכן</div><div class="wyg-desc">פוסט חדש לגמרי עם Hook מקצועי, גוף מעניין וקריאה לפעולה שעובדת.</div></div>
+      </div>
+      <div class="wyg-item">
+        <div class="wyg-icon">#</div>
+        <div><div class="wyg-title">10 האשטגים מותאמים</div><div class="wyg-desc">האשטגים ספציפיים לתחום שלך, לפלטפורמה ולמטרת הפוסט.</div></div>
+      </div>
+      <div class="wyg-item">
+        <div class="wyg-icon">📊</div>
+        <div><div class="wyg-title">ציון מ-0 עד 100</div><div class="wyg-desc">ציון מציאותי בהשוואה לפוסטים של עסקים דומים — לא מנופח.</div></div>
       </div>
     </div>
   </div>
 
   <!-- TESTIMONIALS -->
-  <div style="max-width:900px;margin:0 auto 80px;padding:0 24px;">
-    <div style="text-align:center;margin-bottom:40px;">
-      <div style="font-size:13px;color:#7c5cfc;font-weight:600;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;">מה אומרים עלינו</div>
-      <h2 style="font-size:clamp(26px,4vw,40px);font-weight:900;">בעלי עסקים שכבר משתמשים</h2>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;">
-      <div style="background:#12121a;border:1px solid #2a2a3d;border-radius:16px;padding:24px;">
-        <div style="color:#facc15;font-size:16px;margin-bottom:12px;">★★★★★</div>
-        <p style="font-size:15px;line-height:1.7;color:#c0c0d8;margin-bottom:16px;">"הפוסט שלי קיבל ציון 38. אחרי השיפור של PostIQ — 87. המעורבות שלי עלתה פי 4 תוך שבוע."</p>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#7c5cfc,#fc5c9c);display:flex;align-items:center;justify-content:center;font-size:16px;">💅</div>
-          <div><div style="font-size:14px;font-weight:700;">מיכל כהן</div><div style="font-size:12px;color:#7070a0;">קוסמטיקאית, תל אביב</div></div>
+  <div class="testi-section">
+    <div class="section-eyebrow">מה אומרים</div>
+    <h2 class="section-title">תוצאות אמיתיות</h2>
+    <p class="section-sub">בעלי עסקים שניסו — ולא חזרו לפוסטים הישנים</p>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">הפוסט שלי קיבל ציון <strong>38</strong>. בניתי את הפוסט המשופר מ-PostIQ ופרסמתי — קיבלתי <strong>247 לייקים</strong> במקום 12. כלום לא השתנה חוץ מהכיתוב.</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,#7c5cfc,#fc5c9c)">💅</div>
+          <div>
+            <div class="testi-name">מיכל כהן</div>
+            <div class="testi-role">קוסמטיקאית, תל אביב</div>
+            <div class="testi-result">↑ 1,958% עלייה במעורבות</div>
+          </div>
         </div>
       </div>
-      <div style="background:#12121a;border:1px solid #2a2a3d;border-radius:16px;padding:24px;">
-        <div style="color:#facc15;font-size:16px;margin-bottom:12px;">★★★★★</div>
-        <p style="font-size:15px;line-height:1.7;color:#c0c0d8;margin-bottom:16px;">"השתמשתי בו על פוסט Instagram שלי ולא הבנתי למה הוא לא עובד. PostIQ מצא 3 בעיות שלא ראיתי."</p>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#5cf4fc,#7c5cfc);display:flex;align-items:center;justify-content:center;font-size:16px;">🍕</div>
-          <div><div style="font-size:14px;font-weight:700;">יוסי לוי</div><div style="font-size:12px;color:#7070a0;">בעל מסעדה, חיפה</div></div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">לא הבנתי למה הפוסטים שלי לא עובדים. PostIQ מצא שה-<strong>Hook שלי גנרי</strong> ואין קריאה לפעולה ברורה. תוך שבוע התחלתי לקבל פניות מהסטוריז.</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,#5cf4fc,#7c5cfc)">🍕</div>
+          <div>
+            <div class="testi-name">יוסי לוי</div>
+            <div class="testi-role">בעל מסעדה, חיפה</div>
+            <div class="testi-result">↑ פניות חדשות מסושמ</div>
+          </div>
         </div>
       </div>
-      <div style="background:#12121a;border:1px solid #2a2a3d;border-radius:16px;padding:24px;">
-        <div style="color:#facc15;font-size:16px;margin-bottom:12px;">★★★★★</div>
-        <p style="font-size:15px;line-height:1.7;color:#c0c0d8;margin-bottom:16px;">"49 שקל לחודש זה כלום לעומת מה שחסכתי על יועץ שיווק. הכלי עושה בדיוק מה שצריך."</p>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#fc5c9c,#facc15);display:flex;align-items:center;justify-content:center;font-size:16px;">🏋️</div>
-          <div><div style="font-size:14px;font-weight:700;">דנה שמיר</div><div style="font-size:12px;color:#7070a0;">מאמנת כושר, ירושלים</div></div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">שילמתי ₪49 לחודש ו<strong>חסכתי ₪600</strong> שהייתי משלמת ליועץ שיווק. הכלי עושה בדיוק מה שצריך — עם יותר דיוק ממה שציפיתי.</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,#fc5c9c,#facc15)">🏋️</div>
+          <div>
+            <div class="testi-name">דנה שמיר</div>
+            <div class="testi-role">מאמנת כושר, ירושלים</div>
+            <div class="testi-result">↑ חיסכון של ₪600/חודש</div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- PRICING -->
-  <div style="max-width:860px;margin:0 auto 80px;padding:0 24px;">
-    <div style="text-align:center;margin-bottom:48px;">
-      <div style="font-size:13px;color:#7c5cfc;font-weight:600;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;">תמחור</div>
-      <h2 style="font-size:clamp(28px,5vw,44px);font-weight:900;margin-bottom:12px;">פשוט ושקוף</h2>
-      <p style="color:#7070a0;font-size:16px;">התחל חינם. שדרג כשתראה את התוצאות.</p>
+  <div class="pricing-section">
+    <div class="section-eyebrow">תמחור</div>
+    <h2 class="section-title">השקעה קטנה. תוצאות גדולות.</h2>
+    <p class="section-sub">ניתוח אחד חינם. שדרג כשתראה את ההבדל.</p>
+    <div class="pricing-grid">
+      <div class="plan">
+        <div class="plan-name">חינמי</div>
+        <div class="plan-price">₪0</div>
+        <div class="plan-period">לנסיון</div>
+        <ul class="plan-features">
+          <li>ניתוח אחד מלא</li>
+          <li>ניתוח כיתוב + ויזואל</li>
+          <li>פוסט משופר</li>
+          <li>האשטגים מומלצים</li>
+        </ul>
+        <button class="plan-btn plan-btn-outline" onclick="startTrial()">התחל חינם</button>
+      </div>
+      <div class="plan popular">
+        <div class="popular-tag">⭐ הכי פופולרי</div>
+        <div class="plan-name">חודשי</div>
+        <div class="plan-price">₪49 <sub>/ חודש</sub></div>
+        <div class="plan-period">ניתוחים ללא הגבלה</div>
+        <ul class="plan-features">
+          <li>ניתוחים ללא הגבלה</li>
+          <li>ניתוח תמונה וסרטון</li>
+          <li>פוסט משופר מלא</li>
+          <li>10 האשטגים מותאמים</li>
+          <li>אסטרטגיית תוכן</li>
+          <li>ביטול בכל עת</li>
+        </ul>
+        <button class="plan-btn plan-btn-fill" onclick="showPaywall('monthly')">התחל עכשיו</button>
+      </div>
+      <div class="plan">
+        <div class="plan-name">שנתי — חיסכון 40%</div>
+        <div class="plan-price">₪29 <sub>/ חודש</sub></div>
+        <div class="plan-period">₪348 לשנה</div>
+        <ul class="plan-features">
+          <li>כל מה שבמנוי חודשי</li>
+          <li>עדיפות בתמיכה</li>
+          <li>תכונות חדשות ראשון</li>
+        </ul>
+        <button class="plan-btn plan-btn-outline" onclick="showPaywall('yearly')">בחר שנתי</button>
+      </div>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;">
-
-      <div style="background:#12121a;border:1px solid #2a2a3d;border-radius:16px;padding:28px;">
-        <div style="font-size:12px;font-weight:600;color:#7070a0;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;">חינמי</div>
-        <div style="font-size:40px;font-weight:900;margin-bottom:4px;">₪0</div>
-        <div style="font-size:13px;color:#7070a0;margin-bottom:24px;">לנסיון</div>
-        <ul style="list-style:none;margin-bottom:28px;">
-          <li style="font-size:14px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:8px;"><span style="color:#4ade80">✓</span> 3 ניתוחים מלאים</li>
-          <li style="font-size:14px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:8px;"><span style="color:#4ade80">✓</span> ניתוח כיתוב</li>
-          <li style="font-size:14px;padding:7px 0;display:flex;align-items:center;gap:8px;"><span style="color:#4ade80">✓</span> פוסט משופר</li>
-        </ul>
-        <button onclick="startFreeTrial()" style="width:100%;padding:13px;background:transparent;border:1px solid #2a2a3d;border-radius:10px;color:#fff;font-family:'Heebo',sans-serif;font-size:15px;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='#7c5cfc'" onmouseout="this.style.borderColor='#2a2a3d'">התחל חינם</button>
-      </div>
-
-      <div style="background:linear-gradient(135deg,rgba(124,92,252,.12),rgba(252,92,156,.08));border:1px solid rgba(124,92,252,.4);border-radius:16px;padding:28px;position:relative;">
-        <div style="position:absolute;top:-13px;right:50%;transform:translateX(50%);background:linear-gradient(135deg,#7c5cfc,#fc5c9c);border-radius:100px;padding:4px 16px;font-size:12px;font-weight:700;color:#fff;white-space:nowrap;">⭐ הכי פופולרי</div>
-        <div style="font-size:12px;font-weight:600;color:#7c5cfc;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;">חודשי</div>
-        <div style="font-size:40px;font-weight:900;margin-bottom:4px;">₪49</div>
-        <div style="font-size:13px;color:#7070a0;margin-bottom:24px;">לחודש</div>
-        <ul style="list-style:none;margin-bottom:28px;">
-          <li style="font-size:14px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:8px;"><span style="color:#4ade80">✓</span> ניתוחים ללא הגבלה</li>
-          <li style="font-size:14px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:8px;"><span style="color:#4ade80">✓</span> ניתוח תמונה וסרטון</li>
-          <li style="font-size:14px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:8px;"><span style="color:#4ade80">✓</span> פוסט משופר מלא</li>
-          <li style="font-size:14px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:8px;"><span style="color:#4ade80">✓</span> 10 האשטגים מותאמים</li>
-          <li style="font-size:14px;padding:7px 0;display:flex;align-items:center;gap:8px;"><span style="color:#4ade80">✓</span> אסטרטגיית תוכן</li>
-        </ul>
-        <button onclick="showPaywall('monthly')" style="width:100%;padding:13px;background:linear-gradient(135deg,#7c5cfc,#5c3fdc);border:none;border-radius:10px;color:#fff;font-family:'Heebo',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 6px 24px rgba(124,92,252,.35);" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">התחל עכשיו</button>
-      </div>
-
-      <div style="background:#12121a;border:1px solid #2a2a3d;border-radius:16px;padding:28px;">
-        <div style="font-size:12px;font-weight:600;color:#7070a0;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;">שנתי — חיסכון 40%</div>
-        <div style="font-size:40px;font-weight:900;margin-bottom:4px;">₪29</div>
-        <div style="font-size:13px;color:#7070a0;margin-bottom:24px;">לחודש · ₪348 לשנה</div>
-        <ul style="list-style:none;margin-bottom:28px;">
-          <li style="font-size:14px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:8px;"><span style="color:#4ade80">✓</span> כל מה שבחודשי</li>
-          <li style="font-size:14px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:8px;"><span style="color:#4ade80">✓</span> עדיפות בתמיכה</li>
-          <li style="font-size:14px;padding:7px 0;display:flex;align-items:center;gap:8px;"><span style="color:#4ade80">✓</span> תכונות חדשות ראשון</li>
-        </ul>
-        <button onclick="showPaywall('yearly')" style="width:100%;padding:13px;background:transparent;border:1px solid #2a2a3d;border-radius:10px;color:#fff;font-family:'Heebo',sans-serif;font-size:15px;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='#7c5cfc'" onmouseout="this.style.borderColor='#2a2a3d'">בחר שנתי</button>
-      </div>
-
-    </div>
+    <p class="plan-guarantee">🔒 תשלום מאובטח · ביטול בכל עת · ללא קנסות</p>
   </div>
 
   <!-- FAQ -->
-  <div style="max-width:640px;margin:0 auto 80px;padding:0 24px;">
-    <div style="text-align:center;margin-bottom:40px;">
-      <h2 style="font-size:clamp(24px,4vw,38px);font-weight:900;">שאלות נפוצות</h2>
+  <div class="faq-section">
+    <div class="section-eyebrow">שאלות נפוצות</div>
+    <h2 class="section-title" style="margin-bottom:32px;">יש לך שאלות?</h2>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">האם צריך ידע בשיווק? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">לא. הכלי מסביר הכל בעברית פשוטה ונותן המלצות ספציפיות שאפשר ליישם מיד, גם בלי רקע בשיווק.</div>
     </div>
-    <div style="display:flex;flex-direction:column;gap:12px;">
-      <div style="background:#12121a;border:1px solid #2a2a3d;border-radius:12px;padding:20px;">
-        <div style="font-size:15px;font-weight:700;margin-bottom:8px;">האם צריך ידע בשיווק כדי להשתמש?</div>
-        <div style="font-size:14px;color:#7070a0;line-height:1.6;">לא. הכלי מסביר הכל בעברית פשוטה ונותן המלצות ספציפיות שאפשר ליישם מיד.</div>
-      </div>
-      <div style="background:#12121a;border:1px solid #2a2a3d;border-radius:12px;padding:20px;">
-        <div style="font-size:15px;font-weight:700;margin-bottom:8px;">כמה זמן לוקח ניתוח אחד?</div>
-        <div style="font-size:14px;color:#7070a0;line-height:1.6;">בין 10 ל-20 שניות. אתה מקבל ניתוח מלא — כולל פוסט משופר, ציון, האשטגים ואסטרטגיה.</div>
-      </div>
-      <div style="background:#12121a;border:1px solid #2a2a3d;border-radius:12px;padding:20px;">
-        <div style="font-size:15px;font-weight:700;margin-bottom:8px;">האם אפשר לבטל את המנוי בכל עת?</div>
-        <div style="font-size:14px;color:#7070a0;line-height:1.6;">כן, ביטול בלחיצה אחת בכל עת. אין התחייבות ואין קנסות.</div>
-      </div>
-      <div style="background:#12121a;border:1px solid #2a2a3d;border-radius:12px;padding:20px;">
-        <div style="font-size:15px;font-weight:700;margin-bottom:8px;">לאיזה פלטפורמות זה מתאים?</div>
-        <div style="font-size:14px;color:#7070a0;line-height:1.6;">Instagram, Facebook, LinkedIn, TikTok ו-X (Twitter). כל ניתוח מותאם לאלגוריתם הספציפי של הפלטפורמה שבחרת.</div>
-      </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">כמה זמן לוקח ניתוח? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">בין 10 ל-20 שניות. בסוף מקבלים ניתוח מלא עם פוסט משופר, ציון, המלצות והאשטגים.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">האם אפשר לבטל את המנוי? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">כן, ביטול בלחיצה אחת בכל עת. אין התחייבות ואין קנסות. המנוי יופסק בסוף תקופת החיוב.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">לאיזה פלטפורמות מתאים? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">Instagram, Facebook, LinkedIn, TikTok ו-X (Twitter). כל ניתוח מותאם לאלגוריתם הספציפי של הפלטפורמה.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">האם הפוסט המשופר אמיתי? <span class="faq-arrow">▼</span></div>
+      <div class="faq-a">כן. ה-AI כותב פוסט חדש לגמרי מותאם לעסק שלך, לפלטפורמה ולמטרה — לא תבנית גנרית.</div>
     </div>
   </div>
 
   <!-- FINAL CTA -->
-  <div style="text-align:center;padding:60px 24px 80px;">
-    <h2 style="font-size:clamp(28px,5vw,52px);font-weight:900;margin-bottom:16px;line-height:1.15;">מוכן לפוסטים<br/>שבאמת עובדים?</h2>
-    <p style="color:#7070a0;font-size:17px;margin-bottom:36px;">הצטרף ל-1,240+ בעלי עסקים שכבר משפרים את הפוסטים שלהם</p>
-    <button onclick="startFreeTrial()" style="padding:18px 48px;background:linear-gradient(135deg,#7c5cfc,#fc5c9c);border:none;border-radius:12px;color:#fff;font-family:'Heebo',sans-serif;font-size:20px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 12px 48px rgba(124,92,252,.45);" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='none'">
-      התחל 3 ניתוחים חינם ←
-    </button>
-    <p style="font-size:13px;color:rgba(255,255,255,.25);margin-top:16px;">ללא כרטיס אשראי · ללא הרשמה</p>
+  <div class="final-cta">
+    <h2>מוכן לפוסטים<br/>שבאמת מביאים לקוחות?</h2>
+    <p>הצטרף ל-1,240+ בעלי עסקים שכבר רואים תוצאות</p>
+    <button class="btn-primary" onclick="startTrial()">נסה ניתוח אחד חינם ←</button>
+    <p class="hero-note" style="margin-top:14px;">ללא כרטיס אשראי · ללא הרשמה</p>
   </div>
 
-</div>
+</div><!-- /landingPage -->
 
-<!-- ══════════════ TOOL PAGE ══════════════ -->
+<!-- ══ TOOL PAGE ══ -->
 <div id="toolPage">
-  <div class="container">
-    <button class="back-btn" onclick="showLanding()">← חזרה לדף הבית</button>
-
-    <div class="tool-header">
-      <div class="logo-badge" style="margin-bottom:14px">PostIQ · מנתח פוסטים</div>
-      <h2>נתח את הפוסט שלך</h2>
-      <p>הכנס כיתוב + תמונה/סרטון וקבל ניתוח שיווקי מקצועי</p>
+  <div class="tool-wrap">
+    <div class="tool-topbar">
+      <button class="back-btn" onclick="showLanding()">← חזרה</button>
+      <div class="usage-pill" id="usagePill">
+        <span style="font-size:13px;color:var(--muted)">ניתוחים: <strong id="usageCount" style="color:var(--text)">0</strong>/<strong id="usageMax" style="color:var(--text)">1</strong></span>
+        <div class="usage-dots" id="usageDots"></div>
+        <span class="upgrade-link" onclick="showPaywall('monthly')">שדרג ←</span>
+      </div>
     </div>
 
-    <!-- Usage counter -->
-    <div class="usage-bar" id="usageBar">
-      <div class="usage-text">ניתוחים שנשתמשו: <strong id="usageCount">0</strong> / <strong id="usageMax">3</strong></div>
-      <div class="usage-dots" id="usageDots"></div>
-      <span class="upgrade-link" onclick="showPaywall('monthly')">שדרג לבלתי מוגבל ←</span>
+    <div style="text-align:center;margin-bottom:28px;">
+      <div style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;background:linear-gradient(135deg,#fff,#7c5cfc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;">PostIQ</div>
+      <h2 style="font-size:22px;font-weight:900;margin-bottom:4px;">נתח את הפוסט שלך</h2>
+      <p style="color:var(--muted);font-size:14px;">כיתוב + תמונה/סרטון → ניתוח מקצועי + פוסט משופר</p>
     </div>
 
     <div class="input-card">
-      <div class="input-label"><span></span>פלטפורמה</div>
-      <div class="platform-selector">
-        <button class="platform-btn active" data-platform="instagram" onclick="selectPlatform(this)">📸 Instagram</button>
-        <button class="platform-btn" data-platform="facebook"  onclick="selectPlatform(this)">👥 Facebook</button>
-        <button class="platform-btn" data-platform="linkedin"  onclick="selectPlatform(this)">💼 LinkedIn</button>
-        <button class="platform-btn" data-platform="tiktok"    onclick="selectPlatform(this)">🎵 TikTok</button>
-        <button class="platform-btn" data-platform="twitter"   onclick="selectPlatform(this)">✖ X / Twitter</button>
+      <div class="lbl">פלטפורמה</div>
+      <div class="plat-row">
+        <button class="plat-btn on" data-p="instagram" onclick="selPlat(this)">📸 Instagram</button>
+        <button class="plat-btn" data-p="facebook"  onclick="selPlat(this)">👥 Facebook</button>
+        <button class="plat-btn" data-p="linkedin"  onclick="selPlat(this)">💼 LinkedIn</button>
+        <button class="plat-btn" data-p="tiktok"    onclick="selPlat(this)">🎵 TikTok</button>
+        <button class="plat-btn" data-p="twitter"   onclick="selPlat(this)">✖ X / Twitter</button>
       </div>
 
       <div class="meta-row">
         <div>
-          <div class="input-label"><span></span>תחום העסק</div>
+          <div class="lbl">תחום העסק</div>
           <select id="nicheSelect">
             <option value="general">כללי</option>
             <option value="ecommerce">חנות אונליין</option>
@@ -635,7 +803,7 @@ textarea:focus{border-color:var(--accent);}
           </select>
         </div>
         <div>
-          <div class="input-label"><span></span>מטרת הפוסט</div>
+          <div class="lbl">מטרת הפוסט</div>
           <select id="goalSelect">
             <option value="awareness">מודעות למותג</option>
             <option value="engagement">מעורבות</option>
@@ -649,452 +817,507 @@ textarea:focus{border-color:var(--accent);}
         </div>
       </div>
 
-      <div class="input-label"><span></span>כיתוב הפוסט</div>
+      <div class="lbl">כיתוב הפוסט</div>
       <textarea id="postInput" placeholder="הכנס את הכיתוב שרוצה לנתח..." oninput="updateCounter()"></textarea>
-      <div class="char-counter"><span id="charCount">0</span> תווים</div>
+      <div class="char-c"><span id="charCount">0</span> תווים</div>
 
-      <div style="margin-top:18px">
-        <div class="input-label"><span></span>תמונה / סרטון <span style="font-size:11px;opacity:.5;text-transform:none;letter-spacing:0">(אופציונלי)</span></div>
-        <div class="media-type-tabs">
-          <button class="media-tab active" onclick="switchMediaTab(this,'image')">🖼️ תמונה</button>
-          <button class="media-tab"        onclick="switchMediaTab(this,'video')">🎬 סרטון</button>
+      <div style="margin-top:16px">
+        <div class="lbl">תמונה / סרטון <span style="font-size:10px;opacity:.5;text-transform:none;letter-spacing:0">(אופציונלי)</span></div>
+        <div class="media-tabs">
+          <button class="mtab on" onclick="swMediaTab(this,'image')">🖼️ תמונה</button>
+          <button class="mtab"    onclick="swMediaTab(this,'video')">🎬 סרטון</button>
         </div>
         <div id="uploadZone" class="upload-zone"
-             ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
-          <input type="file" id="mediaInput" accept="image/*" onchange="handleMediaSelect(event)"/>
-          <div class="upload-icon" id="uploadIcon">🖼️</div>
-          <div class="upload-title" id="uploadTitle">גרור תמונה לכאן, או לחץ לבחירה</div>
-          <div class="upload-sub" id="uploadSub">PNG, JPG, WEBP · עד 10MB</div>
+             ondragover="dOver(event)" ondragleave="dLeave(event)" ondrop="dDrop(event)">
+          <input type="file" id="mediaInput" accept="image/*" onchange="mediaSelect(event)"/>
+          <div style="font-size:26px;margin-bottom:8px" id="upIcon">🖼️</div>
+          <div style="font-size:14px;font-weight:600;margin-bottom:4px" id="upTitle">גרור תמונה לכאן, או לחץ לבחירה</div>
+          <div style="font-size:12px;color:var(--muted)" id="upSub">PNG, JPG, WEBP · עד 10MB</div>
         </div>
-        <div class="video-note" id="videoNote">⚡ ה-AI ינתח את פריים הפתיחה של הסרטון + הכיתוב.</div>
-        <div class="media-preview-wrap" id="mediaPreviewWrap">
-          <img   id="mediaPreviewImg"   src="" alt="" style="display:none"/>
-          <video id="mediaPreviewVideo" controls      style="display:none"></video>
-          <button class="media-remove-btn" onclick="removeMedia()">✕ הסר</button>
-          <div class="media-name-badge" id="mediaNameBadge"></div>
+        <div class="video-note" id="videoNote">⚡ ה-AI ינתח את פריים הפתיחה + הכיתוב.</div>
+        <div class="media-prev" id="mediaPrev">
+          <img   id="prevImg"   src="" alt="" style="display:none"/>
+          <video id="prevVid"   controls      style="display:none"></video>
+          <button class="rm-btn" onclick="rmMedia()">✕ הסר</button>
+          <div class="media-name" id="mediaName"></div>
         </div>
       </div>
 
-      <div class="error-msg" id="errorMsg"></div>
-      <button class="analyze-btn" onclick="analyzePost()" id="analyzeBtn">
-        <span id="btnText">⚡ נתח את הפוסט</span>
+      <div class="err" id="errMsg"></div>
+      <button class="analyze-btn" id="analyzeBtn" onclick="doAnalyze()">
+        <span id="btnTxt">⚡ נתח את הפוסט</span>
       </button>
     </div>
 
     <!-- Loading -->
-    <div class="loading-state" id="loadingState">
-      <div class="loader-ring"></div>
-      <div class="loading-text" id="loadingText">מנתח...</div>
+    <div class="loading" id="loadingDiv">
+      <div class="ring"></div>
+      <div class="loading-txt" id="loadingTxt">מנתח...</div>
       <div class="loading-steps">
-        <div class="loading-step" id="step1">קורא כיתוב ומטרה</div>
-        <div class="loading-step" id="step2">סורק ויזואל</div>
-        <div class="loading-step" id="step3">מעריך כנגד benchmark</div>
-        <div class="loading-step" id="step4">כותב פוסט משופר</div>
+        <div class="lstep" id="s1">קורא כיתוב ומטרה</div>
+        <div class="lstep" id="s2">סורק ויזואל</div>
+        <div class="lstep" id="s3">מעריך כנגד benchmark</div>
+        <div class="lstep" id="s4">כותב פוסט משופר</div>
       </div>
     </div>
 
     <!-- Results -->
     <div id="results">
-      <div class="result-tabs" id="resultTabs" style="display:none">
-        <button class="result-tab active" onclick="switchResultTab(this,'text-analysis')">✍️ ניתוח כיתוב</button>
-        <button class="result-tab"        onclick="switchResultTab(this,'visual-analysis')">🎨 ניתוח ויזואל</button>
+
+      <!-- Loss banner -->
+      <div class="loss-banner" id="lossBanner" style="display:none">
+        <div class="loss-icon">⚠️</div>
+        <div class="loss-text" id="lossText"></div>
       </div>
 
-      <div class="tab-pane active" id="text-analysis">
+      <!-- Tabs -->
+      <div class="vtab-row" id="vtabRow" style="display:none">
+        <button class="vtab on" onclick="swVtab(this,'pane-text')">✍️ ניתוח כיתוב</button>
+        <button class="vtab"    onclick="swVtab(this,'pane-visual')">🎨 ניתוח ויזואל</button>
+      </div>
+
+      <!-- TEXT PANE -->
+      <div class="vpane on" id="pane-text">
+
         <div class="score-hero">
           <div class="score-circle">
             <svg class="score-svg" viewBox="0 0 120 120">
-              <defs><linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%"   stop-color="#7c5cfc"/>
+              <defs><linearGradient id="sg" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#7c5cfc"/>
                 <stop offset="100%" stop-color="#fc5c9c"/>
               </linearGradient></defs>
               <circle class="score-track" cx="60" cy="60" r="52"/>
-              <circle class="score-fill" id="scoreFill" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+              <circle class="score-fill" id="scoreFill" cx="60" cy="60" r="52"
+                stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
             </svg>
-            <div class="score-number"><span id="scoreNum">--</span><span class="score-label-sm">/100</span></div>
+            <div class="score-num"><span id="scoreNum">--</span><small>/100</small></div>
           </div>
-          <div class="score-details">
+          <div class="score-info">
             <div class="score-verdict" id="scoreVerdict"></div>
             <div class="score-summary" id="scoreSummary"></div>
-            <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap" id="scoreTags"></div>
+            <div style="margin-top:10px;display:flex;gap:7px;flex-wrap:wrap" id="scoreTags"></div>
           </div>
         </div>
-        <div class="categories-grid" id="categoriesGrid"></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px" id="swGrid">
-          <div class="panel"><div class="panel-header">✅ חוזקות</div><div class="panel-body" id="strengthsList"></div></div>
-          <div class="panel"><div class="panel-header">⚠️ חולשות</div><div class="panel-body" id="weaknessesList"></div></div>
+
+        <!-- Before/After in results -->
+        <div class="ba-result" id="baResult">
+          <div class="ba-result-card bar-before">
+            <div class="bar-label">הפוסט המקורי שלך</div>
+            <div class="bar-text" id="origPost"></div>
+          </div>
+          <div class="ba-result-card bar-after">
+            <div class="bar-label">✨ הפוסט המשופר</div>
+            <div class="bar-text" id="improvedPreview"></div>
+          </div>
         </div>
+
+        <div class="cats" id="catsGrid"></div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px" id="swGrid">
+          <div class="panel"><div class="panel-head">✅ חוזקות</div><div class="panel-body" id="strengthsList"></div></div>
+          <div class="panel"><div class="panel-head">⚠️ חולשות</div><div class="panel-body" id="weaknessesList"></div></div>
+        </div>
+
         <div class="panel">
-          <div class="panel-header">✨ פוסט משופר</div>
+          <div class="panel-head">✨ פוסט משופר — מוכן להעתקה</div>
           <div class="panel-body">
-            <div class="improved-post">
+            <div class="improved-box">
               <button class="copy-btn" onclick="copyImproved()">📋 העתק</button>
-              <span id="improvedText" style="display:block;padding-top:4px"></span>
+              <span id="improvedText" style="display:block;padding-top:2px"></span>
             </div>
           </div>
         </div>
+
         <div class="panel">
-          <div class="panel-header"># האשטגים מומלצים</div>
-          <div class="panel-body"><div class="hashtag-list" id="hashtagsList"></div></div>
+          <div class="panel-head"># האשטגים מומלצים</div>
+          <div class="panel-body"><div class="tags-row" id="hashtagsList"></div></div>
         </div>
+
         <div class="panel">
-          <div class="panel-header">🎯 הצעד הבא</div>
+          <div class="panel-head">🎯 הצעד הבא</div>
           <div class="panel-body" id="nextStepsList"></div>
         </div>
-      </div>
 
-      <div class="tab-pane" id="visual-analysis">
+      </div><!-- /pane-text -->
+
+      <!-- VISUAL PANE -->
+      <div class="vpane" id="pane-visual">
         <div class="panel">
-          <div class="panel-header">🎨 ניתוח ויזואלי</div>
+          <div class="panel-head">🎨 ניתוח ויזואלי</div>
           <div class="panel-body">
-            <div class="media-thumb" id="resultMediaThumb"></div>
-            <div id="visualScoreRows"></div>
+            <div class="media-thumb" id="resMThumb"></div>
+            <div id="vScoreRows"></div>
           </div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px" id="visualSwGrid">
-          <div class="panel"><div class="panel-header">✅ מה עובד</div><div class="panel-body" id="visualStrengths"></div></div>
-          <div class="panel"><div class="panel-header">⚠️ מה לשפר</div><div class="panel-body" id="visualWeaknesses"></div></div>
+          <div class="panel"><div class="panel-head">✅ מה עובד</div><div class="panel-body" id="vStrengths"></div></div>
+          <div class="panel"><div class="panel-head">⚠️ מה לשפר</div><div class="panel-body" id="vWeaknesses"></div></div>
         </div>
-        <div class="panel"><div class="panel-header">🖼️ המלצות עיצוב</div><div class="panel-body" id="visualTips"></div></div>
-        <div class="panel"><div class="panel-header">🔗 התאמה ויזואל–כיתוב</div><div class="panel-body" id="visualTextAlignment"></div></div>
+        <div class="panel"><div class="panel-head">🖼️ המלצות עיצוב</div><div class="panel-body" id="vTips"></div></div>
+        <div class="panel"><div class="panel-head">🔗 התאמה ויזואל–כיתוב</div><div class="panel-body" id="vAlignment"></div></div>
       </div>
 
-      <div class="share-panel">
-        <div style="font-size:14px;color:var(--text-muted)"><strong style="color:var(--text);display:block;margin-bottom:3px">שתף את הניתוח</strong>העתק את הפוסט המשופר ישירות לפלטפורמה שלך</div>
+      <div class="share-row">
+        <div style="font-size:14px;color:var(--muted)"><strong style="color:var(--text);display:block;margin-bottom:3px;">שתף את הניתוח</strong>העתק ישירות לפלטפורמה שלך</div>
         <div class="share-btns">
-          <button class="share-btn primary" onclick="copyImproved()">📋 העתק פוסט משופר</button>
-          <button class="share-btn" onclick="window.print()">🖨️ הדפס</button>
+          <button class="sbtn p" onclick="copyImproved()">📋 העתק פוסט משופר</button>
+          <button class="sbtn"   onclick="window.print()">🖨️ הדפס</button>
         </div>
       </div>
-    </div>
-  </div>
-</div>
 
-<!-- ══════════════ PAYWALL MODAL ══════════════ -->
-<div class="modal-overlay" id="paywallModal">
+    </div><!-- /results -->
+  </div>
+</div><!-- /toolPage -->
+
+<!-- ══ PAYWALL ══ -->
+<div class="overlay" id="paywallOverlay">
   <div class="modal">
-    <div class="modal-close" onclick="closePaywall()">✕</div>
-    <div class="modal-icon">🚀</div>
-    <h3>שדרג לניתוחים בלתי מוגבלים</h3>
-    <p>השתמשת ב-3 הניתוחים החינמיים שלך.<br/>שדרג כדי להמשיך לשפר את הפוסטים שלך ולהגדיל את העסק.</p>
+    <div class="modal-x" onclick="closePaywall()">✕</div>
+    <div class="modal-emoji">🚀</div>
+    <h3>שדרג לניתוחים ללא הגבלה</h3>
+    <p>ניצלת את הניתוח החינמי שלך.<br/>שדרג וקבל גישה מלאה — ניתוחים ללא הגבלה.</p>
     <div class="modal-plans">
-      <div class="modal-plan selected" id="planMonthly" onclick="selectPlan('monthly')">
-        <div class="modal-plan-name">חודשי</div>
-        <div class="modal-plan-price">₪49 <span>/ חודש</span></div>
-        <div class="modal-plan-desc">ניתוחים ללא הגבלה</div>
+      <div class="mplan on" id="mp-monthly" onclick="selPlan('monthly')">
+        <div class="mplan-name">חודשי</div>
+        <div class="mplan-price">₪49 <span>/ חודש</span></div>
+        <div class="mplan-desc">ניתוחים ללא הגבלה</div>
       </div>
-      <div class="modal-plan" id="planYearly" onclick="selectPlan('yearly')">
-        <div class="modal-plan-name">שנתי — חיסכון 40%</div>
-        <div class="modal-plan-price">₪29 <span>/ חודש</span></div>
-        <div class="modal-plan-desc">₪348 לשנה</div>
+      <div class="mplan" id="mp-yearly" onclick="selPlan('yearly')">
+        <div class="mplan-name">שנתי — חיסכון 40%</div>
+        <div class="mplan-price">₪29 <span>/ חודש</span></div>
+        <div class="mplan-desc">₪348 לשנה</div>
       </div>
     </div>
-    <button class="modal-pay-btn" onclick="goToPay()">המשך לתשלום ←</button>
+    <button class="modal-pay" onclick="goToPay()">המשך לתשלום ←</button>
     <div class="modal-note">🔒 תשלום מאובטח · ביטול בכל עת</div>
   </div>
 </div>
 
 <script>
-/* ═══ State ═══ */
-let selectedPlatform = 'instagram';
-let mediaBase64 = null;
-let mediaType   = null;
-let selectedPlan = 'monthly'; let currentFileType = 'image/jpeg';
+/* ══ CONSTANTS ══ */
+const FREE_LIMIT = 1;
+const PAY_MONTHLY = 'https://YOUR-PAYMENT-LINK-MONTHLY';
+const PAY_YEARLY  = 'https://YOUR-PAYMENT-LINK-YEARLY';
 
-const FREE_LIMIT = 3;
-const PAYMENT_URL_MONTHLY = 'https://YOUR-PAYMENT-LINK-MONTHLY'; // ← תחליף בלינק Stripe / PayPlus
-const PAYMENT_URL_YEARLY  = 'https://YOUR-PAYMENT-LINK-YEARLY';  // ← תחליף בלינק Stripe / PayPlus
+/* ══ STATE ══ */
+let platform = 'instagram';
+let mediaB64 = null;
+let mediaType = null;
+let fileType  = 'image/jpeg';
+let selPlanId = 'monthly';
 
-/* ═══ Usage ═══ */
-function getUsage(){ return parseInt(localStorage.getItem('postiq_usage')||'0'); }
-function incUsage(){ localStorage.setItem('postiq_usage', getUsage()+1); }
-function isPro(){    return localStorage.getItem('postiq_pro')==='true'; }
+/* ══ CALCULATOR ══ */
+function calcLoss(){
+  const posts = parseInt(document.getElementById('postsPerWeek').value)||5;
+  const followers = parseInt(document.getElementById('followers').value)||1000;
+  const convRate = 0.02;
+  const weakRate = 0.6;
+  const monthly = Math.round(posts * 4 * followers * convRate * weakRate);
+  const yearly  = monthly * 12;
+  document.getElementById('calcNum').textContent = monthly.toLocaleString();
+  document.getElementById('calcYear').textContent = `= ${yearly.toLocaleString()} לקוחות פוטנציאליים לאורך שנה`;
+}
+calcLoss();
 
-function updateUsageBar(){
-  const used = getUsage();
-  const max  = isPro() ? '∞' : FREE_LIMIT;
-  document.getElementById('usageCount').textContent = used;
-  document.getElementById('usageMax').textContent   = max;
-  const dots = document.getElementById('usageDots');
-  dots.innerHTML = '';
-  if(!isPro()){
-    for(let i=0;i<FREE_LIMIT;i++){
-      const d=document.createElement('div');
-      d.className='usage-dot'+(i<used?' used':'');
-      dots.appendChild(d);
-    }
-  }
-  document.getElementById('usageBar').style.display = isPro() ? 'none' : 'flex';
+/* ══ FAQ ══ */
+function toggleFaq(el){
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(f=>f.classList.remove('open'));
+  if(!isOpen) el.classList.add('open');
 }
 
-/* ═══ Navigation ═══ */
+/* ══ NAVIGATION ══ */
+function startTrial(){
+  document.getElementById('landingPage').style.display='none';
+  document.getElementById('toolPage').style.display='block';
+  updateUsage();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
 function showLanding(){
   document.getElementById('landingPage').style.display='block';
   document.getElementById('toolPage').style.display='none';
   window.scrollTo({top:0,behavior:'smooth'});
 }
-function startFreeTrial(){
-  document.getElementById('landingPage').style.display='none';
-  document.getElementById('toolPage').style.display='block';
-  updateUsageBar();
-  window.scrollTo({top:0,behavior:'smooth'});
+
+/* ══ USAGE ══ */
+function getUsage(){ return parseInt(localStorage.getItem('piq_use')||'0'); }
+function incUsage(){ localStorage.setItem('piq_use', getUsage()+1); }
+function isPro(){ return localStorage.getItem('piq_pro')==='true'; }
+function updateUsage(){
+  const u=getUsage(), max=isPro()?999:FREE_LIMIT;
+  document.getElementById('usageCount').textContent=u;
+  document.getElementById('usageMax').textContent=isPro()?'∞':FREE_LIMIT;
+  const dots=document.getElementById('usageDots'); dots.innerHTML='';
+  if(!isPro()){
+    for(let i=0;i<FREE_LIMIT;i++){
+      const d=document.createElement('div');
+      d.className='udot'+(i<u?' used':'');
+      dots.appendChild(d);
+    }
+  }
+  document.getElementById('usagePill').style.display=isPro()?'none':'flex';
 }
 
-/* ═══ Paywall ═══ */
+/* ══ PAYWALL ══ */
 function showPaywall(plan){
-  selectedPlan = plan||'monthly';
-  highlightPlan(selectedPlan);
-  document.getElementById('paywallModal').classList.add('visible');
+  selPlanId=plan||'monthly';
+  hlPlan(selPlanId);
+  document.getElementById('paywallOverlay').classList.add('on');
 }
-function closePaywall(){ document.getElementById('paywallModal').classList.remove('visible'); }
-function selectPlan(p){
-  selectedPlan=p;
-  highlightPlan(p);
+function closePaywall(){ document.getElementById('paywallOverlay').classList.remove('on'); }
+function selPlan(p){ selPlanId=p; hlPlan(p); }
+function hlPlan(p){
+  document.getElementById('mp-monthly').classList.toggle('on',p==='monthly');
+  document.getElementById('mp-yearly').classList.toggle('on',p==='yearly');
 }
-function highlightPlan(p){
-  document.getElementById('planMonthly').classList.toggle('selected',p==='monthly');
-  document.getElementById('planYearly').classList.toggle('selected',p==='yearly');
-}
-function goToPay(){
-  const url = selectedPlan==='yearly' ? PAYMENT_URL_YEARLY : PAYMENT_URL_MONTHLY;
-  window.open(url,'_blank');
+function goToPay(){ window.open(selPlanId==='yearly'?PAY_YEARLY:PAY_MONTHLY,'_blank'); }
+
+/* ══ PLATFORM ══ */
+function selPlat(btn){
+  document.querySelectorAll('.plat-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on'); platform=btn.dataset.p;
 }
 
-/* ═══ Platform ═══ */
-function selectPlatform(btn){
-  document.querySelectorAll('.platform-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  selectedPlatform=btn.dataset.platform;
-}
-
-/* ═══ Media ═══ */
-function switchMediaTab(btn,type){
-  document.querySelectorAll('.media-tab').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
+/* ══ MEDIA ══ */
+function swMediaTab(btn,type){
+  document.querySelectorAll('.mtab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
   const note=document.getElementById('videoNote');
   if(type==='video'){
     document.getElementById('mediaInput').accept='video/*';
-    document.getElementById('uploadIcon').textContent='🎬';
-    document.getElementById('uploadTitle').textContent='גרור סרטון לכאן, או לחץ לבחירה';
-    document.getElementById('uploadSub').textContent='MP4, MOV · עד 50MB';
-    note.classList.add('visible');
+    document.getElementById('upIcon').textContent='🎬';
+    document.getElementById('upTitle').textContent='גרור סרטון לכאן, או לחץ לבחירה';
+    document.getElementById('upSub').textContent='MP4, MOV · עד 50MB';
+    note.classList.add('on');
   } else {
     document.getElementById('mediaInput').accept='image/*';
-    document.getElementById('uploadIcon').textContent='🖼️';
-    document.getElementById('uploadTitle').textContent='גרור תמונה לכאן, או לחץ לבחירה';
-    document.getElementById('uploadSub').textContent='PNG, JPG, WEBP · עד 10MB';
-    note.classList.remove('visible');
+    document.getElementById('upIcon').textContent='🖼️';
+    document.getElementById('upTitle').textContent='גרור תמונה לכאן, או לחץ לבחירה';
+    document.getElementById('upSub').textContent='PNG, JPG, WEBP · עד 10MB';
+    note.classList.remove('on');
   }
-  removeMedia();
+  rmMedia();
 }
-function handleDragOver(e){e.preventDefault();document.getElementById('uploadZone').classList.add('drag-over');}
-function handleDragLeave(){document.getElementById('uploadZone').classList.remove('drag-over');}
-function handleDrop(e){e.preventDefault();document.getElementById('uploadZone').classList.remove('drag-over');const f=e.dataTransfer.files[0];if(f)processMediaFile(f);}
-function handleMediaSelect(e){const f=e.target.files[0];if(f)processMediaFile(f);}
-function processMediaFile(file){ currentFileType = file.type;
-  const isVideo=file.type.startsWith('video/'),isImage=file.type.startsWith('image/');
-  if(!isVideo&&!isImage){showError('פורמט לא נתמך');return;}
-  document.getElementById('mediaNameBadge').textContent=file.name;
-  document.getElementById('mediaPreviewWrap').classList.add('visible');
+function dOver(e){e.preventDefault();document.getElementById('uploadZone').classList.add('drag');}
+function dLeave(){document.getElementById('uploadZone').classList.remove('drag');}
+function dDrop(e){e.preventDefault();document.getElementById('uploadZone').classList.remove('drag');const f=e.dataTransfer.files[0];if(f)procMedia(f);}
+function mediaSelect(e){const f=e.target.files[0];if(f)procMedia(f);}
+function procMedia(file){
+  const isV=file.type.startsWith('video/'),isI=file.type.startsWith('image/');
+  if(!isV&&!isI){showErr('פורמט לא נתמך');return;}
+  fileType=file.type; mediaType=isV?'video':'image';
+  document.getElementById('mediaName').textContent=file.name;
+  document.getElementById('mediaPrev').classList.add('on');
   document.getElementById('uploadZone').style.display='none';
-  if(isImage){
-    mediaType='image';
+  if(isI){
     const r=new FileReader();
     r.onload=ev=>{
-      mediaBase64=ev.target.result.split(',')[1];
-      const img=document.getElementById('mediaPreviewImg');
+      mediaB64=ev.target.result.split(',')[1];
+      const img=document.getElementById('prevImg');
       img.src=ev.target.result;img.style.display='block';
-      document.getElementById('mediaPreviewVideo').style.display='none';
+      document.getElementById('prevVid').style.display='none';
     };r.readAsDataURL(file);
   } else {
-    mediaType='video';
     const url=URL.createObjectURL(file);
-    const vid=document.getElementById('mediaPreviewVideo');
+    const vid=document.getElementById('prevVid');
     vid.src=url;vid.style.display='block';
-    document.getElementById('mediaPreviewImg').style.display='none';
+    document.getElementById('prevImg').style.display='none';
     vid.addEventListener('loadeddata',()=>{
       vid.currentTime=0;
       vid.addEventListener('seeked',function h(){
         const c=document.createElement('canvas');
         c.width=vid.videoWidth||640;c.height=vid.videoHeight||360;
         c.getContext('2d').drawImage(vid,0,0,c.width,c.height);
-        mediaBase64=c.toDataURL('image/png').split(',')[1];
+        mediaB64=c.toDataURL('image/png').split(',')[1];
+        fileType='image/png';
         vid.removeEventListener('seeked',h);
       },{once:true});
     },{once:true});
   }
 }
-function removeMedia(){
-  mediaBase64=null;mediaType=null;
-  document.getElementById('mediaPreviewWrap').classList.remove('visible');
+function rmMedia(){
+  mediaB64=null;mediaType=null;
+  document.getElementById('mediaPrev').classList.remove('on');
   document.getElementById('uploadZone').style.display='';
-  document.getElementById('mediaPreviewImg').src='';
-  document.getElementById('mediaPreviewVideo').src='';
+  document.getElementById('prevImg').src='';
+  document.getElementById('prevVid').src='';
   document.getElementById('mediaInput').value='';
 }
 
-/* ═══ Tabs ═══ */
-function switchResultTab(btn,pane){
-  document.querySelectorAll('.result-tab').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById(pane).classList.add('active');
+/* ══ HELPERS ══ */
+function swVtab(btn,pane){
+  document.querySelectorAll('.vtab').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.vpane').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on'); document.getElementById(pane).classList.add('on');
 }
-
-/* ═══ Helpers ═══ */
 function updateCounter(){document.getElementById('charCount').textContent=document.getElementById('postInput').value.length;}
-function showError(msg){const e=document.getElementById('errorMsg');e.textContent=msg;e.classList.add('visible');}
-function hideError(){document.getElementById('errorMsg').classList.remove('visible');}
+function showErr(msg){const e=document.getElementById('errMsg');e.textContent=msg;e.classList.add('on');}
+function hideErr(){document.getElementById('errMsg').classList.remove('on');}
 function gc(s){return s>=80?'var(--green)':s>=60?'var(--yellow)':'var(--red)';}
-function gt(s){return s>=80?'tag-good':s>=60?'tag-warn':'tag-bad';}
+function gt(s){return s>=80?'tc-g':s>=60?'tc-y':'tc-r';}
 
-async function animateSteps(hasMedia){
-  const ids=['step1','step2','step3','step4'];
+async function animSteps(hasMedia){
+  const ids=['s1','s2','s3','s4'];
   const labels=hasMedia
-    ?['קורא כיתוב ומטרה','סורק ויזואל','מעריך כנגד benchmark','כותב פוסט משופר']
+    ?['קורא כיתוב ומטרה','סורק את הויזואל','מעריך כנגד benchmark','כותב פוסט משופר']
     :['קורא כיתוב ומטרה','מנתח אסטרטגיה','מעריך כנגד benchmark','כותב פוסט משופר'];
-  ids.forEach((id,i)=>{const el=document.getElementById(id);el.classList.remove('active','done');el.textContent=labels[i];});
+  ids.forEach((id,i)=>{const el=document.getElementById(id);el.classList.remove('on','done');el.textContent=labels[i];});
   for(let i=0;i<ids.length;i++){
     await new Promise(r=>setTimeout(r,650));
     if(i>0)document.getElementById(ids[i-1]).classList.add('done');
-    document.getElementById(ids[i]).classList.add('active');
+    document.getElementById(ids[i]).classList.add('on');
   }
 }
 
-/* ═══ System Prompt ═══ */
-const SYSTEM_PROMPT=`אתה מומחה שיווק דיגיטלי ברמה עולמית עם ניסיון של 15 שנה.
-הכשרתך כוללת: אסטרטגיית תוכן, קופירייטינג שיווקי, פסיכולוגיית צרכנים, Social Media Marketing, Growth Hacking, ו-CRO.
+/* ══ SYSTEM PROMPT ══ */
+const SYS=`אתה מומחה שיווק דיגיטלי ברמה עולמית עם 15 שנות ניסיון.
+ידע מעמיק ב:
+• Instagram: האלגוריתם מעדיף Saves+Shares. Hook חייב לעצור גלילה תוך 0.3 שניות. Carousel מוביל ב-Reach. Reels = 2-3x חשיפה.
+• Facebook: קהל 35+. ניב קהילתי ופרסונלי > פרסומי. לינקים פוגעים בחשיפה אורגנית.
+• LinkedIn: תוכן insight מקצועי = reach גבוה. Hook שמתחיל בנקודת כאב. Dwell time קריטי.
+• TikTok: Hook ב-0-3 שניות. Authentic > Polished. Text overlay הכרחי.
+• X/Twitter: Threads = reach גבוה. Hot take + דעה = engagement.
+קופירייטינג: AIDA, PAS, Hook Formula, Social Proof, Scarcity & Urgency.
+ציונים מציאותיים — ממוצע פוסט טיפוסי = 35-55. פוסט מצוין = 80+.
+הניתוח ספציפי ומעשי. הכל בעברית.`;
 
-אתה שולט לעומק ב:
-• Instagram: האלגוריתם מעדיף Saves+Shares. Hook חייב להיות ב-3 שניות ראשונות. Carousel מוביל ב-Reach. Reels מקבלים 2-3x חשיפה.
-• Facebook: קהל 35+. ניב קהילתי ופרסונלי עובד יותר מפרסומי. לינקים פוגעים בחשיפה.
-• LinkedIn: תוכן אינסייט מקצועי מייצר reach גבוה. Hook שמתחיל בנקודת כאב מקצועית. משפטים קצרים ורווחים.
-• TikTok: Hook ב-0-3 שניות. Authentic יותר מ-Polished. Text overlay הכרחי.
-• X/Twitter: Threads מייצרים reach גבוה. Hot take + דעה = engagement.
-
-עקרונות קופירייטינג שאתה מיישם: AIDA, PAS, Hook Formula, Social Proof, Scarcity.
-אתה מנתח ביחס ל-benchmark אמיתי. ציונים מציאותיים — ממוצע פוסט טיפוסי הוא 40-60.
-הניתוח שלך ספציפי, מדויק, ומעשי. הכל בעברית.`;
-
-/* ═══ Analyze ═══ */
-async function analyzePost(){
+/* ══ ANALYZE ══ */
+async function doAnalyze(){
   const post=document.getElementById('postInput').value.trim();
-  if(!post||post.length<5){showError('אנא הכנס כיתוב של לפחות 5 תווים');return;}
-
+  if(!post||post.length<5){showErr('אנא הכנס כיתוב של לפחות 5 תווים');return;}
   if(!isPro()&&getUsage()>=FREE_LIMIT){showPaywall('monthly');return;}
+  hideErr();
 
-  hideError();
-  const hasMedia=!!mediaBase64;
+  const hasMedia=!!mediaB64;
   const niche=document.getElementById('nicheSelect').value;
   const goal=document.getElementById('goalSelect').value;
-
-  const nicheL={general:'כללי',ecommerce:'חנות אונליין',restaurant:'מסעדה',beauty:'קוסמטיקה',fitness:'כושר',realEstate:'נדל"ן',tech:'טכנולוגיה',fashion:'אופנה',health:'בריאות',education:'חינוך',finance:'פיננסים',localBusiness:'עסק מקומי',creative:'יצירה',travel:'תיירות'};
-  const goalL={awareness:'מודעות למותג',engagement:'מעורבות',leads:'לידים',sales:'מכירה',traffic:'תנועה לאתר',launch:'השקת מוצר',promo:'מבצע',education:'תוכן חינוכי'};
-  const platL={instagram:'Instagram',facebook:'Facebook',linkedin:'LinkedIn',tiktok:'TikTok',twitter:'X / Twitter'};
+  const nL={general:'כללי',ecommerce:'חנות אונליין',restaurant:'מסעדה',beauty:'קוסמטיקה',fitness:'כושר',realEstate:'נדל"ן',tech:'טכנולוגיה',fashion:'אופנה',health:'בריאות',education:'חינוך',finance:'פיננסים',localBusiness:'עסק מקומי',creative:'יצירה',travel:'תיירות'};
+  const gL={awareness:'מודעות למותג',engagement:'מעורבות',leads:'לידים',sales:'מכירה',traffic:'תנועה לאתר',launch:'השקת מוצר',promo:'מבצע',education:'תוכן חינוכי'};
+  const pL={instagram:'Instagram',facebook:'Facebook',linkedin:'LinkedIn',tiktok:'TikTok',twitter:'X / Twitter'};
 
   document.getElementById('analyzeBtn').disabled=true;
-  document.getElementById('btnText').textContent='⏳ מנתח...';
-  document.getElementById('loadingState').classList.add('visible');
-  document.getElementById('results').classList.remove('visible');
-  document.getElementById('loadingText').textContent=hasMedia?'מנתח כיתוב + ויזואל...':'מנתח ברמה מקצועית...';
-  animateSteps(hasMedia);
+  document.getElementById('btnTxt').textContent='⏳ מנתח...';
+  document.getElementById('loadingDiv').classList.add('on');
+  document.getElementById('results').style.display='none';
+  document.getElementById('loadingTxt').textContent=hasMedia?'מנתח כיתוב + ויזואל...':'מנתח ברמה מקצועית...';
+  animSteps(hasMedia);
 
   const prompt=`נתח את הפוסט:
-פלטפורמה: ${platL[selectedPlatform]}
-תחום: ${nicheL[niche]}
-מטרה: ${goalL[goal]}
-${hasMedia?`מדיה: ${mediaType==='video'?'סרטון (פריים ראשון מצורף)':'תמונה מצורפת'}`:''}
+פלטפורמה: ${pL[platform]}
+תחום: ${nL[niche]}
+מטרה: ${gL[goal]}
+${hasMedia?`מדיה: ${mediaType==='video'?'סרטון (פריים ראשון)':'תמונה'}`:''}
 כיתוב:
 """${post}"""
 
-ניתוח ביחס ל-benchmark אמיתי. ציונים מציאותיים (ממוצע 40-60). פוסט משופר עם hook מקצועי לפי AIDA/PAS.
+חשוב: ציונים מציאותיים (35-55 לפוסט ממוצע). הפוסט המשופר חייב להיות דרמטית שונה ועם hook חזק לפי AIDA/PAS.
 
 החזר JSON בלבד:
-{"score":<0-100>,"verdict":"<3-5 מילים>","summary":"<2-3 משפטים>","tags":["<תג1>","<תג2>"],"categories":[{"name":"Hook ופתיחה","icon":"🎣","score":<0-100>,"desc":"<ניתוח>"},{"name":"קריאה לפעולה","icon":"🎯","score":<0-100>,"desc":"<ניתוח>"},{"name":"התאמה לאלגוריתם","icon":"⚡","score":<0-100>,"desc":"<ניתוח>"},{"name":"מסר ותועלת","icon":"💎","score":<0-100>,"desc":"<ניתוח>"},{"name":"שפה ורגש","icon":"❤️","score":<0-100>,"desc":"<ניתוח>"},{"name":"מבנה וקריאות","icon":"📐","score":<0-100>,"desc":"<ניתוח>"}],"strengths":["<1>","<2>","<3>"],"weaknesses":["<1>","<2>","<3>"],"improved":"<פוסט משופר שלם>","hashtags":["#1","#2","#3","#4","#5","#6","#7","#8","#9","#10"],"next_steps":["<1>","<2>","<3>","<4>"]${hasMedia?`,"visual_analysis":{"scores":[{"label":"Hook ויזואלי","desc":"<ניתוח>","score":<0-100>},{"label":"איכות טכנית","desc":"<ניתוח>","score":<0-100>},{"label":"קומפוזיציה","desc":"<ניתוח>","score":<0-100>},{"label":"מיתוג","desc":"<ניתוח>","score":<0-100>},{"label":"התאמה למטרה","desc":"<ניתוח>","score":<0-100>}],"strengths":["<1>","<2>","<3>"],"weaknesses":["<1>","<2>","<3>"],"design_tips":["<1>","<2>","<3>","<4>"],"text_alignment":"<פסקה>"}`:''}
+{"score":<0-100>,"verdict":"<3-5 מילים חדות>","summary":"<2-3 משפטים עם insight ספציפי>","tags":["<תג1>","<תג2>"],"loss_estimate":"<משפט אחד: 'הפוסט הזה מפסיד בערך X לקוחות פוטנציאליים כל שבוע כי...'>","categories":[{"name":"Hook ופתיחה","icon":"🎣","score":<0-100>,"desc":"<ניתוח ספציפי>"},{"name":"קריאה לפעולה","icon":"🎯","score":<0-100>,"desc":"<ניתוח>"},{"name":"התאמה לאלגוריתם","icon":"⚡","score":<0-100>,"desc":"<ניתוח>"},{"name":"מסר ותועלת","icon":"💎","score":<0-100>,"desc":"<ניתוח>"},{"name":"שפה ורגש","icon":"❤️","score":<0-100>,"desc":"<ניתוח>"},{"name":"מבנה וקריאות","icon":"📐","score":<0-100>,"desc":"<ניתוח>"}],"strengths":["<1>","<2>","<3>"],"weaknesses":["<1>","<2>","<3>"],"improved":"<פוסט משופר שלם ודרמטי עם hook חזק>","hashtags":["#1","#2","#3","#4","#5","#6","#7","#8","#9","#10"],"next_steps":["<1>","<2>","<3>","<4>"]${hasMedia?`,"visual_analysis":{"scores":[{"label":"Hook ויזואלי","desc":"<ניתוח>","score":<0-100>},{"label":"איכות טכנית","desc":"<ניתוח>","score":<0-100>},{"label":"קומפוזיציה","desc":"<ניתוח>","score":<0-100>},{"label":"מיתוג","desc":"<ניתוח>","score":<0-100>},{"label":"התאמה למטרה","desc":"<ניתוח>","score":<0-100>}],"strengths":["<1>","<2>","<3>"],"weaknesses":["<1>","<2>","<3>"],"design_tips":["<1>","<2>","<3>","<4>"],"text_alignment":"<פסקה>"}`:''}
 }`;
 
   try{
     const parts=[];
-    if(hasMedia&&mediaBase64)parts.push({type:'image',source:{type:'base64',media_type:mediaType==='video'?'image/png':(currentFileType||'image/jpeg'),data:mediaBase64}});
+    if(hasMedia&&mediaB64){
+      const mt = mediaType==='video' ? 'image/png' : (fileType||'image/jpeg');
+      parts.push({type:'image',source:{type:'base64',media_type:mt,data:mediaB64}});
+    }
     parts.push({type:'text',text:prompt});
 
     const res=await fetch('/api/analyze',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:4000,system:SYSTEM_PROMPT,messages:[{role:'user',content:parts}]})
+      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:4000,system:SYS,messages:[{role:'user',content:parts}]})
     });
 
-    if(!res.ok){let em='שגיאה '+res.status;try{const e=await res.json();em=e?.error?.message||e?.error||em;}catch(x){}throw new Error(em);}
+    if(!res.ok){
+      let em=`שגיאה ${res.status}`;
+      try{const e=await res.json();em=e?.error?.message||e?.error||em;}catch(x){}
+      throw new Error(em);
+    }
     const data=await res.json();
     const raw=data.content.map(c=>c.text||'').join('');
     const result=JSON.parse(raw.replace(/```json|```/g,'').trim());
-
-    incUsage();
-    updateUsageBar();
+    incUsage(); updateUsage();
     await new Promise(r=>setTimeout(r,200));
-    renderResults(result,hasMedia);
+    renderResults(result,hasMedia,post);
   }catch(err){
-    document.getElementById('loadingState').classList.remove('visible');
+    document.getElementById('loadingDiv').classList.remove('on');
     document.getElementById('analyzeBtn').disabled=false;
-    document.getElementById('btnText').textContent='⚡ נתח את הפוסט';
-    showError('שגיאה: '+(err?.message||String(err)||'שגיאה לא ידועה'));
+    document.getElementById('btnTxt').textContent='⚡ נתח את הפוסט';
+    showErr('שגיאה: '+(err?.message||String(err)||'שגיאה לא ידועה'));
   }
 }
 
-/* ═══ Render ═══ */
-function renderResults(r,hasMedia){
-  document.getElementById('loadingState').classList.remove('visible');
-  document.getElementById('results').classList.add('visible');
+/* ══ RENDER ══ */
+function renderResults(r,hasMedia,origPost){
+  document.getElementById('loadingDiv').classList.remove('on');
+  document.getElementById('results').style.display='block';
+  document.getElementById('results').classList.add('on');
   document.getElementById('analyzeBtn').disabled=false;
-  document.getElementById('btnText').textContent='⚡ נתח שוב';
+  document.getElementById('btnTxt').textContent='⚡ נתח שוב';
 
-  const tabs=document.getElementById('resultTabs');
-  tabs.style.display=hasMedia?'flex':'none';
-  document.querySelectorAll('.result-tab').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
-  tabs.children[0]&&tabs.children[0].classList.add('active');
-  document.getElementById('text-analysis').classList.add('active');
+  // Tabs
+  const vt=document.getElementById('vtabRow');
+  vt.style.display=hasMedia?'flex':'none';
+  document.querySelectorAll('.vtab').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.vpane').forEach(p=>p.classList.remove('on'));
+  vt.children[0]&&vt.children[0].classList.add('on');
+  document.getElementById('pane-text').classList.add('on');
 
+  // Score
   setTimeout(()=>document.getElementById('scoreFill').style.strokeDashoffset=326.7-(r.score/100)*326.7,100);
   let cur=0;const iv=setInterval(()=>{cur=Math.min(cur+2,r.score);document.getElementById('scoreNum').textContent=cur;if(cur>=r.score)clearInterval(iv);},18);
 
   document.getElementById('scoreVerdict').textContent=r.verdict||'';
   document.getElementById('scoreSummary').textContent=r.summary||'';
-  document.getElementById('scoreTags').innerHTML=(r.tags||[]).map(t=>`<span class="tag ${gt(r.score)}">${t}</span>`).join('');
+  document.getElementById('scoreTags').innerHTML=(r.tags||[]).map(t=>`<span class="tag-chip ${gt(r.score)}">${t}</span>`).join('');
 
-  const grid=document.getElementById('categoriesGrid');grid.innerHTML='';
+  // Loss banner
+  if(r.loss_estimate){
+    document.getElementById('lossBanner').style.display='flex';
+    document.getElementById('lossText').innerHTML=r.loss_estimate;
+  }
+
+  // Before/after
+  document.getElementById('origPost').textContent=origPost;
+  document.getElementById('improvedPreview').textContent=(r.improved||'').slice(0,200)+(r.improved&&r.improved.length>200?'...':'');
+
+  // Categories
+  const cg=document.getElementById('catsGrid');cg.innerHTML='';
   (r.categories||[]).forEach((c,i)=>{
     const col=gc(c.score);
-    grid.innerHTML+=`<div class="category-card" style="animation:fadeUp .4s ${i*.07}s ease both;opacity:0">
-      <div class="cat-header"><div class="cat-name"><div class="cat-icon" style="background:${col}22">${c.icon}</div>${c.name}</div>
-      <div class="cat-score" style="color:${col}">${c.score}</div></div>
-      <div class="progress-bar"><div class="progress-fill" id="prog-${i}" style="width:0%;background:${col}"></div></div>
+    cg.innerHTML+=`<div class="cat" style="animation:fadeUp .4s ${i*.07}s ease both;opacity:0">
+      <div class="cat-top"><div class="cat-name"><div class="cat-ico" style="background:${col}22">${c.icon}</div>${c.name}</div>
+      <div class="cat-sc" style="color:${col}">${c.score}</div></div>
+      <div class="prog"><div class="prog-fill" id="cp${i}" style="width:0;background:${col}"></div></div>
       <div class="cat-desc">${c.desc}</div></div>`;
   });
-  setTimeout(()=>(r.categories||[]).forEach((_,i)=>document.getElementById(`prog-${i}`).style.width=r.categories[i].score+'%'),200);
+  setTimeout(()=>(r.categories||[]).forEach((_,i)=>document.getElementById(`cp${i}`).style.width=r.categories[i].score+'%'),200);
 
-  document.getElementById('strengthsList').innerHTML=(r.strengths||[]).map(s=>`<div class="insight-item"><div class="insight-dot" style="background:var(--green)"></div><div>${s}</div></div>`).join('');
-  document.getElementById('weaknessesList').innerHTML=(r.weaknesses||[]).map(w=>`<div class="insight-item"><div class="insight-dot" style="background:var(--yellow)"></div><div>${w}</div></div>`).join('');
+  document.getElementById('strengthsList').innerHTML=(r.strengths||[]).map(s=>`<div class="insight"><div class="idot" style="background:var(--green)"></div><div>${s}</div></div>`).join('');
+  document.getElementById('weaknessesList').innerHTML=(r.weaknesses||[]).map(w=>`<div class="insight"><div class="idot" style="background:var(--yellow)"></div><div>${w}</div></div>`).join('');
   document.getElementById('improvedText').textContent=r.improved||'';
-  document.getElementById('hashtagsList').innerHTML=(r.hashtags||[]).map(h=>`<span class="hashtag" onclick="copyText('${h}')">${h}</span>`).join('');
-  document.getElementById('nextStepsList').innerHTML=(r.next_steps||[]).map((t,i)=>`<div class="insight-item"><div class="insight-dot" style="background:var(--accent2)"></div><div><strong>${i+1}.</strong> ${t}</div></div>`).join('');
+  document.getElementById('hashtagsList').innerHTML=(r.hashtags||[]).map(h=>`<span class="htag" onclick="copyText('${h}')">${h}</span>`).join('');
+  document.getElementById('nextStepsList').innerHTML=(r.next_steps||[]).map((t,i)=>`<div class="insight"><div class="idot" style="background:var(--accent2)"></div><div><strong>${i+1}.</strong> ${t}</div></div>`).join('');
 
+  // Visual
   if(hasMedia&&r.visual_analysis){
     const va=r.visual_analysis;
-    const thumb=document.getElementById('resultMediaThumb');
-    thumb.innerHTML=mediaType==='video'
-      ?`<video src="${document.getElementById('mediaPreviewVideo').src}" controls style="width:100%;max-height:250px;object-fit:contain"></video>`
-      :`<img src="${document.getElementById('mediaPreviewImg').src}" style="width:100%;max-height:250px;object-fit:contain"/>`;
-    document.getElementById('visualScoreRows').innerHTML=(va.scores||[]).map(s=>{
+    const th=document.getElementById('resMThumb');
+    th.innerHTML=mediaType==='video'
+      ?`<video src="${document.getElementById('prevVid').src}" controls style="width:100%;max-height:240px;object-fit:contain"></video>`
+      :`<img src="${document.getElementById('prevImg').src}" style="width:100%;max-height:240px;object-fit:contain"/>`;
+    document.getElementById('vScoreRows').innerHTML=(va.scores||[]).map(s=>{
       const c=gc(s.score);
-      return `<div class="visual-score-row"><div class="visual-score-label">${s.label}<small>${s.desc}</small></div>
-        <div class="visual-bar-wrap"><div class="progress-bar"><div class="progress-fill" style="width:${s.score}%;background:${c}"></div></div></div>
-        <div class="visual-score-val" style="color:${c}">${s.score}</div></div>`;
+      return `<div class="vrow"><div class="vrow-label">${s.label}<small>${s.desc}</small></div>
+        <div class="vbar"><div class="prog"><div class="prog-fill" style="width:${s.score}%;background:${c}"></div></div></div>
+        <div class="vrow-val" style="color:${c}">${s.score}</div></div>`;
     }).join('');
-    document.getElementById('visualStrengths').innerHTML=(va.strengths||[]).map(s=>`<div class="insight-item"><div class="insight-dot" style="background:var(--green)"></div><div>${s}</div></div>`).join('');
-    document.getElementById('visualWeaknesses').innerHTML=(va.weaknesses||[]).map(w=>`<div class="insight-item"><div class="insight-dot" style="background:var(--yellow)"></div><div>${w}</div></div>`).join('');
-    document.getElementById('visualTips').innerHTML=(va.design_tips||[]).map((t,i)=>`<div class="insight-item"><div class="insight-dot" style="background:var(--accent2)"></div><div><strong>${i+1}.</strong> ${t}</div></div>`).join('');
-    document.getElementById('visualTextAlignment').innerHTML=`<div style="font-size:14px;line-height:1.7;color:var(--text-muted)">${va.text_alignment||''}</div>`;
+    document.getElementById('vStrengths').innerHTML=(va.strengths||[]).map(s=>`<div class="insight"><div class="idot" style="background:var(--green)"></div><div>${s}</div></div>`).join('');
+    document.getElementById('vWeaknesses').innerHTML=(va.weaknesses||[]).map(w=>`<div class="insight"><div class="idot" style="background:var(--yellow)"></div><div>${w}</div></div>`).join('');
+    document.getElementById('vTips').innerHTML=(va.design_tips||[]).map((t,i)=>`<div class="insight"><div class="idot" style="background:var(--accent2)"></div><div><strong>${i+1}.</strong> ${t}</div></div>`).join('');
+    document.getElementById('vAlignment').innerHTML=`<div style="font-size:14px;line-height:1.7;color:var(--muted)">${va.text_alignment||''}</div>`;
   }
 
   setTimeout(()=>document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'}),100);
@@ -1102,11 +1325,12 @@ function renderResults(r,hasMedia){
 
 function copyImproved(){
   copyText(document.getElementById('improvedText').textContent);
-  const btn=document.querySelector('.copy-btn');btn.textContent='✅ הועתק!';setTimeout(()=>btn.textContent='📋 העתק',2000);
+  const btn=document.querySelector('.copy-btn');
+  btn.textContent='✅ הועתק!';setTimeout(()=>btn.textContent='📋 העתק',2000);
 }
-function copyText(text){
-  navigator.clipboard.writeText(text).catch(()=>{
-    const ta=document.createElement('textarea');ta.value=text;
+function copyText(t){
+  navigator.clipboard.writeText(t).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=t;
     document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
   });
 }
