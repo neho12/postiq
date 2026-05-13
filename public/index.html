@@ -899,9 +899,6 @@ textarea:focus{border-color:var(--accent);}
       <button class="main-tab" onclick="swMainTab(this,'tab-tracker')">
         <span class="tab-icon">📊</span> מעקב תוצאות
       </button>
-      <button class="main-tab" onclick="swMainTab(this,'tab-competitor')">
-        <span class="tab-icon">🎯</span> מתחרים
-      </button>
     </div>
 
     <!-- TAB: ANALYZE -->
@@ -974,6 +971,21 @@ textarea:focus{border-color:var(--accent);}
           <video id="prevVid"   controls      style="display:none"></video>
           <button class="rm-btn" onclick="rmMedia()">✕ הסר</button>
           <div class="media-name" id="mediaName"></div>
+        </div>
+      </div>
+
+      <!-- COMPETITOR POSTS (optional) -->
+      <div style="margin-top:18px;">
+        <div class="lbl" style="cursor:pointer;user-select:none" onclick="toggleComp()">
+          🎯 השווה למתחרה <span id="compToggleArrow" style="color:var(--muted);font-size:11px;">(לחץ להוספה)</span>
+        </div>
+        <div id="compSection" style="display:none;margin-top:10px;">
+          <input type="text" id="compNameInline" placeholder="שם המתחרה (אופציונלי)"
+            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:10px 14px;color:var(--text);font-family:'Heebo',sans-serif;font-size:14px;outline:none;margin-bottom:8px;transition:border-color .2s;"
+            onfocus="this.style.borderColor='var(--accent2)'" onblur="this.style.borderColor='var(--border)'"/>
+          <textarea id="compPostsInline" placeholder="הדבק 2-3 פוסטים של המתחרה לכאן — ה-AI יגיד לך מה הוא עושה שאתה לא ואיך לנצח אותו..."
+            style="width:100%;background:var(--surface2);border:1px solid rgba(252,92,156,.3);border-radius:var(--rs);padding:12px 14px;color:var(--text);font-family:'Heebo',sans-serif;font-size:14px;line-height:1.65;resize:vertical;min-height:100px;outline:none;transition:border-color .2s;"
+            onfocus="this.style.borderColor='rgba(252,92,156,.6)'" onblur="this.style.borderColor='rgba(252,92,156,.3)'"></textarea>
         </div>
       </div>
 
@@ -1091,6 +1103,12 @@ textarea:focus{border-color:var(--accent);}
         <div class="panel"><div class="panel-head">🔗 התאמה ויזואל–כיתוב</div><div class="panel-body" id="vAlignment"></div></div>
       </div>
 
+      <!-- COMPETITOR ANALYSIS RESULT -->
+      <div class="panel" id="compResultPanel" style="display:none;">
+        <div class="panel-head">🎯 השוואה למתחרה</div>
+        <div class="panel-body" id="compResultBody"></div>
+      </div>
+
       <div class="share-row">
         <div style="font-size:14px;color:var(--muted)"><strong style="color:var(--text);display:block;margin-bottom:3px;">שתף את הניתוח</strong>העתק ישירות לפלטפורמה שלך</div>
         <div class="share-btns">
@@ -1135,12 +1153,13 @@ textarea:focus{border-color:var(--accent);}
             </select>
           </div>
           <div>
-            <div class="lbl" style="margin-bottom:8px">כמה פוסטים בשבוע?</div>
+            <div class="lbl" style="margin-bottom:8px">כמה פוסטים בחודש?</div>
             <select id="calFreq">
-              <option value="2">2 פוסטים</option>
-              <option value="3" selected>3 פוסטים</option>
-              <option value="5">5 פוסטים</option>
-              <option value="7">כל יום</option>
+              <option value="4">4 פוסטים (1 בשבוע)</option>
+              <option value="8" selected>8 פוסטים (2 בשבוע)</option>
+              <option value="12">12 פוסטים (3 בשבוע)</option>
+              <option value="20">20 פוסטים (5 בשבוע)</option>
+              <option value="30">30 פוסטים (כל יום)</option>
             </select>
           </div>
           <div>
@@ -1253,56 +1272,7 @@ textarea:focus{border-color:var(--accent);}
       </div>
     </div><!-- /tab-tracker -->
 
-    <!-- TAB: COMPETITOR -->
-    <div class="tool-pane" id="tab-competitor">
-      <div class="comp-setup">
-        <div class="lbl" style="margin-bottom:6px">🎯 ניתוח מתחרים</div>
-        <p style="font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.6;">הדבק פוסטים של המתחרה שלך — ה-AI יגיד לך מה הוא עושה שאתה לא, ואיך לנצח אותו.</p>
-        <div style="margin-bottom:14px;">
-          <div class="lbl" style="margin-bottom:8px">שם המתחרה / שם העסק שלו</div>
-          <input type="text" id="compName" placeholder="לדוגמה: סלון יופי מיכל"
-            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:11px 14px;color:var(--text);font-family:'Heebo',sans-serif;font-size:14px;outline:none;transition:border-color .2s;"
-            onfocus="this.style.borderColor='var(--accent2)'" onblur="this.style.borderColor='var(--border)'"/>
-        </div>
-        <div style="margin-bottom:14px;">
-          <div class="lbl" style="margin-bottom:8px">הדבק 3-5 פוסטים של המתחרה (כיתוב בלבד)</div>
-          <textarea class="comp-posts-area" id="compPosts" placeholder="פוסט 1:
-&quot;טקסט של פוסט ראשון...&quot;
 
-פוסט 2:
-&quot;טקסט של פוסט שני...&quot;
-
-פוסט 3:
-..."></textarea>
-        </div>
-        <div style="margin-bottom:14px;">
-          <div class="lbl" style="margin-bottom:8px">תחום העסק שלך</div>
-          <select id="compNiche" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:11px 14px;color:var(--text);font-family:'Heebo',sans-serif;font-size:14px;outline:none;">
-            <option value="beauty">קוסמטיקה / יופי</option>
-            <option value="restaurant">מסעדה / אוכל</option>
-            <option value="fitness">כושר / תזונה</option>
-            <option value="fashion">אופנה</option>
-            <option value="ecommerce">חנות אונליין</option>
-            <option value="realEstate">נדל"ן</option>
-            <option value="tech">טכנולוגיה</option>
-            <option value="health">בריאות</option>
-            <option value="education">חינוך</option>
-            <option value="localBusiness">עסק מקומי</option>
-            <option value="general">כללי</option>
-          </select>
-        </div>
-        <button onclick="analyzeCompetitor()" style="width:100%;padding:14px;background:linear-gradient(135deg,#fc5c9c,#facc15);border:none;border-radius:var(--rs);color:#000;font-family:'Heebo',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;" id="compBtn">
-          🎯 נתח את המתחרה
-        </button>
-      </div>
-
-      <div id="compLoading" style="display:none;text-align:center;padding:40px;">
-        <div class="ring"></div>
-        <div style="color:var(--muted);margin-top:16px;">מנתח את פוסטי המתחרה...</div>
-      </div>
-
-      <div id="compResults" style="display:none;"></div>
-    </div><!-- /tab-competitor -->
 
   </div><!-- /tool-wrap -->
 </div><!-- /toolPage -->
@@ -1545,13 +1515,18 @@ async function doAnalyze(){
 תחום: ${nL[niche]}
 מטרה: ${gL[goal]}
 ${hasMedia?`מדיה: ${mediaType==='video'?'סרטון (פריים ראשון)':'תמונה'}`:''}
+${hasComp?`
+פוסטים של המתחרה ${compName?'('+compName+')':''}:
+"""
+${compPosts}
+"""`:''}
 כיתוב:
 """${post}"""
 
 חשוב: ציונים מציאותיים (35-55 לפוסט ממוצע). הפוסט המשופר חייב להיות דרמטית שונה ועם hook חזק לפי AIDA/PAS.
 
 החזר JSON בלבד:
-{"score":<0-100>,"verdict":"<3-5 מילים חדות>","summary":"<2-3 משפטים עם insight ספציפי>","tags":["<תג1>","<תג2>"],"loss_estimate":"<משפט אחד: 'הפוסט הזה מפסיד בערך X לקוחות פוטנציאליים כל שבוע כי...'>","categories":[{"name":"Hook ופתיחה","icon":"🎣","score":<0-100>,"desc":"<ניתוח ספציפי>"},{"name":"קריאה לפעולה","icon":"🎯","score":<0-100>,"desc":"<ניתוח>"},{"name":"התאמה לאלגוריתם","icon":"⚡","score":<0-100>,"desc":"<ניתוח>"},{"name":"מסר ותועלת","icon":"💎","score":<0-100>,"desc":"<ניתוח>"},{"name":"שפה ורגש","icon":"❤️","score":<0-100>,"desc":"<ניתוח>"},{"name":"מבנה וקריאות","icon":"📐","score":<0-100>,"desc":"<ניתוח>"}],"strengths":["<1>","<2>","<3>"],"weaknesses":["<1>","<2>","<3>"],"improved":"<פוסט משופר שלם ודרמטי עם hook חזק>","hashtags":["#1","#2","#3","#4","#5","#6","#7","#8","#9","#10"],"next_steps":["<1>","<2>","<3>","<4>"]${hasMedia?`,"visual_analysis":{"scores":[{"label":"Hook ויזואלי","desc":"<ניתוח>","score":<0-100>},{"label":"איכות טכנית","desc":"<ניתוח>","score":<0-100>},{"label":"קומפוזיציה","desc":"<ניתוח>","score":<0-100>},{"label":"מיתוג","desc":"<ניתוח>","score":<0-100>},{"label":"התאמה למטרה","desc":"<ניתוח>","score":<0-100>}],"strengths":["<1>","<2>","<3>"],"weaknesses":["<1>","<2>","<3>"],"design_tips":["<1>","<2>","<3>","<4>"],"text_alignment":"<פסקה>"}`:''}
+{"score":<0-100>,"verdict":"<3-5 מילים חדות>","summary":"<2-3 משפטים עם insight ספציפי>","tags":["<תג1>","<תג2>"],"loss_estimate":"<משפט אחד: 'הפוסט הזה מפסיד בערך X לקוחות פוטנציאליים כל שבוע כי...'>","categories":[{"name":"Hook ופתיחה","icon":"🎣","score":<0-100>,"desc":"<ניתוח ספציפי>"},{"name":"קריאה לפעולה","icon":"🎯","score":<0-100>,"desc":"<ניתוח>"},{"name":"התאמה לאלגוריתם","icon":"⚡","score":<0-100>,"desc":"<ניתוח>"},{"name":"מסר ותועלת","icon":"💎","score":<0-100>,"desc":"<ניתוח>"},{"name":"שפה ורגש","icon":"❤️","score":<0-100>,"desc":"<ניתוח>"},{"name":"מבנה וקריאות","icon":"📐","score":<0-100>,"desc":"<ניתוח>"}],"strengths":["<1>","<2>","<3>"],"weaknesses":["<1>","<2>","<3>"],"improved":"<פוסט משופר שלם ודרמטי עם hook חזק>","hashtags":["#1","#2","#3","#4","#5","#6","#7","#8","#9","#10"],"next_steps":["<1>","<2>","<3>","<4>"]${hasComp?',"competitor_analysis":{"competitor_strengths":["<1>","<2>","<3>"],"your_advantages":["<1>","<2>","<3>"],"gap":"<השוואה בין הפוסטים>","counter_post":"<פוסט מוכן שיבדיל>"}':''  }${hasMedia?`,"visual_analysis":{"scores":[{"label":"Hook ויזואלי","desc":"<ניתוח>","score":<0-100>},{"label":"איכות טכנית","desc":"<ניתוח>","score":<0-100>},{"label":"קומפוזיציה","desc":"<ניתוח>","score":<0-100>},{"label":"מיתוג","desc":"<ניתוח>","score":<0-100>},{"label":"התאמה למטרה","desc":"<ניתוח>","score":<0-100>}],"strengths":["<1>","<2>","<3>"],"weaknesses":["<1>","<2>","<3>"],"design_tips":["<1>","<2>","<3>","<4>"],"text_alignment":"<פסקה>"}`:''}
 }`;
 
   try{
@@ -1638,6 +1613,27 @@ function renderResults(r,hasMedia,origPost){
   document.getElementById('improvedText').textContent=r.improved||'';
   document.getElementById('hashtagsList').innerHTML=(r.hashtags||[]).map(h=>`<span class="htag" onclick="copyText('${h}')">${h}</span>`).join('');
   document.getElementById('nextStepsList').innerHTML=(r.next_steps||[]).map((t,i)=>`<div class="insight"><div class="idot" style="background:var(--accent2)"></div><div><strong>${i+1}.</strong> ${t}</div></div>`).join('');
+
+  // Competitor result
+  const compPanel=document.getElementById('compResultPanel');
+  const compBody=document.getElementById('compResultBody');
+  if(r.competitor_analysis && compPanel && compBody){
+    compPanel.style.display='block';
+    const ca=r.competitor_analysis;
+    let ch='<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">';
+    ch+='<div><div style="font-size:12px;font-weight:700;color:#f87171;margin-bottom:8px;">מה המתחרה עושה טוב</div>'+(ca.competitor_strengths||[]).map(s=>`<div class="insight"><div class="idot" style="background:var(--red)"></div><div style="font-size:13px;color:var(--muted)">${s}</div></div>`).join('')+'</div>';
+    ch+='<div><div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:8px;">היתרונות שלך</div>'+(ca.your_advantages||[]).map(s=>`<div class="insight"><div class="idot" style="background:var(--green)"></div><div style="font-size:13px;color:var(--muted)">${s}</div></div>`).join('')+'</div>';
+    ch+='</div>';
+    if(ca.gap) ch+=`<div style="background:rgba(252,92,156,.06);border:1px solid rgba(252,92,156,.2);border-radius:10px;padding:14px;font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:14px;">${ca.gap}</div>`;
+    if(ca.counter_post){
+      ch+=`<div style="margin-bottom:6px;font-size:13px;font-weight:700;">✨ פוסט שיבדיל אותך מהמתחרה</div>`;
+      ch+=`<div style="background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.2);border-radius:10px;padding:14px;font-size:14px;line-height:1.8;white-space:pre-wrap;margin-bottom:8px;">${ca.counter_post}</div>`;
+      ch+=`<span style="font-size:12px;color:var(--accent);cursor:pointer;text-decoration:underline" onclick="copyText(document.getElementById('compResultBody').querySelector('div[style*=pre-wrap]').textContent)">📋 העתק פוסט</span>`;
+    }
+    compBody.innerHTML=ch;
+  } else if(compPanel){
+    compPanel.style.display='none';
+  }
 
   // Visual
   if(hasMedia&&r.visual_analysis){
