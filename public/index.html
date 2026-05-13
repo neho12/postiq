@@ -560,6 +560,9 @@ textarea:focus{border-color:var(--accent);}
   .nav{padding:14px 18px;}
   .hero{padding:44px 16px 56px;}
   .calc-inputs{grid-template-columns:1fr;}
+  .feat-grid-2col{grid-template-columns:1fr!important;}
+  .tracker-mock-grid{grid-template-columns:1fr!important;}
+  .vs-table .comp-section{grid-template-columns:1fr!important;}
   .stats-inner{gap:0;}
   .stat-item{padding:12px 18px;}
   .stat-div{width:100%;height:1px;margin:0;}
@@ -744,11 +747,16 @@ textarea:focus{border-color:var(--accent);}
 
   <!-- UNIQUE VALUE SECTION -->
   <div style="max-width:900px;margin:0 auto 90px;padding:0 20px;position:relative;z-index:1;">
-    <div class="section-eyebrow">למה PostIQ ולא ChatGPT?</div>
-    <h2 class="section-title">הכלי היחיד שמחבר<br/>ניתוח, תכנון ומעקב — במקום אחד</h2>
-    <p class="section-sub">ChatGPT יכול לשפר פוסט אחד. PostIQ מנהל את כל השיווק שלך.</p>
+    <div class="section-eyebrow">זה לא עוד AI. זה משהו אחר לגמרי.</div>
+    <h2 class="section-title" style="font-size:clamp(28px,6vw,52px);letter-spacing:-1px;">
+      PostIQ הוא המנהל שיווק<br/>
+      <span style="background:linear-gradient(135deg,#5cf4fc,#7c5cfc,#fc5c9c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+        שלא יכולת להרשות לעצמך.
+      </span>
+    </h2>
+    <p class="section-sub">ChatGPT משפר פוסט. PostIQ מנתח, מתכנן, עוקב אחרי התוצאות — ומנצח את המתחרים שלך. הכל במקום אחד, בעברית, ב-₪49 לחודש.</p>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;" class="feat-grid-2col">
       <div style="background:linear-gradient(135deg,rgba(92,244,252,.06),rgba(124,92,252,.04));border:1px solid rgba(92,244,252,.2);border-radius:18px;padding:28px;position:relative;overflow:hidden;">
         <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#5cf4fc,#7c5cfc);"></div>
         <div style="font-size:36px;margin-bottom:14px;">📅</div>
@@ -778,7 +786,7 @@ textarea:focus{border-color:var(--accent);}
 
     <div style="background:linear-gradient(135deg,rgba(74,222,128,.06),rgba(124,92,252,.04));border:1px solid rgba(74,222,128,.2);border-radius:18px;padding:28px;position:relative;overflow:hidden;margin-bottom:20px;">
       <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#4ade80,#7c5cfc);"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center;" class="tracker-mock-grid">
         <div>
           <div style="font-size:36px;margin-bottom:14px;">📊</div>
           <div style="font-size:18px;font-weight:900;margin-bottom:10px;">מעקב תוצאות חכם</div>
@@ -808,7 +816,7 @@ textarea:focus{border-color:var(--accent);}
     </div>
 
     <!-- VS Table -->
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;" class="vs-table">
       <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr;text-align:center;background:rgba(124,92,252,.05);">
         <div style="padding:14px 16px;font-size:13px;font-weight:700;color:var(--muted);text-align:right;">פיצ׳ר</div>
         <div style="padding:14px;font-size:14px;font-weight:900;color:var(--accent);border-right:1px solid var(--border);">PostIQ</div>
