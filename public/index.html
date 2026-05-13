@@ -479,10 +479,10 @@ textarea:focus{border-color:var(--accent);}
   <!-- HERO -->
   <div class="hero">
     <div class="live-badge"><div class="live-dot"></div> 1,240+ בעלי עסקים משתמשים</div>
-    <h1 class="hero-h1">כל פוסט חלש<br/>עולה לך <em>לקוחות.</em></h1>
-    <p class="hero-sub">PostIQ מנתח את הפוסט, התמונה והסרטון שלך ברמת מומחה שיווק — ומחזיר פוסט משופר מוכן להעתקה תוך 15 שניות.</p>
+    <h1 class="hero-h1">הפוסטים שלך<br/>מפסידים לקוחות.<br/><em>תפסיק את זה.</em></h1>
+    <p class="hero-sub">הכנס פוסט. קבל ניתוח מקצועי + פוסט משופר מוכן להעתקה — תוך 15 שניות. בלי ידע בשיווק. בלי ניחושים.</p>
     <div class="hero-cta-row">
-      <button class="btn-primary" onclick="startTrial()">נתח פוסט אחד חינם ←</button>
+      <button class="btn-primary" onclick="startTrial()">⚡ נתח פוסט אחד חינם עכשיו ←</button>
     </div>
     <p class="hero-note">ניתוח אחד חינם · ללא כרטיס אשראי · ללא הרשמה</p>
   </div>
@@ -534,18 +534,6 @@ textarea:focus{border-color:var(--accent);}
     <h2 class="section-title">ראה את ההבדל בעצמך</h2>
     <p class="section-sub">אותו עסק, אותו מוצר — פוסט שונה לגמרי</p>
     <div class="ba-grid">
-      <div class="ba-card ba-before">
-        <div class="ba-tag ba-tag-before">✗ לפני PostIQ</div>
-        <div class="ba-post">סלון יופי שמח להודיע על מבצע מניקור!
-השירות שלנו הכי טוב בעיר.
-בואו לבקר אותנו 😊
-#מניקור #סלוןיופי #מבצע</div>
-        <div class="ba-metrics">
-          <div class="ba-metric">❤️ <span>12</span> לייקים</div>
-          <div class="ba-metric">💬 <span>1</span> תגובה</div>
-          <div class="ba-metric">👁️ <span>89</span> צפיות</div>
-        </div>
-      </div>
       <div class="ba-card ba-after">
         <div class="ba-tag ba-tag-after">✓ אחרי PostIQ</div>
         <div class="ba-post"><strong>הציפורניים שלך מספרות עליך — מה הן אומרות?</strong>
@@ -562,13 +550,25 @@ textarea:focus{border-color:var(--accent);}
           <div class="ba-metric">👁️ <span>3,200</span> צפיות</div>
         </div>
       </div>
+      <div class="ba-card ba-before">
+        <div class="ba-tag ba-tag-before">✗ לפני PostIQ</div>
+        <div class="ba-post">סלון יופי שמח להודיע על מבצע מניקור!
+השירות שלנו הכי טוב בעיר.
+בואו לבקר אותנו 😊
+#מניקור #סלוןיופי #מבצע</div>
+        <div class="ba-metrics">
+          <div class="ba-metric">❤️ <span>12</span> לייקים</div>
+          <div class="ba-metric">💬 <span>1</span> תגובה</div>
+          <div class="ba-metric">👁️ <span>89</span> צפיות</div>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- HOW IT WORKS -->
   <div class="hiw-section">
     <div class="section-eyebrow">איך זה עובד</div>
-    <h2 class="section-title">3 שלבים. 15 שניות.</h2>
+    <h2 class="section-title">3 שלבים. 15 שניות.<br/>תוצאות שתרגיש מחר.</h2>
     <p class="section-sub">מהדבקת הפוסט ועד פוסט משופר מוכן להעתקה</p>
     <div class="hiw-grid">
       <div class="hiw-card">
@@ -746,9 +746,9 @@ textarea:focus{border-color:var(--accent);}
 
   <!-- FINAL CTA -->
   <div class="final-cta">
-    <h2>מוכן לפוסטים<br/>שבאמת מביאים לקוחות?</h2>
+    <h2>כל יום שאתה ממתין<br/>הוא יום שאתה <em style="font-style:normal;background:linear-gradient(135deg,#fc5c9c,#7c5cfc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">מפסיד.</em></h2>
     <p>הצטרף ל-1,240+ בעלי עסקים שכבר רואים תוצאות</p>
-    <button class="btn-primary" onclick="startTrial()">נסה ניתוח אחד חינם ←</button>
+    <button class="btn-primary" onclick="startTrial()">⚡ תפסיק להפסיד — נסה חינם עכשיו ←</button>
     <p class="hero-note" style="margin-top:14px;">ללא כרטיס אשראי · ללא הרשמה</p>
   </div>
 
@@ -1334,6 +1334,47 @@ function copyText(t){
     document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
   });
 }
+</script>
+
+<!-- STICKY CTA -->
+<div id="stickyCTA" style="position:fixed;bottom:0;left:0;right:0;z-index:999;
+  background:linear-gradient(135deg,rgba(7,7,15,.97),rgba(15,15,26,.97));
+  border-top:1px solid rgba(124,92,252,.3);
+  padding:12px 20px;display:none;
+  align-items:center;justify-content:space-between;gap:10px;
+  backdrop-filter:blur(12px);">
+  <div class="sticky-text" style="font-size:14px;font-weight:700;">
+    <span style="color:var(--muted);font-size:12px;font-weight:400;display:block;margin-bottom:1px;">הפוסטים שלך יכולים להיות טובים יותר</span>
+    נתח פוסט אחד חינם — 15 שניות
+  </div>
+  <button onclick="startTrial()" style="background:linear-gradient(135deg,#7c5cfc,#fc5c9c);
+    border:none;border-radius:10px;padding:11px 22px;color:#fff;
+    font-family:'Heebo',sans-serif;font-size:14px;font-weight:700;
+    cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .2s;
+    box-shadow:0 4px 20px rgba(124,92,252,.45);">
+    ⚡ נסה חינם
+  </button>
+</div>
+<style>
+@media(max-width:500px){
+  #stickyCTA{padding:10px 14px !important;}
+  #stickyCTA .sticky-text{font-size:12px !important;}
+  #stickyCTA .sticky-text span{display:none !important;}
+  #stickyCTA button{padding:10px 16px !important;font-size:13px !important;}
+}
+</style>
+
+<script>
+// Show sticky CTA after scrolling past hero
+window.addEventListener('scroll', () => {
+  const sticky = document.getElementById('stickyCTA');
+  if(!sticky) return;
+  if(window.scrollY > 400 && document.getElementById('landingPage').style.display !== 'none') {
+    sticky.style.display = 'flex';
+  } else {
+    sticky.style.display = 'none';
+  }
+});
 </script>
 </body>
 </html>
