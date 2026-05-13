@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PostIQ – מנתח פוסטים חכם</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#0a0a0f;--surface:#12121a;--surface2:#1a1a26;--border:#2a2a3d;
+  --accent:#7c5cfc;--accent2:#fc5c9c;--accent3:#5cf4fc;
+  --text:#e8e8f0;--text-muted:#7070a0;
+  --green:#4ade80;--yellow:#facc15;--red:#f87171;
+  --radius:16px;--radius-sm:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Heebo',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 80% 10%,rgba(124,92,252,.13) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 30% at 10% 90%,rgba(252,92,156,.09) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 50% at 50% 50%,rgba(92,244,252,.05) 0%,transparent 70%);
+}
+
+/* ═══════════════════════════════
+   LANDING PAGE
+═══════════════════════════════ */
+#landingPage{position:relative;z-index:1;}
+
+.hero{text-align:center;padding:80px 24px 60px;}
+.logo-badge{display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,rgba(124,92,252,.2),rgba(252,92,156,.2));
+  border:1px solid rgba(124,92,252,.4);border-radius:100px;
+  padding:6px 18px;font-size:13px;color:var(--accent);
+  font-family:'Space Mono',monospace;margin-bottom:24px;letter-spacing:1px;}
+.logo-badge::before{content:'◈';animation:spin 4s linear infinite;display:inline-block;}
+.hero h1{font-size:clamp(38px,8vw,72px);font-weight:900;line-height:1.05;
+  background:linear-gradient(135deg,#fff 30%,var(--accent) 70%,var(--accent2) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:20px;}
+.hero-sub{color:var(--text-muted);font-size:18px;font-weight:300;max-width:500px;
+  margin:0 auto 48px;line-height:1.65;}
+
+/* Features */
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px;max-width:900px;margin:0 auto 64px;padding:0 24px;}
+.feature-card{background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:24px;text-align:center;
+  transition:border-color .2s,transform .2s;}
+.feature-card:hover{border-color:rgba(124,92,252,.4);transform:translateY(-3px);}
+.feature-icon{font-size:32px;margin-bottom:12px;}
+.feature-title{font-size:15px;font-weight:700;margin-bottom:8px;}
+.feature-desc{font-size:13px;color:var(--text-muted);line-height:1.55;}
+
+/* Pricing */
+.pricing-section{max-width:900px;margin:0 auto 80px;padding:0 24px;}
+.pricing-title{text-align:center;font-size:28px;font-weight:900;margin-bottom:8px;}
+.pricing-sub{text-align:center;color:var(--text-muted);font-size:15px;margin-bottom:40px;}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;}
+
+.plan-card{background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:28px;position:relative;transition:transform .2s;}
+.plan-card:hover{transform:translateY(-4px);}
+.plan-card.popular{border-color:var(--accent);background:linear-gradient(135deg,rgba(124,92,252,.08),var(--surface));}
+.popular-badge{position:absolute;top:-12px;right:50%;transform:translateX(50%);
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border-radius:100px;padding:4px 14px;font-size:12px;font-weight:700;color:#fff;white-space:nowrap;}
+.plan-name{font-size:14px;font-weight:600;color:var(--text-muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;}
+.plan-price{font-size:42px;font-weight:900;margin-bottom:4px;line-height:1;}
+.plan-price span{font-size:16px;font-weight:400;color:var(--text-muted);}
+.plan-period{font-size:13px;color:var(--text-muted);margin-bottom:24px;}
+.plan-features{list-style:none;margin-bottom:28px;}
+.plan-features li{font-size:14px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);
+  display:flex;align-items:center;gap:10px;}
+.plan-features li:last-child{border-bottom:none;}
+.plan-features li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;}
+
+.plan-btn{width:100%;padding:14px;border:none;border-radius:var(--radius-sm);
+  font-family:'Heebo',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;}
+.plan-btn.outline{background:transparent;border:1px solid var(--border);color:var(--text);}
+.plan-btn.outline:hover{border-color:var(--accent);color:var(--accent);}
+.plan-btn.filled{background:linear-gradient(135deg,var(--accent),#5c3fdc);color:#fff;}
+.plan-btn.filled:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(124,92,252,.4);}
+
+/* Free trial */
+.free-trial-banner{
+  max-width:700px;margin:0 auto 80px;padding:0 24px;text-align:center;}
+.free-trial-inner{background:linear-gradient(135deg,rgba(124,92,252,.1),rgba(252,92,156,.08));
+  border:1px solid rgba(124,92,252,.3);border-radius:var(--radius);padding:32px;}
+.free-trial-inner h3{font-size:22px;font-weight:900;margin-bottom:8px;}
+.free-trial-inner p{color:var(--text-muted);font-size:14px;margin-bottom:24px;line-height:1.6;}
+.try-free-btn{display:inline-block;padding:14px 36px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border:none;border-radius:var(--radius-sm);color:#fff;
+  font-family:'Heebo',sans-serif;font-size:17px;font-weight:700;
+  cursor:pointer;transition:all .2s;}
+.try-free-btn:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(124,92,252,.45);}
+
+/* ═══════════════════════════════
+   TOOL PAGE
+═══════════════════════════════ */
+#toolPage{display:none;position:relative;z-index:1;}
+.container{max-width:860px;margin:0 auto;padding:40px 24px 80px;}
+
+.tool-header{text-align:center;margin-bottom:36px;}
+.tool-header h2{font-size:28px;font-weight:900;margin-bottom:8px;}
+.tool-header p{color:var(--text-muted);font-size:15px;}
+.back-btn{display:inline-flex;align-items:center;gap:6px;background:var(--surface2);
+  border:1px solid var(--border);border-radius:100px;padding:6px 14px;
+  font-size:13px;color:var(--text-muted);cursor:pointer;transition:all .2s;
+  margin-bottom:20px;font-family:'Heebo',sans-serif;}
+.back-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+/* Usage counter */
+.usage-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.usage-text{font-size:13px;color:var(--text-muted);}
+.usage-text strong{color:var(--text);}
+.usage-dots{display:flex;gap:5px;}
+.usage-dot{width:10px;height:10px;border-radius:50%;background:var(--border);transition:background .3s;}
+.usage-dot.used{background:var(--accent);}
+.upgrade-link{font-size:12px;color:var(--accent);cursor:pointer;text-decoration:underline;}
+
+/* Input card */
+.input-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:28px;margin-bottom:20px;position:relative;overflow:hidden;}
+.input-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3));}
+.input-label{font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;
+  letter-spacing:1.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.input-label span{width:6px;height:6px;background:var(--accent);border-radius:50%;display:inline-block;}
+
+.platform-selector{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+.platform-btn{background:var(--surface2);border:1px solid var(--border);border-radius:100px;
+  padding:8px 16px;font-family:'Heebo',sans-serif;font-size:13px;color:var(--text-muted);
+  cursor:pointer;transition:all .2s;}
+.platform-btn:hover{border-color:var(--accent);color:var(--text);}
+.platform-btn.active{background:rgba(124,92,252,.15);border-color:var(--accent);color:var(--accent);}
+
+.meta-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:11px 14px;color:var(--text);font-family:'Heebo',sans-serif;font-size:14px;
+  outline:none;cursor:pointer;transition:border-color .2s;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%237070a0' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:left 12px center;}
+select:focus{border-color:var(--accent);}
+select option{background:var(--surface2);}
+
+textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:16px;color:var(--text);font-family:'Heebo',sans-serif;font-size:15px;
+  line-height:1.75;resize:vertical;min-height:150px;transition:border-color .2s;outline:none;}
+textarea::placeholder{color:var(--text-muted);}
+textarea:focus{border-color:var(--accent);}
+.char-counter{text-align:left;font-family:'Space Mono',monospace;font-size:11px;color:var(--text-muted);margin-top:8px;}
+
+/* Media */
+.media-type-tabs{display:flex;gap:8px;margin-bottom:12px;}
+.media-tab{background:var(--surface2);border:1px solid var(--border);border-radius:100px;
+  padding:6px 14px;font-family:'Heebo',sans-serif;font-size:12px;color:var(--text-muted);cursor:pointer;transition:all .2s;}
+.media-tab:hover{border-color:var(--accent);color:var(--text);}
+.media-tab.active{background:rgba(124,92,252,.15);border-color:var(--accent);color:var(--accent);}
+.upload-zone{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:24px;
+  text-align:center;cursor:pointer;transition:all .25s;position:relative;background:var(--surface2);}
+.upload-zone:hover,.upload-zone.drag-over{border-color:var(--accent);background:rgba(124,92,252,.06);}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.upload-icon{font-size:26px;margin-bottom:8px;}
+.upload-title{font-size:14px;font-weight:600;margin-bottom:4px;}
+.upload-sub{font-size:12px;color:var(--text-muted);}
+.video-note{background:rgba(250,204,21,.07);border:1px solid rgba(250,204,21,.2);
+  border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;color:var(--yellow);margin-top:10px;display:none;}
+.video-note.visible{display:block;}
+.media-preview-wrap{display:none;position:relative;border-radius:var(--radius-sm);overflow:hidden;background:#000;margin-top:4px;}
+.media-preview-wrap.visible{display:block;}
+.media-preview-wrap img,.media-preview-wrap video{width:100%;max-height:300px;object-fit:contain;display:block;}
+.media-remove-btn{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.75);
+  border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:4px 12px;
+  font-size:12px;color:#fff;cursor:pointer;font-family:'Heebo',sans-serif;}
+.media-remove-btn:hover{background:rgba(248,113,113,.6);}
+.media-name-badge{position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.7);
+  border-radius:100px;padding:4px 12px;font-size:11px;color:var(--text-muted);font-family:'Space Mono',monospace;}
+
+.analyze-btn{width:100%;margin-top:20px;padding:16px;
+  background:linear-gradient(135deg,var(--accent),#5c3fdc);
+  border:none;border-radius:var(--radius-sm);color:#fff;
+  font-family:'Heebo',sans-serif;font-size:17px;font-weight:700;
+  cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;align-items:center;justify-content:center;gap:10px;}
+.analyze-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 40px rgba(124,92,252,.4);}
+.analyze-btn:disabled{opacity:.55;cursor:not-allowed;transform:none;}
+
+.error-msg{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.3);
+  border-radius:var(--radius-sm);padding:14px 18px;color:var(--red);font-size:14px;display:none;margin-top:12px;}
+.error-msg.visible{display:block;}
+
+/* Loading */
+.loading-state{display:none;text-align:center;padding:50px 20px;}
+.loading-state.visible{display:block;}
+.loader-ring{width:60px;height:60px;border:3px solid var(--border);border-top-color:var(--accent);
+  border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 20px;}
+.loading-text{color:var(--text-muted);font-size:15px;}
+.loading-steps{display:flex;flex-direction:column;gap:8px;margin-top:14px;align-items:center;}
+.loading-step{font-size:13px;color:var(--text-muted);opacity:0;transition:opacity .3s;}
+.loading-step.active{opacity:1;color:var(--accent);}
+.loading-step.done{opacity:.5;}
+.loading-step.done::before{content:'✓ ';color:var(--green);}
+
+/* Results */
+#results{display:none;}
+#results.visible{display:block;animation:fadeUp .5s ease both;}
+.result-tabs{display:flex;margin-bottom:18px;background:var(--surface);
+  border:1px solid var(--border);border-radius:var(--radius-sm);padding:4px;}
+.result-tab{flex:1;padding:10px;text-align:center;font-size:14px;font-weight:600;
+  cursor:pointer;border-radius:6px;transition:all .2s;color:var(--text-muted);
+  border:none;background:none;font-family:'Heebo',sans-serif;}
+.result-tab.active{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+.tab-pane{display:none;}
+.tab-pane.active{display:block;}
+
+.score-hero{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:28px;margin-bottom:18px;display:flex;align-items:center;gap:28px;}
+.score-circle{position:relative;flex-shrink:0;}
+.score-svg{width:110px;height:110px;transform:rotate(-90deg);}
+.score-track{fill:none;stroke:var(--border);stroke-width:8;}
+.score-fill{fill:none;stroke-width:8;stroke-linecap:round;
+  transition:stroke-dashoffset 1.3s cubic-bezier(.4,0,.2,1);stroke:url(#scoreGrad);}
+.score-number{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;font-weight:900;font-size:26px;line-height:1;}
+.score-label-sm{font-size:11px;color:var(--text-muted);font-weight:400;font-family:'Space Mono',monospace;}
+.score-details{flex:1;}
+.score-verdict{font-size:20px;font-weight:700;margin-bottom:8px;}
+.score-summary{color:var(--text-muted);font-size:14px;line-height:1.65;}
+
+.categories-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-bottom:18px;}
+.category-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;transition:border-color .2s,transform .2s;}
+.category-card:hover{border-color:rgba(124,92,252,.4);transform:translateY(-2px);}
+.cat-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.cat-name{font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px;}
+.cat-icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;}
+.cat-score{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;}
+.progress-bar{height:4px;background:var(--border);border-radius:100px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:100px;transition:width 1s cubic-bezier(.4,0,.2,1);}
+.cat-desc{font-size:12px;color:var(--text-muted);margin-top:8px;line-height:1.5;}
+
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:14px;overflow:hidden;}
+.panel-header{padding:15px 20px;font-size:14px;font-weight:600;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);}
+.panel-body{padding:16px 20px;}
+.insight-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:14px;line-height:1.6;}
+.insight-item:last-child{border-bottom:none;padding-bottom:0;}
+.insight-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:7px;}
+
+.improved-post{background:rgba(124,92,252,.06);border:1px solid rgba(124,92,252,.25);
+  border-radius:var(--radius-sm);padding:20px;font-size:15px;line-height:1.8;white-space:pre-wrap;position:relative;}
+.copy-btn{position:absolute;top:12px;left:12px;background:var(--surface2);border:1px solid var(--border);
+  border-radius:6px;padding:5px 11px;font-size:12px;color:var(--text-muted);
+  cursor:pointer;font-family:'Heebo',sans-serif;transition:all .2s;}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+.tag{display:inline-flex;align-items:center;padding:4px 10px;border-radius:100px;font-size:12px;font-weight:500;}
+.tag-good{background:rgba(74,222,128,.1);color:var(--green);border:1px solid rgba(74,222,128,.2);}
+.tag-warn{background:rgba(250,204,21,.1);color:var(--yellow);border:1px solid rgba(250,204,21,.2);}
+.tag-bad{background:rgba(248,113,113,.1);color:var(--red);border:1px solid rgba(248,113,113,.2);}
+.hashtag-list{display:flex;flex-wrap:wrap;gap:8px;}
+.hashtag{background:var(--surface2);border:1px solid var(--border);border-radius:100px;
+  padding:5px 13px;font-size:13px;color:var(--accent3);cursor:pointer;
+  transition:all .2s;font-family:'Space Mono',monospace;}
+.hashtag:hover{border-color:var(--accent3);background:rgba(92,244,252,.08);}
+
+.media-thumb{width:100%;border-radius:var(--radius-sm);overflow:hidden;background:#000;
+  max-height:250px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.media-thumb img,.media-thumb video{width:100%;max-height:250px;object-fit:contain;}
+.visual-score-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.visual-score-row:last-child{border-bottom:none;}
+.visual-score-label{flex:1;font-size:14px;}
+.visual-score-label small{display:block;color:var(--text-muted);font-size:12px;margin-top:2px;}
+.visual-score-val{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;min-width:36px;text-align:center;}
+.visual-bar-wrap{width:100px;}
+
+.share-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:16px 20px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.share-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.share-btn{background:var(--surface2);border:1px solid var(--border);border-radius:100px;
+  padding:8px 14px;font-size:13px;color:var(--text-muted);cursor:pointer;
+  transition:all .2s;font-family:'Heebo',sans-serif;}
+.share-btn:hover{border-color:var(--accent);color:var(--accent);}
+.share-btn.primary{background:rgba(124,92,252,.15);border-color:var(--accent);color:var(--accent);}
+
+/* Paywall modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);
+  z-index:1000;display:none;align-items:center;justify-content:center;padding:24px;}
+.modal-overlay.visible{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:36px;max-width:480px;width:100%;text-align:center;position:relative;}
+.modal-icon{font-size:48px;margin-bottom:16px;}
+.modal h3{font-size:24px;font-weight:900;margin-bottom:10px;}
+.modal p{color:var(--text-muted);font-size:15px;line-height:1.65;margin-bottom:28px;}
+.modal-plans{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+.modal-plan{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:18px;cursor:pointer;transition:all .2s;text-align:center;}
+.modal-plan:hover,.modal-plan.selected{border-color:var(--accent);background:rgba(124,92,252,.1);}
+.modal-plan-name{font-size:13px;color:var(--text-muted);margin-bottom:6px;}
+.modal-plan-price{font-size:26px;font-weight:900;}
+.modal-plan-price span{font-size:13px;font-weight:400;color:var(--text-muted);}
+.modal-plan-desc{font-size:12px;color:var(--text-muted);margin-top:4px;}
+.modal-pay-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),#5c3fdc);
+  border:none;border-radius:var(--radius-sm);color:#fff;
+  font-family:'Heebo',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;}
+.modal-pay-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(124,92,252,.4);}
+.modal-close{position:absolute;top:14px;left:14px;background:var(--surface2);border:1px solid var(--border);
+  border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:14px;color:var(--text-muted);transition:all .2s;}
+.modal-close:hover{border-color:var(--red);color:var(--red);}
+.modal-note{font-size:12px;color:var(--text-muted);margin-top:12px;}
+
+@keyframes fadeDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+@media(max-width:600px){
+  .score-hero{flex-direction:column;text-align:center;}
+  .categories-grid{grid-template-columns:1fr;}
+  #swGrid,#visualSwGrid{grid-template-columns:1fr!important;}
+  .meta-row{grid-template-columns:1fr;}
+  .modal-plans{grid-template-columns:1fr;}
+  .visual-bar-wrap{width:70px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ LANDING PAGE ══════════════ -->
+<div id="landingPage">
+  <div class="hero">
+    <div class="logo-badge">PostIQ · מנתח פוסטים חכם</div>
+    <h1>הפוסטים שלך<br/>יכולים להיות<br/>הרבה יותר טובים</h1>
+    <p class="hero-sub">הכלי היחיד שמנתח את הכיתוב, התמונה והסרטון שלך ברמת מומחה שיווק — ומחזיר פוסט משופר תוך שניות</p>
+    <button class="try-free-btn" onclick="startFreeTrial()">← נסה חינם עכשיו — 3 ניתוחים</button>
+  </div>
+
+  <!-- Features -->
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon">🧠</div>
+      <div class="feature-title">ניתוח ברמת מומחה</div>
+      <div class="feature-desc">בינה מלאכותית שיודעת את האלגוריתמים של כל פלטפורמה ועקרונות קופירייטינג מקצועיים</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🖼️</div>
+      <div class="feature-title">ניתוח תמונה וסרטון</div>
+      <div class="feature-desc">לא רק הכיתוב — גם התמונה או הסרטון שלך נבדקים ומקבלים המלצות עיצוב ספציפיות</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">✨</div>
+      <div class="feature-title">פוסט משופר מוכן</div>
+      <div class="feature-desc">מקבלים פוסט חדש מוכן להעתקה עם hook חזק, מסר ברור וקריאה לפעולה שעובדת</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <div class="feature-title">ציון ודו״ח מפורט</div>
+      <div class="feature-desc">ציון מ-0 עד 100, ניתוח 6 קטגוריות, חוזקות, חולשות, האשטגים ואסטרטגיה לצעד הבא</div>
+    </div>
+  </div>
+
+  <!-- Pricing -->
+  <div class="pricing-section">
+    <div class="pricing-title">תמחור פשוט ושקוף</div>
+    <div class="pricing-sub">התחל בחינם, שדרג כשתרצה</div>
+    <div class="pricing-grid">
+      <div class="plan-card">
+        <div class="plan-name">חינמי</div>
+        <div class="plan-price">₪0</div>
+        <div class="plan-period">לתמיד</div>
+        <ul class="plan-features">
+          <li>3 ניתוחים להתנסות</li>
+          <li>ניתוח כיתוב</li>
+          <li>פוסט משופר</li>
+          <li>האשטגים מומלצים</li>
+        </ul>
+        <button class="plan-btn outline" onclick="startFreeTrial()">התחל חינם</button>
+      </div>
+      <div class="plan-card popular">
+        <div class="popular-badge">⭐ הכי פופולרי</div>
+        <div class="plan-name">מנוי חודשי</div>
+        <div class="plan-price">₪49 <span>/ חודש</span></div>
+        <div class="plan-period">ניתוחים בלתי מוגבלים</div>
+        <ul class="plan-features">
+          <li>ניתוחים ללא הגבלה</li>
+          <li>ניתוח תמונה וסרטון</li>
+          <li>פוסט משופר מלא</li>
+          <li>10 האשטגים מותאמים</li>
+          <li>אסטרטגיית תוכן</li>
+        </ul>
+        <button class="plan-btn filled" onclick="showPaywall('monthly')">התחל עכשיו</button>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">שנתי — חיסכון 40%</div>
+        <div class="plan-price">₪29 <span>/ חודש</span></div>
+        <div class="plan-period">מחויב שנתית — ₪348</div>
+        <ul class="plan-features">
+          <li>כל מה שבמנוי חודשי</li>
+          <li>עדיפות בתמיכה</li>
+          <li>תכונות חדשות ראשון</li>
+        </ul>
+        <button class="plan-btn outline" onclick="showPaywall('yearly')">בחר שנתי</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA Banner -->
+  <div class="free-trial-banner">
+    <div class="free-trial-inner">
+      <h3>מוכן לראות איך הפוסטים שלך יכולים להיות?</h3>
+      <p>3 ניתוחים ראשונים בחינם לגמרי — ללא כרטיס אשראי, ללא הרשמה</p>
+      <button class="try-free-btn" onclick="startFreeTrial()">← התחל עכשיו בחינם</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ TOOL PAGE ══════════════ -->
+<div id="toolPage">
+  <div class="container">
+    <button class="back-btn" onclick="showLanding()">← חזרה לדף הבית</button>
+
+    <div class="tool-header">
+      <div class="logo-badge" style="margin-bottom:14px">PostIQ · מנתח פוסטים</div>
+      <h2>נתח את הפוסט שלך</h2>
+      <p>הכנס כיתוב + תמונה/סרטון וקבל ניתוח שיווקי מקצועי</p>
+    </div>
+
+    <!-- Usage counter -->
+    <div class="usage-bar" id="usageBar">
+      <div class="usage-text">ניתוחים שנשתמשו: <strong id="usageCount">0</strong> / <strong id="usageMax">3</strong></div>
+      <div class="usage-dots" id="usageDots"></div>
+      <span class="upgrade-link" onclick="showPaywall('monthly')">שדרג לבלתי מוגבל ←</span>
+    </div>
+
+    <div class="input-card">
+      <div class="input-label"><span></span>פלטפורמה</div>
+      <div class="platform-selector">
+        <button class="platform-btn active" data-platform="instagram" onclick="selectPlatform(this)">📸 Instagram</button>
+        <button class="platform-btn" data-platform="facebook"  onclick="selectPlatform(this)">👥 Facebook</button>
+        <button class="platform-btn" data-platform="linkedin"  onclick="selectPlatform(this)">💼 LinkedIn</button>
+        <button class="platform-btn" data-platform="tiktok"    onclick="selectPlatform(this)">🎵 TikTok</button>
+        <button class="platform-btn" data-platform="twitter"   onclick="selectPlatform(this)">✖ X / Twitter</button>
+      </div>
+
+      <div class="meta-row">
+        <div>
+          <div class="input-label"><span></span>תחום העסק</div>
+          <select id="nicheSelect">
+            <option value="general">כללי</option>
+            <option value="ecommerce">חנות אונליין</option>
+            <option value="restaurant">מסעדה / אוכל</option>
+            <option value="beauty">קוסמטיקה / יופי</option>
+            <option value="fitness">כושר / תזונה</option>
+            <option value="realEstate">נדל"ן</option>
+            <option value="tech">טכנולוגיה</option>
+            <option value="fashion">אופנה</option>
+            <option value="health">בריאות / רפואה</option>
+            <option value="education">חינוך / קורסים</option>
+            <option value="finance">פיננסים</option>
+            <option value="localBusiness">עסק מקומי</option>
+            <option value="creative">יצירה / עיצוב</option>
+            <option value="travel">תיירות</option>
+          </select>
+        </div>
+        <div>
+          <div class="input-label"><span></span>מטרת הפוסט</div>
+          <select id="goalSelect">
+            <option value="awareness">מודעות למותג</option>
+            <option value="engagement">מעורבות</option>
+            <option value="leads">לידים / פניות</option>
+            <option value="sales">מכירה ישירה</option>
+            <option value="traffic">תנועה לאתר</option>
+            <option value="launch">השקת מוצר</option>
+            <option value="promo">מבצע / הנחה</option>
+            <option value="education">תוכן חינוכי</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="input-label"><span></span>כיתוב הפוסט</div>
+      <textarea id="postInput" placeholder="הכנס את הכיתוב שרוצה לנתח..." oninput="updateCounter()"></textarea>
+      <div class="char-counter"><span id="charCount">0</span> תווים</div>
+
+      <div style="margin-top:18px">
+        <div class="input-label"><span></span>תמונה / סרטון <span style="font-size:11px;opacity:.5;text-transform:none;letter-spacing:0">(אופציונלי)</span></div>
+        <div class="media-type-tabs">
+          <button class="media-tab active" onclick="switchMediaTab(this,'image')">🖼️ תמונה</button>
+          <button class="media-tab"        onclick="switchMediaTab(this,'video')">🎬 סרטון</button>
+        </div>
+        <div id="uploadZone" class="upload-zone"
+             ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+          <input type="file" id="mediaInput" accept="image/*" onchange="handleMediaSelect(event)"/>
+          <div class="upload-icon" id="uploadIcon">🖼️</div>
+          <div class="upload-title" id="uploadTitle">גרור תמונה לכאן, או לחץ לבחירה</div>
+          <div class="upload-sub" id="uploadSub">PNG, JPG, WEBP · עד 10MB</div>
+        </div>
+        <div class="video-note" id="videoNote">⚡ ה-AI ינתח את פריים הפתיחה של הסרטון + הכיתוב.</div>
+        <div class="media-preview-wrap" id="mediaPreviewWrap">
+          <img   id="mediaPreviewImg"   src="" alt="" style="display:none"/>
+          <video id="mediaPreviewVideo" controls      style="display:none"></video>
+          <button class="media-remove-btn" onclick="removeMedia()">✕ הסר</button>
+          <div class="media-name-badge" id="mediaNameBadge"></div>
+        </div>
+      </div>
+
+      <div class="error-msg" id="errorMsg"></div>
+      <button class="analyze-btn" onclick="analyzePost()" id="analyzeBtn">
+        <span id="btnText">⚡ נתח את הפוסט</span>
+      </button>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-state" id="loadingState">
+      <div class="loader-ring"></div>
+      <div class="loading-text" id="loadingText">מנתח...</div>
+      <div class="loading-steps">
+        <div class="loading-step" id="step1">קורא כיתוב ומטרה</div>
+        <div class="loading-step" id="step2">סורק ויזואל</div>
+        <div class="loading-step" id="step3">מעריך כנגד benchmark</div>
+        <div class="loading-step" id="step4">כותב פוסט משופר</div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div id="results">
+      <div class="result-tabs" id="resultTabs" style="display:none">
+        <button class="result-tab active" onclick="switchResultTab(this,'text-analysis')">✍️ ניתוח כיתוב</button>
+        <button class="result-tab"        onclick="switchResultTab(this,'visual-analysis')">🎨 ניתוח ויזואל</button>
+      </div>
+
+      <div class="tab-pane active" id="text-analysis">
+        <div class="score-hero">
+          <div class="score-circle">
+            <svg class="score-svg" viewBox="0 0 120 120">
+              <defs><linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%"   stop-color="#7c5cfc"/>
+                <stop offset="100%" stop-color="#fc5c9c"/>
+              </linearGradient></defs>
+              <circle class="score-track" cx="60" cy="60" r="52"/>
+              <circle class="score-fill" id="scoreFill" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+            </svg>
+            <div class="score-number"><span id="scoreNum">--</span><span class="score-label-sm">/100</span></div>
+          </div>
+          <div class="score-details">
+            <div class="score-verdict" id="scoreVerdict"></div>
+            <div class="score-summary" id="scoreSummary"></div>
+            <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap" id="scoreTags"></div>
+          </div>
+        </div>
+        <div class="categories-grid" id="categoriesGrid"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px" id="swGrid">
+          <div class="panel"><div class="panel-header">✅ חוזקות</div><div class="panel-body" id="strengthsList"></div></div>
+          <div class="panel"><div class="panel-header">⚠️ חולשות</div><div class="panel-body" id="weaknessesList"></div></div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">✨ פוסט משופר</div>
+          <div class="panel-body">
+            <div class="improved-post">
+              <button class="copy-btn" onclick="copyImproved()">📋 העתק</button>
+              <span id="improvedText" style="display:block;padding-top:4px"></span>
+            </div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-header"># האשטגים מומלצים</div>
+          <div class="panel-body"><div class="hashtag-list" id="hashtagsList"></div></div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">🎯 הצעד הבא</div>
+          <div class="panel-body" id="nextStepsList"></div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="visual-analysis">
+        <div class="panel">
+          <div class="panel-header">🎨 ניתוח ויזואלי</div>
+          <div class="panel-body">
+            <div class="media-thumb" id="resultMediaThumb"></div>
+            <div id="visualScoreRows"></div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px" id="visualSwGrid">
+          <div class="panel"><div class="panel-header">✅ מה עובד</div><div class="panel-body" id="visualStrengths"></div></div>
+          <div class="panel"><div class="panel-header">⚠️ מה לשפר</div><div class="panel-body" id="visualWeaknesses"></div></div>
+        </div>
+        <div class="panel"><div class="panel-header">🖼️ המלצות עיצוב</div><div class="panel-body" id="visualTips"></div></div>
+        <div class="panel"><div class="panel-header">🔗 התאמה ויזואל–כיתוב</div><div class="panel-body" id="visualTextAlignment"></div></div>
+      </div>
+
+      <div class="share-panel">
+        <div style="font-size:14px;color:var(--text-muted)"><strong style="color:var(--text);display:block;margin-bottom:3px">שתף את הניתוח</strong>העתק את הפוסט המשופר ישירות לפלטפורמה שלך</div>
+        <div class="share-btns">
+          <button class="share-btn primary" onclick="copyImproved()">📋 העתק פוסט משופר</button>
+          <button class="share-btn" onclick="window.print()">🖨️ הדפס</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ PAYWALL MODAL ══════════════ -->
+<div class="modal-overlay" id="paywallModal">
+  <div class="modal">
+    <div class="modal-close" onclick="closePaywall()">✕</div>
+    <div class="modal-icon">🚀</div>
+    <h3>שדרג לניתוחים בלתי מוגבלים</h3>
+    <p>השתמשת ב-3 הניתוחים החינמיים שלך.<br/>שדרג כדי להמשיך לשפר את הפוסטים שלך ולהגדיל את העסק.</p>
+    <div class="modal-plans">
+      <div class="modal-plan selected" id="planMonthly" onclick="selectPlan('monthly')">
+        <div class="modal-plan-name">חודשי</div>
+        <div class="modal-plan-price">₪49 <span>/ חודש</span></div>
+        <div class="modal-plan-desc">ניתוחים ללא הגבלה</div>
+      </div>
+      <div class="modal-plan" id="planYearly" onclick="selectPlan('yearly')">
+        <div class="modal-plan-name">שנתי — חיסכון 40%</div>
+        <div class="modal-plan-price">₪29 <span>/ חודש</span></div>
+        <div class="modal-plan-desc">₪348 לשנה</div>
+      </div>
+    </div>
+    <button class="modal-pay-btn" onclick="goToPay()">המשך לתשלום ←</button>
+    <div class="modal-note">🔒 תשלום מאובטח · ביטול בכל עת</div>
+  </div>
+</div>
+
+<script>
+/* ═══ State ═══ */
+let selectedPlatform = 'instagram';
+let mediaBase64 = null;
+let mediaType   = null;
+let selectedPlan = 'monthly';
+
+const FREE_LIMIT = 3;
+const PAYMENT_URL_MONTHLY = 'https://YOUR-PAYMENT-LINK-MONTHLY'; // ← תחליף בלינק Stripe / PayPlus
+const PAYMENT_URL_YEARLY  = 'https://YOUR-PAYMENT-LINK-YEARLY';  // ← תחליף בלינק Stripe / PayPlus
+
+/* ═══ Usage ═══ */
+function getUsage(){ return parseInt(localStorage.getItem('postiq_usage')||'0'); }
+function incUsage(){ localStorage.setItem('postiq_usage', getUsage()+1); }
+function isPro(){    return localStorage.getItem('postiq_pro')==='true'; }
+
+function updateUsageBar(){
+  const used = getUsage();
+  const max  = isPro() ? '∞' : FREE_LIMIT;
+  document.getElementById('usageCount').textContent = used;
+  document.getElementById('usageMax').textContent   = max;
+  const dots = document.getElementById('usageDots');
+  dots.innerHTML = '';
+  if(!isPro()){
+    for(let i=0;i<FREE_LIMIT;i++){
+      const d=document.createElement('div');
+      d.className='usage-dot'+(i<used?' used':'');
+      dots.appendChild(d);
+    }
+  }
+  document.getElementById('usageBar').style.display = isPro() ? 'none' : 'flex';
+}
+
+/* ═══ Navigation ═══ */
+function showLanding(){
+  document.getElementById('landingPage').style.display='block';
+  document.getElementById('toolPage').style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function startFreeTrial(){
+  document.getElementById('landingPage').style.display='none';
+  document.getElementById('toolPage').style.display='block';
+  updateUsageBar();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ═══ Paywall ═══ */
+function showPaywall(plan){
+  selectedPlan = plan||'monthly';
+  highlightPlan(selectedPlan);
+  document.getElementById('paywallModal').classList.add('visible');
+}
+function closePaywall(){ document.getElementById('paywallModal').classList.remove('visible'); }
+function selectPlan(p){
+  selectedPlan=p;
+  highlightPlan(p);
+}
+function highlightPlan(p){
+  document.getElementById('planMonthly').classList.toggle('selected',p==='monthly');
+  document.getElementById('planYearly').classList.toggle('selected',p==='yearly');
+}
+function goToPay(){
+  const url = selectedPlan==='yearly' ? PAYMENT_URL_YEARLY : PAYMENT_URL_MONTHLY;
+  window.open(url,'_blank');
+}
+
+/* ═══ Platform ═══ */
+function selectPlatform(btn){
+  document.querySelectorAll('.platform-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedPlatform=btn.dataset.platform;
+}
+
+/* ═══ Media ═══ */
+function switchMediaTab(btn,type){
+  document.querySelectorAll('.media-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const note=document.getElementById('videoNote');
+  if(type==='video'){
+    document.getElementById('mediaInput').accept='video/*';
+    document.getElementById('uploadIcon').textContent='🎬';
+    document.getElementById('uploadTitle').textContent='גרור סרטון לכאן, או לחץ לבחירה';
+    document.getElementById('uploadSub').textContent='MP4, MOV · עד 50MB';
+    note.classList.add('visible');
+  } else {
+    document.getElementById('mediaInput').accept='image/*';
+    document.getElementById('uploadIcon').textContent='🖼️';
+    document.getElementById('uploadTitle').textContent='גרור תמונה לכאן, או לחץ לבחירה';
+    document.getElementById('uploadSub').textContent='PNG, JPG, WEBP · עד 10MB';
+    note.classList.remove('visible');
+  }
+  removeMedia();
+}
+function handleDragOver(e){e.preventDefault();document.getElementById('uploadZone').classList.add('drag-over');}
+function handleDragLeave(){document.getElementById('uploadZone').classList.remove('drag-over');}
+function handleDrop(e){e.preventDefault();document.getElementById('uploadZone').classList.remove('drag-over');const f=e.dataTransfer.files[0];if(f)processMediaFile(f);}
+function handleMediaSelect(e){const f=e.target.files[0];if(f)processMediaFile(f);}
+function processMediaFile(file){
+  const isVideo=file.type.startsWith('video/'),isImage=file.type.startsWith('image/');
+  if(!isVideo&&!isImage){showError('פורמט לא נתמך');return;}
+  document.getElementById('mediaNameBadge').textContent=file.name;
+  document.getElementById('mediaPreviewWrap').classList.add('visible');
+  document.getElementById('uploadZone').style.display='none';
+  if(isImage){
+    mediaType='image';
+    const r=new FileReader();
+    r.onload=ev=>{
+      mediaBase64=ev.target.result.split(',')[1];
+      const img=document.getElementById('mediaPreviewImg');
+      img.src=ev.target.result;img.style.display='block';
+      document.getElementById('mediaPreviewVideo').style.display='none';
+    };r.readAsDataURL(file);
+  } else {
+    mediaType='video';
+    const url=URL.createObjectURL(file);
+    const vid=document.getElementById('mediaPreviewVideo');
+    vid.src=url;vid.style.display='block';
+    document.getElementById('mediaPreviewImg').style.display='none';
+    vid.addEventListener('loadeddata',()=>{
+      vid.currentTime=0;
+      vid.addEventListener('seeked',function h(){
+        const c=document.createElement('canvas');
+        c.width=vid.videoWidth||640;c.height=vid.videoHeight||360;
+        c.getContext('2d').drawImage(vid,0,0,c.width,c.height);
+        mediaBase64=c.toDataURL('image/jpeg',.85).split(',')[1];
+        vid.removeEventListener('seeked',h);
+      },{once:true});
+    },{once:true});
+  }
+}
+function removeMedia(){
+  mediaBase64=null;mediaType=null;
+  document.getElementById('mediaPreviewWrap').classList.remove('visible');
+  document.getElementById('uploadZone').style.display='';
+  document.getElementById('mediaPreviewImg').src='';
+  document.getElementById('mediaPreviewVideo').src='';
+  document.getElementById('mediaInput').value='';
+}
+
+/* ═══ Tabs ═══ */
+function switchResultTab(btn,pane){
+  document.querySelectorAll('.result-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(pane).classList.add('active');
+}
+
+/* ═══ Helpers ═══ */
+function updateCounter(){document.getElementById('charCount').textContent=document.getElementById('postInput').value.length;}
+function showError(msg){const e=document.getElementById('errorMsg');e.textContent=msg;e.classList.add('visible');}
+function hideError(){document.getElementById('errorMsg').classList.remove('visible');}
+function gc(s){return s>=80?'var(--green)':s>=60?'var(--yellow)':'var(--red)';}
+function gt(s){return s>=80?'tag-good':s>=60?'tag-warn':'tag-bad';}
+
+async function animateSteps(hasMedia){
+  const ids=['step1','step2','step3','step4'];
+  const labels=hasMedia
+    ?['קורא כיתוב ומטרה','סורק ויזואל','מעריך כנגד benchmark','כותב פוסט משופר']
+    :['קורא כיתוב ומטרה','מנתח אסטרטגיה','מעריך כנגד benchmark','כותב פוסט משופר'];
+  ids.forEach((id,i)=>{const el=document.getElementById(id);el.classList.remove('active','done');el.textContent=labels[i];});
+  for(let i=0;i<ids.length;i++){
+    await new Promise(r=>setTimeout(r,650));
+    if(i>0)document.getElementById(ids[i-1]).classList.add('done');
+    document.getElementById(ids[i]).classList.add('active');
+  }
+}
+
+/* ═══ System Prompt ═══ */
+const SYSTEM_PROMPT=`אתה מומחה שיווק דיגיטלי ברמה עולמית עם ניסיון של 15 שנה.
+הכשרתך כוללת: אסטרטגיית תוכן, קופירייטינג שיווקי, פסיכולוגיית צרכנים, Social Media Marketing, Growth Hacking, ו-CRO.
+
+אתה שולט לעומק ב:
+• Instagram: האלגוריתם מעדיף Saves+Shares. Hook חייב להיות ב-3 שניות ראשונות. Carousel מוביל ב-Reach. Reels מקבלים 2-3x חשיפה.
+• Facebook: קהל 35+. ניב קהילתי ופרסונלי עובד יותר מפרסומי. לינקים פוגעים בחשיפה.
+• LinkedIn: תוכן אינסייט מקצועי מייצר reach גבוה. Hook שמתחיל בנקודת כאב מקצועית. משפטים קצרים ורווחים.
+• TikTok: Hook ב-0-3 שניות. Authentic יותר מ-Polished. Text overlay הכרחי.
+• X/Twitter: Threads מייצרים reach גבוה. Hot take + דעה = engagement.
+
+עקרונות קופירייטינג שאתה מיישם: AIDA, PAS, Hook Formula, Social Proof, Scarcity.
+אתה מנתח ביחס ל-benchmark אמיתי. ציונים מציאותיים — ממוצע פוסט טיפוסי הוא 40-60.
+הניתוח שלך ספציפי, מדויק, ומעשי. הכל בעברית.`;
+
+/* ═══ Analyze ═══ */
+async function analyzePost(){
+  const post=document.getElementById('postInput').value.trim();
+  if(!post||post.length<5){showError('אנא הכנס כיתוב של לפחות 5 תווים');return;}
+
+  if(!isPro()&&getUsage()>=FREE_LIMIT){showPaywall('monthly');return;}
+
+  hideError();
+  const hasMedia=!!mediaBase64;
+  const niche=document.getElementById('nicheSelect').value;
+  const goal=document.getElementById('goalSelect').value;
+
+  const nicheL={general:'כללי',ecommerce:'חנות אונליין',restaurant:'מסעדה',beauty:'קוסמטיקה',fitness:'כושר',realEstate:'נדל"ן',tech:'טכנולוגיה',fashion:'אופנה',health:'בריאות',education:'חינוך',finance:'פיננסים',localBusiness:'עסק מקומי',creative:'יצירה',travel:'תיירות'};
+  const goalL={awareness:'מודעות למותג',engagement:'מעורבות',leads:'לידים',sales:'מכירה',traffic:'תנועה לאתר',launch:'השקת מוצר',promo:'מבצע',education:'תוכן חינוכי'};
+  const platL={instagram:'Instagram',facebook:'Facebook',linkedin:'LinkedIn',tiktok:'TikTok',twitter:'X / Twitter'};
+
+  document.getElementById('analyzeBtn').disabled=true;
+  document.getElementById('btnText').textContent='⏳ מנתח...';
+  document.getElementById('loadingState').classList.add('visible');
+  document.getElementById('results').classList.remove('visible');
+  document.getElementById('loadingText').textContent=hasMedia?'מנתח כיתוב + ויזואל...':'מנתח ברמה מקצועית...';
+  animateSteps(hasMedia);
+
+  const prompt=`נתח את הפוסט:
+פלטפורמה: ${platL[selectedPlatform]}
+תחום: ${nicheL[niche]}
+מטרה: ${goalL[goal]}
+${hasMedia?`מדיה: ${mediaType==='video'?'סרטון (פריים ראשון מצורף)':'תמונה מצורפת'}`:''}
+כיתוב:
+"""${post}"""
+
+ניתוח ביחס ל-benchmark אמיתי. ציונים מציאותיים (ממוצע 40-60). פוסט משופר עם hook מקצועי לפי AIDA/PAS.
+
+החזר JSON בלבד:
+{"score":<0-100>,"verdict":"<3-5 מילים>","summary":"<2-3 משפטים>","tags":["<תג1>","<תג2>"],"categories":[{"name":"Hook ופתיחה","icon":"🎣","score":<0-100>,"desc":"<ניתוח>"},{"name":"קריאה לפעולה","icon":"🎯","score":<0-100>,"desc":"<ניתוח>"},{"name":"התאמה לאלגוריתם","icon":"⚡","score":<0-100>,"desc":"<ניתוח>"},{"name":"מסר ותועלת","icon":"💎","score":<0-100>,"desc":"<ניתוח>"},{"name":"שפה ורגש","icon":"❤️","score":<0-100>,"desc":"<ניתוח>"},{"name":"מבנה וקריאות","icon":"📐","score":<0-100>,"desc":"<ניתוח>"}],"strengths":["<1>","<2>","<3>"],"weaknesses":["<1>","<2>","<3>"],"improved":"<פוסט משופר שלם>","hashtags":["#1","#2","#3","#4","#5","#6","#7","#8","#9","#10"],"next_steps":["<1>","<2>","<3>","<4>"]${hasMedia?`,"visual_analysis":{"scores":[{"label":"Hook ויזואלי","desc":"<ניתוח>","score":<0-100>},{"label":"איכות טכנית","desc":"<ניתוח>","score":<0-100>},{"label":"קומפוזיציה","desc":"<ניתוח>","score":<0-100>},{"label":"מיתוג","desc":"<ניתוח>","score":<0-100>},{"label":"התאמה למטרה","desc":"<ניתוח>","score":<0-100>}],"strengths":["<1>","<2>","<3>"],"weaknesses":["<1>","<2>","<3>"],"design_tips":["<1>","<2>","<3>","<4>"],"text_alignment":"<פסקה>"}`:''}
+}`;
+
+  try{
+    const parts=[];
+    if(hasMedia&&mediaBase64)parts.push({type:'image',source:{type:'base64',media_type:'image/jpeg',data:mediaBase64}});
+    parts.push({type:'text',text:prompt});
+
+    const res=await fetch('/api/analyze',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,system:SYSTEM_PROMPT,messages:[{role:'user',content:parts}]})
+    });
+
+    if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error||`שגיאה ${res.status}`);}
+    const data=await res.json();
+    const raw=data.content.map(c=>c.text||'').join('');
+    const result=JSON.parse(raw.replace(/```json|```/g,'').trim());
+
+    incUsage();
+    updateUsageBar();
+    await new Promise(r=>setTimeout(r,200));
+    renderResults(result,hasMedia);
+  }catch(err){
+    document.getElementById('loadingState').classList.remove('visible');
+    document.getElementById('analyzeBtn').disabled=false;
+    document.getElementById('btnText').textContent='⚡ נתח את הפוסט';
+    showError('שגיאה: '+err.message);
+  }
+}
+
+/* ═══ Render ═══ */
+function renderResults(r,hasMedia){
+  document.getElementById('loadingState').classList.remove('visible');
+  document.getElementById('results').classList.add('visible');
+  document.getElementById('analyzeBtn').disabled=false;
+  document.getElementById('btnText').textContent='⚡ נתח שוב';
+
+  const tabs=document.getElementById('resultTabs');
+  tabs.style.display=hasMedia?'flex':'none';
+  document.querySelectorAll('.result-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  tabs.children[0]&&tabs.children[0].classList.add('active');
+  document.getElementById('text-analysis').classList.add('active');
+
+  setTimeout(()=>document.getElementById('scoreFill').style.strokeDashoffset=326.7-(r.score/100)*326.7,100);
+  let cur=0;const iv=setInterval(()=>{cur=Math.min(cur+2,r.score);document.getElementById('scoreNum').textContent=cur;if(cur>=r.score)clearInterval(iv);},18);
+
+  document.getElementById('scoreVerdict').textContent=r.verdict||'';
+  document.getElementById('scoreSummary').textContent=r.summary||'';
+  document.getElementById('scoreTags').innerHTML=(r.tags||[]).map(t=>`<span class="tag ${gt(r.score)}">${t}</span>`).join('');
+
+  const grid=document.getElementById('categoriesGrid');grid.innerHTML='';
+  (r.categories||[]).forEach((c,i)=>{
+    const col=gc(c.score);
+    grid.innerHTML+=`<div class="category-card" style="animation:fadeUp .4s ${i*.07}s ease both;opacity:0">
+      <div class="cat-header"><div class="cat-name"><div class="cat-icon" style="background:${col}22">${c.icon}</div>${c.name}</div>
+      <div class="cat-score" style="color:${col}">${c.score}</div></div>
+      <div class="progress-bar"><div class="progress-fill" id="prog-${i}" style="width:0%;background:${col}"></div></div>
+      <div class="cat-desc">${c.desc}</div></div>`;
+  });
+  setTimeout(()=>(r.categories||[]).forEach((_,i)=>document.getElementById(`prog-${i}`).style.width=r.categories[i].score+'%'),200);
+
+  document.getElementById('strengthsList').innerHTML=(r.strengths||[]).map(s=>`<div class="insight-item"><div class="insight-dot" style="background:var(--green)"></div><div>${s}</div></div>`).join('');
+  document.getElementById('weaknessesList').innerHTML=(r.weaknesses||[]).map(w=>`<div class="insight-item"><div class="insight-dot" style="background:var(--yellow)"></div><div>${w}</div></div>`).join('');
+  document.getElementById('improvedText').textContent=r.improved||'';
+  document.getElementById('hashtagsList').innerHTML=(r.hashtags||[]).map(h=>`<span class="hashtag" onclick="copyText('${h}')">${h}</span>`).join('');
+  document.getElementById('nextStepsList').innerHTML=(r.next_steps||[]).map((t,i)=>`<div class="insight-item"><div class="insight-dot" style="background:var(--accent2)"></div><div><strong>${i+1}.</strong> ${t}</div></div>`).join('');
+
+  if(hasMedia&&r.visual_analysis){
+    const va=r.visual_analysis;
+    const thumb=document.getElementById('resultMediaThumb');
+    thumb.innerHTML=mediaType==='video'
+      ?`<video src="${document.getElementById('mediaPreviewVideo').src}" controls style="width:100%;max-height:250px;object-fit:contain"></video>`
+      :`<img src="${document.getElementById('mediaPreviewImg').src}" style="width:100%;max-height:250px;object-fit:contain"/>`;
+    document.getElementById('visualScoreRows').innerHTML=(va.scores||[]).map(s=>{
+      const c=gc(s.score);
+      return `<div class="visual-score-row"><div class="visual-score-label">${s.label}<small>${s.desc}</small></div>
+        <div class="visual-bar-wrap"><div class="progress-bar"><div class="progress-fill" style="width:${s.score}%;background:${c}"></div></div></div>
+        <div class="visual-score-val" style="color:${c}">${s.score}</div></div>`;
+    }).join('');
+    document.getElementById('visualStrengths').innerHTML=(va.strengths||[]).map(s=>`<div class="insight-item"><div class="insight-dot" style="background:var(--green)"></div><div>${s}</div></div>`).join('');
+    document.getElementById('visualWeaknesses').innerHTML=(va.weaknesses||[]).map(w=>`<div class="insight-item"><div class="insight-dot" style="background:var(--yellow)"></div><div>${w}</div></div>`).join('');
+    document.getElementById('visualTips').innerHTML=(va.design_tips||[]).map((t,i)=>`<div class="insight-item"><div class="insight-dot" style="background:var(--accent2)"></div><div><strong>${i+1}.</strong> ${t}</div></div>`).join('');
+    document.getElementById('visualTextAlignment').innerHTML=`<div style="font-size:14px;line-height:1.7;color:var(--text-muted)">${va.text_alignment||''}</div>`;
+  }
+
+  setTimeout(()=>document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'}),100);
+}
+
+function copyImproved(){
+  copyText(document.getElementById('improvedText').textContent);
+  const btn=document.querySelector('.copy-btn');btn.textContent='✅ הועתק!';setTimeout(()=>btn.textContent='📋 העתק',2000);
+}
+function copyText(text){
+  navigator.clipboard.writeText(text).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=text;
+    document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+  });
+}
+</script>
+</body>
+</html>
