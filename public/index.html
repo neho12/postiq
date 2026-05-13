@@ -857,7 +857,7 @@ ${hasMedia?`מדיה: ${mediaType==='video'?'סרטון (פריים ראשון �
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,system:SYSTEM_PROMPT,messages:[{role:'user',content:parts}]})
     });
 
-    if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error||`שגיאה ${res.status}`);}
+    if(!res.ok){let em='שגיאה '+res.status;try{const e=await res.json();em=e?.error?.message||e?.error||em;}catch(x){}throw new Error(em);}
     const data=await res.json();
     const raw=data.content.map(c=>c.text||'').join('');
     const result=JSON.parse(raw.replace(/```json|```/g,'').trim());
@@ -870,7 +870,7 @@ ${hasMedia?`מדיה: ${mediaType==='video'?'סרטון (פריים ראשון �
     document.getElementById('loadingState').classList.remove('visible');
     document.getElementById('analyzeBtn').disabled=false;
     document.getElementById('btnText').textContent='⚡ נתח את הפוסט';
-    showError('שגיאה: '+err.message);
+    showError('שגיאה: '+(err?.message||String(err)||'שגיאה לא ידועה'));
   }
 }
 
