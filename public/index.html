@@ -1811,11 +1811,11 @@ async function generateCalendar(){
   const today=new Date();
   const month=today.getMonth()+1;
   const year=today.getFullYear();
-  const prompt='צור לוח שנה תוכן.\nתחום: '+nicheL[niche]+'\nפלטפורמה: '+platL[platform]+'\nכמות: '+freq+' פוסטים לחודש\nמטרה: '+goalL[goal]+(desc?'\nעסק: '+desc:'')+'\n\nצור בדיוק '+freq+' פוסטים לחודש '+month+'/'+year+', מחולקים בצורה שווה.\n\nהחזר JSON בלבד:\n{"month_theme":"<נושא>","posts":[{"day":<יום>,"type":"<חינוכי/בידורי/מכירתי/קהילתי/השראה>","title":"<כותרת>","content":"<פוסט מלא>","hashtags":["#1","#2","#3"],"best_time":"<שעה>"}],"weekly_tips":["<טיפ1>","<טיפ2>","<טיפ3>","<טיפ4>"]}';
+  const prompt='צור '+freq+' פוסטים לחודש '+month+'/'+year+' עבור עסק בתחום '+nicheL[niche]+' בפלטפורמה '+platL[platform]+', מטרה: '+goalL[goal]+(desc?', עסק: '+desc:'')+'.\nהחזר JSON בלבד, כל פוסט עד 3 שורות:\n{"month_theme":"<נושא>","posts":[{"day":<יום 1-28>,"type":"<חינוכי/בידורי/מכירתי>","title":"<כותרת>","content":"<פוסט קצר>","hashtags":["#1","#2","#3"],"best_time":"<שעה>"}],"weekly_tips":["<טיפ1>","<טיפ2>"]}';
   try{
     const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:4000,
-        system:'אתה מומחה תוכן ושיווק. צור תוכן מקצועי בעברית.',
+      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1000,
+        system:'אתה מומחה תוכן ושיווק. צור תוכן מקצועי קצר בעברית. כל פוסט עד 3 שורות.',
         messages:[{role:'user',content:prompt}]})});
     if(!res.ok) throw new Error('שגיאה '+res.status);
     const data=await res.json();
