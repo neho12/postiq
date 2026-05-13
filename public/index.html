@@ -319,6 +319,33 @@ textarea:focus{border-color:var(--accent);}
 ::-webkit-scrollbar-track{background:var(--bg);}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
 
+@media(max-width:768px){
+  /* Landing page nav */
+  nav{padding:16px 20px!important;}
+
+  /* Hero */
+  .hero{padding:40px 16px 50px!important;}
+
+  /* Stats bar - stack on mobile */
+  .stats-bar-inner{flex-direction:column!important;gap:16px!important;}
+  .stats-divider{display:none!important;}
+
+  /* How it works - single column */
+  .how-grid{grid-template-columns:1fr!important;}
+
+  /* Testimonials - single column */
+  .testimonials-grid{grid-template-columns:1fr!important;}
+
+  /* Pricing - single column */
+  .pricing-grid-new{grid-template-columns:1fr!important;}
+
+  /* FAQ */
+  .faq-item{padding:16px!important;}
+
+  /* Nav buttons */
+  .nav-btn-outline,.nav-btn-filled{padding:7px 14px!important;font-size:13px!important;}
+}
+
 @media(max-width:600px){
   .score-hero{flex-direction:column;text-align:center;}
   .categories-grid{grid-template-columns:1fr;}
@@ -326,6 +353,10 @@ textarea:focus{border-color:var(--accent);}
   .meta-row{grid-template-columns:1fr;}
   .modal-plans{grid-template-columns:1fr;}
   .visual-bar-wrap{width:70px;}
+  .platform-selector{gap:6px;}
+  .platform-btn{padding:6px 12px;font-size:12px;}
+  .usage-bar{flex-wrap:wrap;gap:8px;}
+  .share-panel{flex-direction:column;}
 }
 </style>
 </head>
@@ -335,7 +366,7 @@ textarea:focus{border-color:var(--accent);}
 <div id="landingPage">
 
   <!-- NAV -->
-  <nav style="display:flex;align-items:center;justify-content:space-between;padding:20px 40px;position:relative;z-index:10;max-width:1100px;margin:0 auto;">
+  <nav style="display:flex;align-items:center;justify-content:space-between;padding:20px 40px;position:relative;z-index:10;max-width:1100px;margin:0 auto;flex-wrap:wrap;gap:12px;">
     <div style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;background:linear-gradient(135deg,#fff,#7c5cfc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">PostIQ</div>
     <div style="display:flex;align-items:center;gap:12px;">
       <button onclick="startFreeTrial()" style="background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:100px;padding:8px 20px;color:#fff;font-family:'Heebo',sans-serif;font-size:14px;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='rgba(124,92,252,.6)'" onmouseout="this.style.borderColor='rgba(255,255,255,.15)'">התחברות</button>
@@ -361,7 +392,7 @@ textarea:focus{border-color:var(--accent);}
       PostIQ מנתח את הפוסט, התמונה והסרטון שלך ברמת מומחה שיווק — ומחזיר פוסט משופר מוכן להעתקה תוך 10 שניות.
     </p>
 
-    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:48px;">
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:40px;">
       <button onclick="startFreeTrial()" style="padding:16px 36px;background:linear-gradient(135deg,#7c5cfc,#5c3fdc);border:none;border-radius:12px;color:#fff;font-family:'Heebo',sans-serif;font-size:18px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 8px 32px rgba(124,92,252,.4);" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 16px 48px rgba(124,92,252,.5)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 8px 32px rgba(124,92,252,.4)'">
         נסה 3 ניתוחים חינם ←
       </button>
@@ -375,7 +406,7 @@ textarea:focus{border-color:var(--accent);}
 
   <!-- SOCIAL PROOF BAR -->
   <div style="background:rgba(255,255,255,.03);border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);padding:20px 24px;margin-bottom:80px;">
-    <div style="max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap;">
+    <div style="max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;">
       <div style="text-align:center;">
         <div style="font-size:26px;font-weight:900;color:#fff;">1,240+</div>
         <div style="font-size:12px;color:#7070a0;">בעלי עסקים</div>
@@ -411,7 +442,7 @@ textarea:focus{border-color:var(--accent);}
       <div style="font-size:13px;color:#7c5cfc;font-weight:600;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;">איך זה עובד</div>
       <h2 style="font-size:clamp(28px,5vw,44px);font-weight:900;">3 שלבים פשוטים</h2>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;">
       <div style="background:rgba(124,92,252,.06);border:1px solid rgba(124,92,252,.2);border-radius:16px;padding:28px;position:relative;">
         <div style="font-family:'Space Mono',monospace;font-size:11px;color:#7c5cfc;margin-bottom:16px;letter-spacing:2px;">01</div>
         <div style="font-size:32px;margin-bottom:14px;">📋</div>
@@ -474,7 +505,7 @@ textarea:focus{border-color:var(--accent);}
       <h2 style="font-size:clamp(28px,5vw,44px);font-weight:900;margin-bottom:12px;">פשוט ושקוף</h2>
       <p style="color:#7070a0;font-size:16px;">התחל חינם. שדרג כשתראה את התוצאות.</p>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;">
 
       <div style="background:#12121a;border:1px solid #2a2a3d;border-radius:16px;padding:28px;">
         <div style="font-size:12px;font-weight:600;color:#7070a0;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;">חינמי</div>
@@ -544,7 +575,7 @@ textarea:focus{border-color:var(--accent);}
   </div>
 
   <!-- FINAL CTA -->
-  <div style="text-align:center;padding:60px 24px 100px;">
+  <div style="text-align:center;padding:60px 24px 80px;">
     <h2 style="font-size:clamp(28px,5vw,52px);font-weight:900;margin-bottom:16px;line-height:1.15;">מוכן לפוסטים<br/>שבאמת עובדים?</h2>
     <p style="color:#7070a0;font-size:17px;margin-bottom:36px;">הצטרף ל-1,240+ בעלי עסקים שכבר משפרים את הפוסטים שלהם</p>
     <button onclick="startFreeTrial()" style="padding:18px 48px;background:linear-gradient(135deg,#7c5cfc,#fc5c9c);border:none;border-radius:12px;color:#fff;font-family:'Heebo',sans-serif;font-size:20px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 12px 48px rgba(124,92,252,.45);" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='none'">
