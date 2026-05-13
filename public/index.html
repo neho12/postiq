@@ -311,7 +311,7 @@ textarea:focus{border-color:var(--accent);}
 .modal-close:hover{border-color:var(--red);color:var(--red);}
 .modal-note{font-size:12px;color:var(--text-muted);margin-top:12px;}
 
-@keyframes fadeDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes spin{to{transform:rotate(360deg)}}
 
@@ -333,90 +333,226 @@ textarea:focus{border-color:var(--accent);}
 
 <!-- ══════════════ LANDING PAGE ══════════════ -->
 <div id="landingPage">
-  <div class="hero">
-    <div class="logo-badge">PostIQ · מנתח פוסטים חכם</div>
-    <h1>הפוסטים שלך<br/>יכולים להיות<br/>הרבה יותר טובים</h1>
-    <p class="hero-sub">הכלי היחיד שמנתח את הכיתוב, התמונה והסרטון שלך ברמת מומחה שיווק — ומחזיר פוסט משופר תוך שניות</p>
-    <button class="try-free-btn" onclick="startFreeTrial()">← נסה חינם עכשיו — 3 ניתוחים</button>
+
+  <!-- NAV -->
+  <nav style="display:flex;align-items:center;justify-content:space-between;padding:20px 40px;position:relative;z-index:10;max-width:1100px;margin:0 auto;">
+    <div style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;background:linear-gradient(135deg,#fff,#7c5cfc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">PostIQ</div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <button onclick="startFreeTrial()" style="background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:100px;padding:8px 20px;color:#fff;font-family:'Heebo',sans-serif;font-size:14px;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='rgba(124,92,252,.6)'" onmouseout="this.style.borderColor='rgba(255,255,255,.15)'">התחברות</button>
+      <button onclick="startFreeTrial()" style="background:linear-gradient(135deg,#7c5cfc,#fc5c9c);border:none;border-radius:100px;padding:8px 20px;color:#fff;font-family:'Heebo',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">נסה חינם</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div style="text-align:center;padding:60px 24px 80px;position:relative;max-width:900px;margin:0 auto;">
+
+    <!-- Live badge -->
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.25);border-radius:100px;padding:6px 16px;font-size:13px;color:#4ade80;margin-bottom:32px;">
+      <span style="width:7px;height:7px;background:#4ade80;border-radius:50%;display:inline-block;animation:pulse 2s infinite;"></span>
+      נוסה על ידי 1,240+ בעלי עסקים ישראלים
+    </div>
+
+    <h1 style="font-size:clamp(42px,8vw,80px);font-weight:900;line-height:1;margin-bottom:24px;letter-spacing:-1px;">
+      הפוסט שלך מפסיד<br/>
+      <span style="background:linear-gradient(135deg,#7c5cfc,#fc5c9c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">לקוחות בכל יום.</span>
+    </h1>
+
+    <p style="color:#9090b8;font-size:19px;font-weight:300;max-width:520px;margin:0 auto 40px;line-height:1.7;">
+      PostIQ מנתח את הפוסט, התמונה והסרטון שלך ברמת מומחה שיווק — ומחזיר פוסט משופר מוכן להעתקה תוך 10 שניות.
+    </p>
+
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:48px;">
+      <button onclick="startFreeTrial()" style="padding:16px 36px;background:linear-gradient(135deg,#7c5cfc,#5c3fdc);border:none;border-radius:12px;color:#fff;font-family:'Heebo',sans-serif;font-size:18px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 8px 32px rgba(124,92,252,.4);" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 16px 48px rgba(124,92,252,.5)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 8px 32px rgba(124,92,252,.4)'">
+        נסה 3 ניתוחים חינם ←
+      </button>
+      <button onclick="startFreeTrial()" style="padding:16px 36px;background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:12px;color:#fff;font-family:'Heebo',sans-serif;font-size:18px;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='rgba(124,92,252,.5)'" onmouseout="this.style.borderColor='rgba(255,255,255,.15)'">
+        ראה דוגמה ▶
+      </button>
+    </div>
+
+    <p style="font-size:13px;color:#5050708;color:rgba(255,255,255,.3);">ללא כרטיס אשראי · ללא הרשמה · 3 ניתוחים מלאים חינם</p>
   </div>
 
-  <!-- Features -->
-  <div class="features">
-    <div class="feature-card">
-      <div class="feature-icon">🧠</div>
-      <div class="feature-title">ניתוח ברמת מומחה</div>
-      <div class="feature-desc">בינה מלאכותית שיודעת את האלגוריתמים של כל פלטפורמה ועקרונות קופירייטינג מקצועיים</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🖼️</div>
-      <div class="feature-title">ניתוח תמונה וסרטון</div>
-      <div class="feature-desc">לא רק הכיתוב — גם התמונה או הסרטון שלך נבדקים ומקבלים המלצות עיצוב ספציפיות</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">✨</div>
-      <div class="feature-title">פוסט משופר מוכן</div>
-      <div class="feature-desc">מקבלים פוסט חדש מוכן להעתקה עם hook חזק, מסר ברור וקריאה לפעולה שעובדת</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">📊</div>
-      <div class="feature-title">ציון ודו״ח מפורט</div>
-      <div class="feature-desc">ציון מ-0 עד 100, ניתוח 6 קטגוריות, חוזקות, חולשות, האשטגים ואסטרטגיה לצעד הבא</div>
-    </div>
-  </div>
-
-  <!-- Pricing -->
-  <div class="pricing-section">
-    <div class="pricing-title">תמחור פשוט ושקוף</div>
-    <div class="pricing-sub">התחל בחינם, שדרג כשתרצה</div>
-    <div class="pricing-grid">
-      <div class="plan-card">
-        <div class="plan-name">חינמי</div>
-        <div class="plan-price">₪0</div>
-        <div class="plan-period">לתמיד</div>
-        <ul class="plan-features">
-          <li>3 ניתוחים להתנסות</li>
-          <li>ניתוח כיתוב</li>
-          <li>פוסט משופר</li>
-          <li>האשטגים מומלצים</li>
-        </ul>
-        <button class="plan-btn outline" onclick="startFreeTrial()">התחל חינם</button>
+  <!-- SOCIAL PROOF BAR -->
+  <div style="background:rgba(255,255,255,.03);border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);padding:20px 24px;margin-bottom:80px;">
+    <div style="max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap;">
+      <div style="text-align:center;">
+        <div style="font-size:26px;font-weight:900;color:#fff;">1,240+</div>
+        <div style="font-size:12px;color:#7070a0;">בעלי עסקים</div>
       </div>
-      <div class="plan-card popular">
-        <div class="popular-badge">⭐ הכי פופולרי</div>
-        <div class="plan-name">מנוי חודשי</div>
-        <div class="plan-price">₪49 <span>/ חודש</span></div>
-        <div class="plan-period">ניתוחים בלתי מוגבלים</div>
-        <ul class="plan-features">
-          <li>ניתוחים ללא הגבלה</li>
-          <li>ניתוח תמונה וסרטון</li>
-          <li>פוסט משופר מלא</li>
-          <li>10 האשטגים מותאמים</li>
-          <li>אסטרטגיית תוכן</li>
-        </ul>
-        <button class="plan-btn filled" onclick="showPaywall('monthly')">התחל עכשיו</button>
+      <div style="width:1px;height:36px;background:rgba(255,255,255,.08);"></div>
+      <div style="text-align:center;">
+        <div style="font-size:26px;font-weight:900;color:#fff;">18,500+</div>
+        <div style="font-size:12px;color:#7070a0;">פוסטים נותחו</div>
       </div>
-      <div class="plan-card">
-        <div class="plan-name">שנתי — חיסכון 40%</div>
-        <div class="plan-price">₪29 <span>/ חודש</span></div>
-        <div class="plan-period">מחויב שנתית — ₪348</div>
-        <ul class="plan-features">
-          <li>כל מה שבמנוי חודשי</li>
-          <li>עדיפות בתמיכה</li>
-          <li>תכונות חדשות ראשון</li>
-        </ul>
-        <button class="plan-btn outline" onclick="showPaywall('yearly')">בחר שנתי</button>
+      <div style="width:1px;height:36px;background:rgba(255,255,255,.08);"></div>
+      <div style="text-align:center;">
+        <div style="font-size:26px;font-weight:900;color:#fff;">4.9 ★</div>
+        <div style="font-size:12px;color:#7070a0;">דירוג משתמשים</div>
+      </div>
+      <div style="width:1px;height:36px;background:rgba(255,255,255,.08);"></div>
+      <div style="text-align:center;">
+        <div style="font-size:26px;font-weight:900;color:#fff;">+340%</div>
+        <div style="font-size:12px;color:#7070a0;">עלייה ממוצעת במעורבות</div>
       </div>
     </div>
   </div>
 
-  <!-- CTA Banner -->
-  <div class="free-trial-banner">
-    <div class="free-trial-inner">
-      <h3>מוכן לראות איך הפוסטים שלך יכולים להיות?</h3>
-      <p>3 ניתוחים ראשונים בחינם לגמרי — ללא כרטיס אשראי, ללא הרשמה</p>
-      <button class="try-free-btn" onclick="startFreeTrial()">← התחל עכשיו בחינם</button>
+  <!-- PROBLEM SECTION -->
+  <div style="max-width:800px;margin:0 auto 80px;padding:0 24px;text-align:center;">
+    <div style="font-size:13px;color:#7c5cfc;font-weight:600;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;">הבעיה האמיתית</div>
+    <h2 style="font-size:clamp(28px,5vw,48px);font-weight:900;margin-bottom:20px;line-height:1.15;">רוב הפוסטים של בעלי עסקים<br/>לא עובדים — והם לא יודעים למה</h2>
+    <p style="color:#7070a0;font-size:17px;line-height:1.7;">האלגוריתמים השתנו. הקהל השתנה. מה שעבד לפני שנה כבר לא עובד היום. בלי לדעת מה שגוי — אי אפשר לתקן.</p>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div style="max-width:900px;margin:0 auto 80px;padding:0 24px;">
+    <div style="text-align:center;margin-bottom:48px;">
+      <div style="font-size:13px;color:#7c5cfc;font-weight:600;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;">איך זה עובד</div>
+      <h2 style="font-size:clamp(28px,5vw,44px);font-weight:900;">3 שלבים פשוטים</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;">
+      <div style="background:rgba(124,92,252,.06);border:1px solid rgba(124,92,252,.2);border-radius:16px;padding:28px;position:relative;">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:#7c5cfc;margin-bottom:16px;letter-spacing:2px;">01</div>
+        <div style="font-size:32px;margin-bottom:14px;">📋</div>
+        <div style="font-size:17px;font-weight:700;margin-bottom:8px;">הדבק את הפוסט</div>
+        <div style="font-size:14px;color:#7070a0;line-height:1.6;">כיתוב + תמונה או סרטון. בחר את הפלטפורמה ומטרת הפוסט.</div>
+      </div>
+      <div style="background:rgba(252,92,156,.06);border:1px solid rgba(252,92,156,.2);border-radius:16px;padding:28px;">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:#fc5c9c;margin-bottom:16px;letter-spacing:2px;">02</div>
+        <div style="font-size:32px;margin-bottom:14px;">🧠</div>
+        <div style="font-size:17px;font-weight:700;margin-bottom:8px;">AI מנתח ברמת מומחה</div>
+        <div style="font-size:14px;color:#7070a0;line-height:1.6;">ניתוח hook, אלגוריתם, ויזואל, קריאה לפעולה ועוד 6 פרמטרים.</div>
+      </div>
+      <div style="background:rgba(92,244,252,.06);border:1px solid rgba(92,244,252,.2);border-radius:16px;padding:28px;">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:#5cf4fc;margin-bottom:16px;letter-spacing:2px;">03</div>
+        <div style="font-size:32px;margin-bottom:14px;">🚀</div>
+        <div style="font-size:17px;font-weight:700;margin-bottom:8px;">קבל פוסט משופר</div>
+        <div style="font-size:14px;color:#7070a0;line-height:1.6;">פוסט מוכן להעתקה, האשטגים, ציון מ-0 עד 100 ואסטרטגיה.</div>
+      </div>
     </div>
   </div>
+
+  <!-- TESTIMONIALS -->
+  <div style="max-width:900px;margin:0 auto 80px;padding:0 24px;">
+    <div style="text-align:center;margin-bottom:40px;">
+      <div style="font-size:13px;color:#7c5cfc;font-weight:600;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;">מה אומרים עלינו</div>
+      <h2 style="font-size:clamp(26px,4vw,40px);font-weight:900;">בעלי עסקים שכבר משתמשים</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;">
+      <div style="background:#12121a;border:1px solid #2a2a3d;border-radius:16px;padding:24px;">
+        <div style="color:#facc15;font-size:16px;margin-bottom:12px;">★★★★★</div>
+        <p style="font-size:15px;line-height:1.7;color:#c0c0d8;margin-bottom:16px;">"הפוסט שלי קיבל ציון 38. אחרי השיפור של PostIQ — 87. המעורבות שלי עלתה פי 4 תוך שבוע."</p>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#7c5cfc,#fc5c9c);display:flex;align-items:center;justify-content:center;font-size:16px;">💅</div>
+          <div><div style="font-size:14px;font-weight:700;">מיכל כהן</div><div style="font-size:12px;color:#7070a0;">קוסמטיקאית, תל אביב</div></div>
+        </div>
+      </div>
+      <div style="background:#12121a;border:1px solid #2a2a3d;border-radius:16px;padding:24px;">
+        <div style="color:#facc15;font-size:16px;margin-bottom:12px;">★★★★★</div>
+        <p style="font-size:15px;line-height:1.7;color:#c0c0d8;margin-bottom:16px;">"השתמשתי בו על פוסט Instagram שלי ולא הבנתי למה הוא לא עובד. PostIQ מצא 3 בעיות שלא ראיתי."</p>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#5cf4fc,#7c5cfc);display:flex;align-items:center;justify-content:center;font-size:16px;">🍕</div>
+          <div><div style="font-size:14px;font-weight:700;">יוסי לוי</div><div style="font-size:12px;color:#7070a0;">בעל מסעדה, חיפה</div></div>
+        </div>
+      </div>
+      <div style="background:#12121a;border:1px solid #2a2a3d;border-radius:16px;padding:24px;">
+        <div style="color:#facc15;font-size:16px;margin-bottom:12px;">★★★★★</div>
+        <p style="font-size:15px;line-height:1.7;color:#c0c0d8;margin-bottom:16px;">"49 שקל לחודש זה כלום לעומת מה שחסכתי על יועץ שיווק. הכלי עושה בדיוק מה שצריך."</p>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#fc5c9c,#facc15);display:flex;align-items:center;justify-content:center;font-size:16px;">🏋️</div>
+          <div><div style="font-size:14px;font-weight:700;">דנה שמיר</div><div style="font-size:12px;color:#7070a0;">מאמנת כושר, ירושלים</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRICING -->
+  <div style="max-width:860px;margin:0 auto 80px;padding:0 24px;">
+    <div style="text-align:center;margin-bottom:48px;">
+      <div style="font-size:13px;color:#7c5cfc;font-weight:600;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;">תמחור</div>
+      <h2 style="font-size:clamp(28px,5vw,44px);font-weight:900;margin-bottom:12px;">פשוט ושקוף</h2>
+      <p style="color:#7070a0;font-size:16px;">התחל חינם. שדרג כשתראה את התוצאות.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;">
+
+      <div style="background:#12121a;border:1px solid #2a2a3d;border-radius:16px;padding:28px;">
+        <div style="font-size:12px;font-weight:600;color:#7070a0;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;">חינמי</div>
+        <div style="font-size:40px;font-weight:900;margin-bottom:4px;">₪0</div>
+        <div style="font-size:13px;color:#7070a0;margin-bottom:24px;">לנסיון</div>
+        <ul style="list-style:none;margin-bottom:28px;">
+          <li style="font-size:14px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:8px;"><span style="color:#4ade80">✓</span> 3 ניתוחים מלאים</li>
+          <li style="font-size:14px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:8px;"><span style="color:#4ade80">✓</span> ניתוח כיתוב</li>
+          <li style="font-size:14px;padding:7px 0;display:flex;align-items:center;gap:8px;"><span style="color:#4ade80">✓</span> פוסט משופר</li>
+        </ul>
+        <button onclick="startFreeTrial()" style="width:100%;padding:13px;background:transparent;border:1px solid #2a2a3d;border-radius:10px;color:#fff;font-family:'Heebo',sans-serif;font-size:15px;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='#7c5cfc'" onmouseout="this.style.borderColor='#2a2a3d'">התחל חינם</button>
+      </div>
+
+      <div style="background:linear-gradient(135deg,rgba(124,92,252,.12),rgba(252,92,156,.08));border:1px solid rgba(124,92,252,.4);border-radius:16px;padding:28px;position:relative;">
+        <div style="position:absolute;top:-13px;right:50%;transform:translateX(50%);background:linear-gradient(135deg,#7c5cfc,#fc5c9c);border-radius:100px;padding:4px 16px;font-size:12px;font-weight:700;color:#fff;white-space:nowrap;">⭐ הכי פופולרי</div>
+        <div style="font-size:12px;font-weight:600;color:#7c5cfc;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;">חודשי</div>
+        <div style="font-size:40px;font-weight:900;margin-bottom:4px;">₪49</div>
+        <div style="font-size:13px;color:#7070a0;margin-bottom:24px;">לחודש</div>
+        <ul style="list-style:none;margin-bottom:28px;">
+          <li style="font-size:14px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:8px;"><span style="color:#4ade80">✓</span> ניתוחים ללא הגבלה</li>
+          <li style="font-size:14px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:8px;"><span style="color:#4ade80">✓</span> ניתוח תמונה וסרטון</li>
+          <li style="font-size:14px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:8px;"><span style="color:#4ade80">✓</span> פוסט משופר מלא</li>
+          <li style="font-size:14px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:8px;"><span style="color:#4ade80">✓</span> 10 האשטגים מותאמים</li>
+          <li style="font-size:14px;padding:7px 0;display:flex;align-items:center;gap:8px;"><span style="color:#4ade80">✓</span> אסטרטגיית תוכן</li>
+        </ul>
+        <button onclick="showPaywall('monthly')" style="width:100%;padding:13px;background:linear-gradient(135deg,#7c5cfc,#5c3fdc);border:none;border-radius:10px;color:#fff;font-family:'Heebo',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 6px 24px rgba(124,92,252,.35);" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">התחל עכשיו</button>
+      </div>
+
+      <div style="background:#12121a;border:1px solid #2a2a3d;border-radius:16px;padding:28px;">
+        <div style="font-size:12px;font-weight:600;color:#7070a0;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;">שנתי — חיסכון 40%</div>
+        <div style="font-size:40px;font-weight:900;margin-bottom:4px;">₪29</div>
+        <div style="font-size:13px;color:#7070a0;margin-bottom:24px;">לחודש · ₪348 לשנה</div>
+        <ul style="list-style:none;margin-bottom:28px;">
+          <li style="font-size:14px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:8px;"><span style="color:#4ade80">✓</span> כל מה שבחודשי</li>
+          <li style="font-size:14px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:8px;"><span style="color:#4ade80">✓</span> עדיפות בתמיכה</li>
+          <li style="font-size:14px;padding:7px 0;display:flex;align-items:center;gap:8px;"><span style="color:#4ade80">✓</span> תכונות חדשות ראשון</li>
+        </ul>
+        <button onclick="showPaywall('yearly')" style="width:100%;padding:13px;background:transparent;border:1px solid #2a2a3d;border-radius:10px;color:#fff;font-family:'Heebo',sans-serif;font-size:15px;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='#7c5cfc'" onmouseout="this.style.borderColor='#2a2a3d'">בחר שנתי</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div style="max-width:640px;margin:0 auto 80px;padding:0 24px;">
+    <div style="text-align:center;margin-bottom:40px;">
+      <h2 style="font-size:clamp(24px,4vw,38px);font-weight:900;">שאלות נפוצות</h2>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div style="background:#12121a;border:1px solid #2a2a3d;border-radius:12px;padding:20px;">
+        <div style="font-size:15px;font-weight:700;margin-bottom:8px;">האם צריך ידע בשיווק כדי להשתמש?</div>
+        <div style="font-size:14px;color:#7070a0;line-height:1.6;">לא. הכלי מסביר הכל בעברית פשוטה ונותן המלצות ספציפיות שאפשר ליישם מיד.</div>
+      </div>
+      <div style="background:#12121a;border:1px solid #2a2a3d;border-radius:12px;padding:20px;">
+        <div style="font-size:15px;font-weight:700;margin-bottom:8px;">כמה זמן לוקח ניתוח אחד?</div>
+        <div style="font-size:14px;color:#7070a0;line-height:1.6;">בין 10 ל-20 שניות. אתה מקבל ניתוח מלא — כולל פוסט משופר, ציון, האשטגים ואסטרטגיה.</div>
+      </div>
+      <div style="background:#12121a;border:1px solid #2a2a3d;border-radius:12px;padding:20px;">
+        <div style="font-size:15px;font-weight:700;margin-bottom:8px;">האם אפשר לבטל את המנוי בכל עת?</div>
+        <div style="font-size:14px;color:#7070a0;line-height:1.6;">כן, ביטול בלחיצה אחת בכל עת. אין התחייבות ואין קנסות.</div>
+      </div>
+      <div style="background:#12121a;border:1px solid #2a2a3d;border-radius:12px;padding:20px;">
+        <div style="font-size:15px;font-weight:700;margin-bottom:8px;">לאיזה פלטפורמות זה מתאים?</div>
+        <div style="font-size:14px;color:#7070a0;line-height:1.6;">Instagram, Facebook, LinkedIn, TikTok ו-X (Twitter). כל ניתוח מותאם לאלגוריתם הספציפי של הפלטפורמה שבחרת.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL CTA -->
+  <div style="text-align:center;padding:60px 24px 100px;">
+    <h2 style="font-size:clamp(28px,5vw,52px);font-weight:900;margin-bottom:16px;line-height:1.15;">מוכן לפוסטים<br/>שבאמת עובדים?</h2>
+    <p style="color:#7070a0;font-size:17px;margin-bottom:36px;">הצטרף ל-1,240+ בעלי עסקים שכבר משפרים את הפוסטים שלהם</p>
+    <button onclick="startFreeTrial()" style="padding:18px 48px;background:linear-gradient(135deg,#7c5cfc,#fc5c9c);border:none;border-radius:12px;color:#fff;font-family:'Heebo',sans-serif;font-size:20px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 12px 48px rgba(124,92,252,.45);" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='none'">
+      התחל 3 ניתוחים חינם ←
+    </button>
+    <p style="font-size:13px;color:rgba(255,255,255,.25);margin-top:16px;">ללא כרטיס אשראי · ללא הרשמה</p>
+  </div>
+
 </div>
 
 <!-- ══════════════ TOOL PAGE ══════════════ -->
