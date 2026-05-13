@@ -913,8 +913,8 @@ textarea:focus{border-color:var(--accent);}
         <div class="plan-price">₪0</div>
         <div class="plan-period">לנסיון</div>
         <ul class="plan-features">
-          <li>ניתוח אחד מלא</li>
-          <li>ניתוח כיתוב + ויזואל</li>
+          <li>3 ניתוחים בחודש</li>
+          <li>ניתוח כיתוב</li>
           <li>פוסט משופר</li>
           <li>האשטגים מומלצים</li>
         </ul>
@@ -928,9 +928,11 @@ textarea:focus{border-color:var(--accent);}
         <ul class="plan-features">
           <li>ניתוחים ללא הגבלה</li>
           <li>ניתוח תמונה וסרטון</li>
+          <li>לוח שנה תוכן חכם</li>
+          <li>ניתוח מתחרים</li>
+          <li>מעקב תוצאות</li>
           <li>פוסט משופר מלא</li>
           <li>10 האשטגים מותאמים</li>
-          <li>אסטרטגיית תוכן</li>
           <li>ביטול בכל עת</li>
         </ul>
         <button class="plan-btn plan-btn-fill" onclick="showPaywall('monthly')">התחל עכשיו</button>
@@ -992,9 +994,9 @@ textarea:focus{border-color:var(--accent);}
     <div class="tool-topbar">
       <button class="back-btn" onclick="showLanding()">← חזרה</button>
       <div class="usage-pill" id="usagePill">
-        <span style="font-size:13px;color:var(--muted)">ניתוחים: <strong id="usageCount" style="color:var(--text)">0</strong>/<strong id="usageMax" style="color:var(--text)">1</strong></span>
+        <span style="font-size:13px;color:var(--muted)">ניתוחים החודש: <strong id="usageCount" style="color:var(--text)">0</strong>/<strong id="usageMax" style="color:var(--text)">3</strong></span>
         <div class="usage-dots" id="usageDots"></div>
-        <span class="upgrade-link" onclick="showPaywall('monthly')">שדרג ←</span>
+        <span class="upgrade-link" onclick="showPaywall('monthly')">שדרג לבלתי מוגבל ←</span>
       </div>
     </div>
 
@@ -1009,8 +1011,7 @@ textarea:focus{border-color:var(--accent);}
         <span class="tab-icon">🔍</span> ניתוח פוסט
       </button>
       <button class="main-tab" onclick="swMainTab(this,'tab-calendar')">
-        <span class="tab-icon">📅</span> לוח שנה
-      </button>
+        <span class="tab-icon">📅</span> לוח שנה </button>
       <button class="main-tab" onclick="swMainTab(this,'tab-tracker')">
         <span class="tab-icon">📊</span> מעקב תוצאות
       </button>
@@ -1068,7 +1069,7 @@ textarea:focus{border-color:var(--accent);}
       <div class="char-c"><span id="charCount">0</span> תווים</div>
 
       <div style="margin-top:16px">
-        <div class="lbl">תמונה / סרטון <span style="font-size:10px;opacity:.5;text-transform:none;letter-spacing:0">(אופציונלי)</span></div>
+        <div class="lbl">תמונה / סרטון <span style="font-size:10px;background:linear-gradient(135deg,#7c5cfc,#fc5c9c);color:#fff;border-radius:4px;padding:1px 5px;">PRO</span></div>
         <div class="media-tabs">
           <button class="mtab on" onclick="swMediaTab(this,'image')">🖼️ תמונה</button>
           <button class="mtab"    onclick="swMediaTab(this,'video')">🎬 סרטון</button>
@@ -1092,7 +1093,7 @@ textarea:focus{border-color:var(--accent);}
       <!-- COMPETITOR POSTS (optional) -->
       <div style="margin-top:18px;">
         <div class="lbl" style="cursor:pointer;user-select:none" onclick="toggleComp()">
-          🎯 השווה למתחרה <span id="compToggleArrow" style="color:var(--muted);font-size:11px;">(לחץ להוספה)</span>
+          🎯 השווה למתחרה <span style="font-size:10px;background:linear-gradient(135deg,#7c5cfc,#fc5c9c);color:#fff;border-radius:4px;padding:1px 5px;">PRO</span> <span id="compToggleArrow" style="color:var(--muted);font-size:11px;">(לחץ לפתיחה)</span>
         </div>
         <div id="compSection" style="display:none;margin-top:10px;">
           <input type="text" id="compNameInline" placeholder="שם המתחרה (אופציונלי)"
@@ -1418,7 +1419,7 @@ textarea:focus{border-color:var(--accent);}
 
 <script>
 /* ══ CONSTANTS ══ */
-const FREE_LIMIT = 1;
+const FREE_LIMIT = 3;
 const PAY_MONTHLY = 'https://YOUR-PAYMENT-LINK-MONTHLY';
 const PAY_YEARLY  = 'https://YOUR-PAYMENT-LINK-YEARLY';
 
@@ -1439,6 +1440,7 @@ function swMainTab(btn,pane){
 
 /* ══ COMPETITOR TOGGLE ══ */
 function toggleComp(){
+  if(!isPro()){showPaywall('monthly');return;}
   const sec=document.getElementById('compSection');
   const arrow=document.getElementById('compToggleArrow');
   if(!sec||!arrow) return;
@@ -1482,8 +1484,20 @@ function showLanding(){
 }
 
 /* ══ USAGE ══ */
-function getUsage(){ return parseInt(localStorage.getItem('piq_use')||'0'); }
-function incUsage(){ localStorage.setItem('piq_use', getUsage()+1); }
+function getUsage(){
+  const saved=JSON.parse(localStorage.getItem('piq_use_v2')||'{}');
+  const now=new Date();
+  const key=now.getFullYear()+'-'+now.getMonth();
+  if(saved.month!==key) return 0;
+  return saved.count||0;
+}
+function incUsage(){
+  const now=new Date();
+  const key=now.getFullYear()+'-'+now.getMonth();
+  const saved=JSON.parse(localStorage.getItem('piq_use_v2')||'{}');
+  const count=(saved.month===key?saved.count||0:0)+1;
+  localStorage.setItem('piq_use_v2',JSON.stringify({month:key,count}));
+}
 function isPro(){ return localStorage.getItem('piq_pro')==='true'; }
 function updateUsage(){
   const u=getUsage(), max=isPro()?999:FREE_LIMIT;
@@ -1545,6 +1559,7 @@ function dLeave(){document.getElementById('uploadZone').classList.remove('drag')
 function dDrop(e){e.preventDefault();document.getElementById('uploadZone').classList.remove('drag');const f=e.dataTransfer.files[0];if(f)procMedia(f);}
 function mediaSelect(e){const f=e.target.files[0];if(f)procMedia(f);}
 function procMedia(file){
+  if(!isPro()){showPaywall('monthly');return;}
   const isV=file.type.startsWith('video/'),isI=file.type.startsWith('image/');
   if(!isV&&!isI){showErr('פורמט לא נתמך');return;}
   fileType=file.type; mediaType=isV?'video':'image';
@@ -1778,6 +1793,128 @@ function renderResults(r,hasMedia,origPost){
 
   setTimeout(()=>document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'}),100);
 }
+
+/* ══ CALENDAR ══ */
+async function generateCalendar(){
+  const niche=document.getElementById('calNiche').value;
+  const platform=document.getElementById('calPlatform').value;
+  const freq=document.getElementById('calFreq').value;
+  const goal=document.getElementById('calGoal').value;
+  const desc=document.getElementById('calBizDesc').value.trim();
+  const nicheL={beauty:'קוסמטיקה/יופי',restaurant:'מסעדה/אוכל',fitness:'כושר/תזונה',fashion:'אופנה',ecommerce:'חנות אונליין',realEstate:'נדל"ן',tech:'טכנולוגיה',health:'בריאות/רפואה',education:'חינוך/קורסים',localBusiness:'עסק מקומי',creative:'יצירה/עיצוב',general:'כללי'};
+  const platL={instagram:'Instagram',facebook:'Facebook',linkedin:'LinkedIn',tiktok:'TikTok',twitter:'X/Twitter'};
+  const goalL={awareness:'מודעות למותג',engagement:'מעורבות',leads:'לידים/פניות',sales:'מכירות',launch:'השקת מוצר'};
+  document.getElementById('calBtn').disabled=true;
+  document.getElementById('calBtn').textContent='מתכנן...';
+  document.getElementById('calLoading').style.display='block';
+  document.getElementById('calResults').style.display='none';
+  const today=new Date();
+  const month=today.getMonth()+1;
+  const year=today.getFullYear();
+  const prompt='צור לוח שנה תוכן.\nתחום: '+nicheL[niche]+'\nפלטפורמה: '+platL[platform]+'\nכמות: '+freq+' פוסטים לחודש\nמטרה: '+goalL[goal]+(desc?'\nעסק: '+desc:'')+'\n\nצור בדיוק '+freq+' פוסטים לחודש '+month+'/'+year+', מחולקים בצורה שווה.\n\nהחזר JSON בלבד:\n{"month_theme":"<נושא>","posts":[{"day":<יום>,"type":"<חינוכי/בידורי/מכירתי/קהילתי/השראה>","title":"<כותרת>","content":"<פוסט מלא>","hashtags":["#1","#2","#3"],"best_time":"<שעה>"}],"weekly_tips":["<טיפ1>","<טיפ2>","<טיפ3>","<טיפ4>"]}';
+  try{
+    const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:4000,
+        system:'אתה מומחה תוכן ושיווק. צור תוכן מקצועי בעברית.',
+        messages:[{role:'user',content:prompt}]})});
+    if(!res.ok) throw new Error('שגיאה '+res.status);
+    const data=await res.json();
+    const raw=data.content.map(c=>c.text||'').join('');
+    const result=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    result._meta={month,year};
+    const calRes=document.getElementById('calResults');
+    calRes.dataset.calData=JSON.stringify(result);
+    calRes.dataset.posts=JSON.stringify(result.posts||[]);
+    renderCalendar(result);
+  }catch(err){alert('שגיאה: '+err.message);}
+  finally{
+    document.getElementById('calBtn').disabled=false;
+    document.getElementById('calBtn').textContent='📅 צור לוח שנה לחודש הקרוב';
+    document.getElementById('calLoading').style.display='none';
+  }
+}
+
+function renderCalendar(result){
+  const container=document.getElementById('calResults');
+  container.style.display='block';
+  const typeColors={'חינוכי':'background:rgba(92,244,252,.1);color:#5cf4fc;border:1px solid rgba(92,244,252,.25)','בידורי':'background:rgba(250,204,21,.1);color:#facc15;border:1px solid rgba(250,204,21,.25)','מכירתי':'background:rgba(252,92,156,.1);color:#fc5c9c;border:1px solid rgba(252,92,156,.25)','קהילתי':'background:rgba(74,222,128,.1);color:#4ade80;border:1px solid rgba(74,222,128,.25)','השראה':'background:rgba(124,92,252,.1);color:#7c5cfc;border:1px solid rgba(124,92,252,.25)'};
+  const {month,year}=result._meta||{month:new Date().getMonth()+1,year:new Date().getFullYear()};
+  let html='<div style="background:rgba(124,92,252,.06);border:1px solid rgba(124,92,252,.2);border-radius:14px;padding:18px;margin-bottom:16px;"><div style="font-size:12px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">נושא החודש</div><div style="font-size:18px;font-weight:700;">'+(result.month_theme||'')+'</div></div><div class="cal-result-card">';
+  (result.posts||[]).forEach((p,i)=>{
+    const col=typeColors[p.type]||'background:rgba(124,92,252,.1);color:#7c5cfc;border:1px solid rgba(124,92,252,.25)';
+    html+='<div class="cal-post-item"><div class="cal-post-header"><div style="display:flex;align-items:center;gap:8px;"><span class="cal-date-badge">'+p.day+'/'+month+'</span><span class="cal-type-badge" style="'+col+'">'+p.type+'</span></div><div style="font-size:12px;color:var(--muted);">'+(p.best_time||'')+'</div></div><div style="font-size:15px;font-weight:700;margin-bottom:8px;">'+(p.title||'')+'</div><div class="cal-post-text">'+(p.content||'')+'</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;">'+(p.hashtags||[]).map(h=>'<span style="background:var(--surface2);border:1px solid var(--border);border-radius:100px;padding:3px 10px;font-size:11px;color:var(--accent3);font-family:Space Mono,monospace;">'+h+'</span>').join('')+'</div><span style="font-size:12px;color:var(--accent);cursor:pointer;text-decoration:underline;" onclick="copyCalPost('+i+')">📋 העתק פוסט</span></div>';
+  });
+  html+='</div>';
+  if(result.weekly_tips){
+    html+='<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;margin-top:14px;"><div style="font-size:14px;font-weight:700;margin-bottom:12px;">💡 טיפים שבועיים</div>';
+    result.weekly_tips.forEach((t,i)=>{html+='<div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:14px;"><span style="color:var(--accent);font-weight:700;flex-shrink:0;">שבוע '+(i+1)+'</span><span style="color:var(--muted);">'+t+'</span></div>';});
+    html+='</div>';
+  }
+  container.innerHTML=html;
+  container.dataset.posts=JSON.stringify(result.posts||[]);
+}
+
+function copyCalPost(idx){
+  const posts=JSON.parse(document.getElementById('calResults').dataset.posts||'[]');
+  if(posts[idx]) copyText(posts[idx].content+(posts[idx].hashtags?'\n\n'+posts[idx].hashtags.join(' '):''));
+}
+
+/* ══ TRACKER ══ */
+function loadTracker(){
+  const entries=JSON.parse(localStorage.getItem('piq_tracker')||'[]');
+  const list=document.getElementById('trackerList');
+  const empty=document.getElementById('trackerEmpty');
+  if(!list) return;
+  if(!entries.length){list.innerHTML='';if(empty)empty.style.display='block';updateTrackerStats([]);return;}
+  if(empty) empty.style.display='none';
+  list.innerHTML='';
+  entries.slice().reverse().forEach(e=>{
+    const sc=e.score||0;
+    const scoreColor=sc>=70?'var(--green)':sc>=50?'var(--yellow)':'var(--red)';
+    const engRate=e.views>0?((e.likes+e.comments)/e.views*100).toFixed(1)+'%':'--';
+    list.innerHTML+='<div class="tracker-item"><div class="tracker-header"><div class="tracker-post-text">'+e.text+'</div><div class="tracker-date">'+e.date+' · '+e.platform+'</div></div><div class="tracker-metrics"><div class="tracker-metric"><div class="tracker-metric-val">'+e.likes+'</div><div class="tracker-metric-lbl">לייקים</div></div><div class="tracker-metric"><div class="tracker-metric-val">'+e.comments+'</div><div class="tracker-metric-lbl">תגובות</div></div><div class="tracker-metric"><div class="tracker-metric-val">'+(e.views||0).toLocaleString()+'</div><div class="tracker-metric-lbl">צפיות</div></div><div class="tracker-metric"><div class="tracker-metric-val">'+(e.clicks||0)+'</div><div class="tracker-metric-lbl">קליקים</div></div></div><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;"><span class="tracker-score-badge" style="background:'+scoreColor+'22;color:'+scoreColor+';border:1px solid '+scoreColor+'44;">ציון PostIQ: '+sc+'</span><span style="font-size:13px;color:var(--muted);">מעורבות: <strong style="color:var(--text)">'+engRate+'</strong></span></div>'+(e.insight?'<div class="tracker-insight">💡 '+e.insight+'</div>':'')+'</div>';
+  });
+  updateTrackerStats(entries);
+}
+
+function updateTrackerStats(entries){
+  const s=document.getElementById('statAvgScore');
+  const t=document.getElementById('statTotalPosts');
+  const b=document.getElementById('statBestPost');
+  if(!s) return;
+  if(!entries.length){s.textContent='--';t.textContent='0';b.textContent='--';return;}
+  const scores=entries.map(e=>e.score||0).filter(x=>x>0);
+  s.textContent=scores.length?Math.round(scores.reduce((a,c)=>a+c,0)/scores.length):'--';
+  t.textContent=entries.length;
+  b.textContent=scores.length?Math.max(...scores):'--';
+}
+
+async function addTrackerEntry(){
+  const text=document.getElementById('trackPostText').value.trim();
+  const likes=parseInt(document.getElementById('trackLikes').value)||0;
+  const comments=parseInt(document.getElementById('trackComments').value)||0;
+  const views=parseInt(document.getElementById('trackViews').value)||0;
+  const clicks=parseInt(document.getElementById('trackClicks').value)||0;
+  const score=parseInt(document.getElementById('trackScore').value)||0;
+  const platform=document.getElementById('trackPlatform').value;
+  if(!text){alert('הכנס כיתוב פוסט');return;}
+  let insight='';
+  try{
+    const engRate=views>0?((likes+comments)/views*100).toFixed(1):0;
+    const r=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:120,
+        messages:[{role:'user',content:'פוסט: "'+text+'"\nציון PostIQ: '+score+'\nתוצאות: '+likes+' לייקים, '+comments+' תגובות, '+views+' צפיות, מעורבות: '+engRate+'%\nתן תובנה קצרה ב-1-2 משפטים בעברית.'}]})});
+    if(r.ok){const d=await r.json();insight=d.content.map(c=>c.text||'').join('').trim();}
+  }catch(e){}
+  const entry={text:text.slice(0,100)+(text.length>100?'...':''),likes,comments,views,clicks,score,platform,insight,date:new Date().toLocaleDateString('he-IL')};
+  const entries=JSON.parse(localStorage.getItem('piq_tracker')||'[]');
+  entries.push(entry);
+  localStorage.setItem('piq_tracker',JSON.stringify(entries));
+  ['trackPostText','trackLikes','trackComments','trackViews','trackClicks','trackScore'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  loadTracker();
+}
+
+document.addEventListener('DOMContentLoaded',()=>loadTracker());
 
 function copyImproved(){
   copyText(document.getElementById('improvedText').textContent);
