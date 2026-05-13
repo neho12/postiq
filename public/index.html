@@ -192,6 +192,123 @@ body{background:var(--bg);color:var(--text);font-family:'Heebo',sans-serif;min-h
   margin-bottom:16px;line-height:1.1;letter-spacing:-1px;}
 .final-cta p{font-size:17px;color:var(--muted);margin-bottom:36px;}
 
+/* ══ MAIN TOOL TABS ══ */
+.main-tabs{display:flex;gap:0;background:var(--surface);border:1px solid var(--border);
+  border-radius:14px;padding:4px;margin-bottom:24px;overflow-x:auto;}
+.main-tab{flex:1;min-width:120px;padding:10px 8px;text-align:center;font-size:14px;font-weight:600;
+  cursor:pointer;border-radius:10px;color:var(--muted);border:none;background:none;
+  font-family:'Heebo',sans-serif;transition:all .2s;white-space:nowrap;display:flex;
+  align-items:center;justify-content:center;gap:6px;}
+.main-tab:hover{color:var(--text);}
+.main-tab.on{background:linear-gradient(135deg,rgba(124,92,252,.2),rgba(252,92,156,.1));
+  color:var(--text);border:1px solid rgba(124,92,252,.35);}
+.main-tab .tab-icon{font-size:16px;}
+.tool-pane{display:none;}
+.tool-pane.on{display:block;}
+
+/* ══ CALENDAR ══ */
+.cal-setup{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:20px;position:relative;overflow:hidden;}
+.cal-setup::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#5cf4fc,#7c5cfc,#fc5c9c);}
+.cal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+.cal-month{display:grid;grid-template-columns:1fr;gap:10px;margin-top:20px;}
+.cal-week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
+.cal-week-label{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px;}
+.cal-day-name{text-align:center;font-size:11px;color:var(--muted);font-weight:600;padding:4px 0;}
+.cal-day{border-radius:8px;padding:8px 6px;font-size:12px;min-height:70px;cursor:pointer;
+  transition:all .2s;position:relative;overflow:hidden;}
+.cal-day.empty{background:transparent;cursor:default;}
+.cal-day.has-post{background:rgba(124,92,252,.1);border:1px solid rgba(124,92,252,.25);}
+.cal-day.has-post:hover{background:rgba(124,92,252,.18);border-color:rgba(124,92,252,.5);}
+.cal-day.no-post{background:var(--surface2);border:1px solid var(--border);}
+.cal-day.no-post:hover{border-color:rgba(255,255,255,.2);}
+.cal-day-num{font-size:11px;color:var(--muted);margin-bottom:4px;font-family:'Space Mono',monospace;}
+.cal-post-title{font-size:11px;line-height:1.35;color:var(--text);font-weight:500;}
+.cal-post-type{display:inline-block;font-size:10px;border-radius:4px;padding:1px 5px;margin-top:3px;}
+.cal-loading{text-align:center;padding:40px;color:var(--muted);}
+.cal-result-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  margin-bottom:14px;overflow:hidden;}
+.cal-post-item{padding:16px 20px;border-bottom:1px solid var(--border);transition:background .2s;}
+.cal-post-item:last-child{border-bottom:none;}
+.cal-post-item:hover{background:var(--surface2);}
+.cal-post-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;}
+.cal-date-badge{font-family:'Space Mono',monospace;font-size:11px;color:var(--accent);
+  background:rgba(124,92,252,.1);border:1px solid rgba(124,92,252,.2);
+  border-radius:6px;padding:3px 8px;}
+.cal-type-badge{font-size:11px;border-radius:6px;padding:3px 10px;font-weight:600;}
+.cal-post-text{font-size:14px;line-height:1.7;color:var(--text);white-space:pre-wrap;
+  background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:8px;}
+.cal-copy{font-size:12px;color:var(--accent);cursor:pointer;text-decoration:underline;}
+.cal-view-toggle{display:flex;gap:8px;margin-bottom:16px;}
+.cal-view-btn{background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+  padding:7px 14px;font-size:13px;color:var(--muted);cursor:pointer;font-family:'Heebo',sans-serif;transition:all .2s;}
+.cal-view-btn.on{background:rgba(124,92,252,.15);border-color:var(--accent);color:var(--accent);}
+
+/* ══ TRACKER ══ */
+.tracker-list{display:flex;flex-direction:column;gap:12px;}
+.tracker-item{background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:18px;transition:border-color .2s;}
+.tracker-item:hover{border-color:rgba(124,92,252,.35);}
+.tracker-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+.tracker-post-text{font-size:13px;color:var(--muted);line-height:1.5;flex:1;}
+.tracker-date{font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;flex-shrink:0;}
+.tracker-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;}
+.tracker-metric{background:var(--surface2);border-radius:8px;padding:10px;text-align:center;}
+.tracker-metric-val{font-size:18px;font-weight:900;font-family:'Space Mono',monospace;}
+.tracker-metric-lbl{font-size:11px;color:var(--muted);margin-top:2px;}
+.tracker-score-badge{display:inline-flex;align-items:center;gap:6px;border-radius:8px;
+  padding:4px 12px;font-size:12px;font-weight:700;}
+.tracker-insight{font-size:13px;color:var(--muted);line-height:1.6;margin-top:8px;
+  padding:10px;background:var(--surface2);border-radius:8px;}
+.tracker-add-form{background:var(--surface);border:1px solid var(--border);border-radius:16px;
+  padding:24px;margin-bottom:20px;position:relative;overflow:hidden;}
+.tracker-add-form::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--green),var(--accent));}
+.tracker-metrics-input{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px;}
+.metric-input-group label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;}
+.metric-input-group input{width:100%;background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--rs);padding:10px 12px;color:var(--text);font-family:'Heebo',sans-serif;
+  font-size:15px;outline:none;transition:border-color .2s;text-align:center;}
+.metric-input-group input:focus{border-color:var(--accent);}
+.tracker-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+.tracker-stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  padding:16px;text-align:center;}
+.tracker-stat-num{font-size:26px;font-weight:900;font-family:'Space Mono',monospace;margin-bottom:4px;}
+.tracker-stat-lbl{font-size:12px;color:var(--muted);}
+
+/* ══ COMPETITOR ══ */
+.comp-setup{background:var(--surface);border:1px solid var(--border);border-radius:16px;
+  padding:28px;margin-bottom:20px;position:relative;overflow:hidden;}
+.comp-setup::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,#fc5c9c,#facc15);}
+.comp-posts-area{width:100%;background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--rs);padding:14px;color:var(--text);font-family:'Heebo',sans-serif;
+  font-size:14px;line-height:1.7;resize:vertical;min-height:120px;
+  outline:none;transition:border-color .2s;}
+.comp-posts-area:focus{border-color:var(--accent2);}
+.comp-result{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+.comp-section{padding:18px 20px;border-bottom:1px solid var(--border);}
+.comp-section:last-child{border-bottom:none;}
+.comp-section-title{font-size:13px;font-weight:700;margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;}
+.comp-insight{display:flex;gap:10px;padding:8px 0;font-size:14px;line-height:1.6;
+  border-bottom:1px solid rgba(255,255,255,.04);}
+.comp-insight:last-child{border-bottom:none;}
+.comp-pattern{background:rgba(250,204,21,.06);border:1px solid rgba(250,204,21,.2);
+  border-radius:8px;padding:10px 12px;font-size:13px;color:var(--yellow);margin-bottom:8px;line-height:1.6;}
+
+@media(max-width:600px){
+  .main-tabs{border-radius:10px;}
+  .main-tab{font-size:12px;min-width:80px;padding:8px 4px;}
+  .main-tab .tab-icon{display:none;}
+  .cal-week{gap:3px;}
+  .cal-day{min-height:50px;padding:5px 3px;}
+  .cal-post-title{display:none;}
+  .tracker-metrics{grid-template-columns:repeat(2,1fr);}
+  .tracker-stats{grid-template-columns:1fr;}
+  .cal-grid{grid-template-columns:1fr;}
+  .tracker-metrics-input{grid-template-columns:1fr 1fr;}
+}
+
 /* ══════════ TOOL PAGE ══════════ */
 #toolPage{display:none;position:relative;z-index:1;}
 .tool-wrap{max-width:860px;margin:0 auto;padding:32px 20px 80px;}
@@ -766,12 +883,29 @@ textarea:focus{border-color:var(--accent);}
       </div>
     </div>
 
-    <div style="text-align:center;margin-bottom:28px;">
-      <div style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;background:linear-gradient(135deg,#fff,#7c5cfc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;">PostIQ</div>
-      <h2 style="font-size:22px;font-weight:900;margin-bottom:4px;">נתח את הפוסט שלך</h2>
-      <p style="color:var(--muted);font-size:14px;">כיתוב + תמונה/סרטון → ניתוח מקצועי + פוסט משופר</p>
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;background:linear-gradient(135deg,#fff,#7c5cfc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px;">PostIQ</div>
+      <p style="color:var(--muted);font-size:13px;">הכלי השיווקי החכם לבעלי עסקים</p>
     </div>
 
+    <!-- MAIN TABS -->
+    <div class="main-tabs">
+      <button class="main-tab on" onclick="swMainTab(this,'tab-analyze')">
+        <span class="tab-icon">🔍</span> ניתוח פוסט
+      </button>
+      <button class="main-tab" onclick="swMainTab(this,'tab-calendar')">
+        <span class="tab-icon">📅</span> לוח שנה
+      </button>
+      <button class="main-tab" onclick="swMainTab(this,'tab-tracker')">
+        <span class="tab-icon">📊</span> מעקב תוצאות
+      </button>
+      <button class="main-tab" onclick="swMainTab(this,'tab-competitor')">
+        <span class="tab-icon">🎯</span> מתחרים
+      </button>
+    </div>
+
+    <!-- TAB: ANALYZE -->
+    <div class="tool-pane on" id="tab-analyze">
     <div class="input-card">
       <div class="lbl">פלטפורמה</div>
       <div class="plat-row">
@@ -966,7 +1100,211 @@ textarea:focus{border-color:var(--accent);}
       </div>
 
     </div><!-- /results -->
-  </div>
+    </div><!-- /tab-analyze -->
+
+    <!-- TAB: CALENDAR -->
+    <div class="tool-pane" id="tab-calendar">
+      <div class="cal-setup">
+        <div class="lbl">פרטי העסק לתכנון תוכן</div>
+        <div class="cal-grid">
+          <div>
+            <div class="lbl" style="margin-bottom:8px">תחום העסק</div>
+            <select id="calNiche">
+              <option value="beauty">קוסמטיקה / יופי</option>
+              <option value="restaurant">מסעדה / אוכל</option>
+              <option value="fitness">כושר / תזונה</option>
+              <option value="fashion">אופנה</option>
+              <option value="ecommerce">חנות אונליין</option>
+              <option value="realEstate">נדל"ן</option>
+              <option value="tech">טכנולוגיה</option>
+              <option value="health">בריאות / רפואה</option>
+              <option value="education">חינוך / קורסים</option>
+              <option value="localBusiness">עסק מקומי</option>
+              <option value="creative">יצירה / עיצוב</option>
+              <option value="general">כללי</option>
+            </select>
+          </div>
+          <div>
+            <div class="lbl" style="margin-bottom:8px">פלטפורמה</div>
+            <select id="calPlatform">
+              <option value="instagram">Instagram</option>
+              <option value="facebook">Facebook</option>
+              <option value="linkedin">LinkedIn</option>
+              <option value="tiktok">TikTok</option>
+              <option value="twitter">X / Twitter</option>
+            </select>
+          </div>
+          <div>
+            <div class="lbl" style="margin-bottom:8px">כמה פוסטים בשבוע?</div>
+            <select id="calFreq">
+              <option value="2">2 פוסטים</option>
+              <option value="3" selected>3 פוסטים</option>
+              <option value="5">5 פוסטים</option>
+              <option value="7">כל יום</option>
+            </select>
+          </div>
+          <div>
+            <div class="lbl" style="margin-bottom:8px">מטרה לחודש הקרוב</div>
+            <select id="calGoal">
+              <option value="awareness">מודעות למותג</option>
+              <option value="engagement">מעורבות</option>
+              <option value="leads">לידים / פניות</option>
+              <option value="sales">מכירות</option>
+              <option value="launch">השקת מוצר</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-bottom:16px;">
+          <div class="lbl" style="margin-bottom:8px">ספר לי על העסק שלך (אופציונלי)</div>
+          <textarea id="calBizDesc" placeholder="לדוגמה: סלון יופי בתל אביב שמתמחה במניקור ג'ל, קהל יעד נשים 25-45..."
+            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:12px;color:var(--text);font-family:'Heebo',sans-serif;font-size:14px;line-height:1.6;resize:vertical;min-height:80px;outline:none;transition:border-color .2s;"
+            onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+        </div>
+        <div class="cal-view-toggle">
+          <button class="cal-view-btn on" id="calViewList" onclick="calView('list')">📋 רשימה</button>
+          <button class="cal-view-btn" id="calViewGrid" onclick="calView('grid')">📅 לוח</button>
+        </div>
+        <button onclick="generateCalendar()" style="width:100%;padding:14px;background:linear-gradient(135deg,#5cf4fc,#7c5cfc);border:none;border-radius:var(--rs);color:#fff;font-family:'Heebo',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;" id="calBtn">
+          📅 צור לוח שנה לחודש הקרוב
+        </button>
+      </div>
+
+      <div id="calLoading" style="display:none;text-align:center;padding:40px;">
+        <div class="ring"></div>
+        <div style="color:var(--muted);margin-top:16px;">מתכנן את חודש התוכן שלך...</div>
+      </div>
+
+      <div id="calResults" style="display:none;"></div>
+    </div><!-- /tab-calendar -->
+
+    <!-- TAB: TRACKER -->
+    <div class="tool-pane" id="tab-tracker">
+
+      <!-- Stats summary -->
+      <div class="tracker-stats" id="trackerStats">
+        <div class="tracker-stat">
+          <div class="tracker-stat-num" id="statAvgScore">--</div>
+          <div class="tracker-stat-lbl">ציון ממוצע</div>
+        </div>
+        <div class="tracker-stat">
+          <div class="tracker-stat-num" id="statTotalPosts">0</div>
+          <div class="tracker-stat-lbl">פוסטים שנותחו</div>
+        </div>
+        <div class="tracker-stat">
+          <div class="tracker-stat-num" id="statBestPost">--</div>
+          <div class="tracker-stat-lbl">הציון הכי טוב</div>
+        </div>
+      </div>
+
+      <!-- Add result form -->
+      <div class="tracker-add-form">
+        <div class="lbl" style="margin-bottom:14px">➕ הוסף תוצאות לפוסט</div>
+        <div style="margin-bottom:12px;">
+          <div class="lbl" style="margin-bottom:8px">הכיתוב של הפוסט (קצר)</div>
+          <textarea id="trackPostText" placeholder="הכנס את תחילת הפוסט..." rows="2"
+            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px;color:var(--text);font-family:'Heebo',sans-serif;font-size:14px;resize:none;outline:none;transition:border-color .2s;"
+            onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+        </div>
+        <div class="tracker-metrics-input">
+          <div class="metric-input-group">
+            <label>❤️ לייקים</label>
+            <input type="number" id="trackLikes" placeholder="0" min="0"/>
+          </div>
+          <div class="metric-input-group">
+            <label>💬 תגובות</label>
+            <input type="number" id="trackComments" placeholder="0" min="0"/>
+          </div>
+          <div class="metric-input-group">
+            <label>👁️ צפיות / חשיפה</label>
+            <input type="number" id="trackViews" placeholder="0" min="0"/>
+          </div>
+          <div class="metric-input-group">
+            <label>🔗 קליקים / פניות</label>
+            <input type="number" id="trackClicks" placeholder="0" min="0"/>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <div style="flex:1;">
+            <div class="lbl" style="margin-bottom:6px">ציון PostIQ שקיבל הפוסט</div>
+            <input type="number" id="trackScore" placeholder="למשל: 67" min="0" max="100"
+              style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px;color:var(--text);font-family:'Heebo',sans-serif;font-size:15px;outline:none;text-align:center;transition:border-color .2s;"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"/>
+          </div>
+          <div style="flex:1;">
+            <div class="lbl" style="margin-bottom:6px">פלטפורמה</div>
+            <select id="trackPlatform" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px;color:var(--text);font-family:'Heebo',sans-serif;font-size:14px;outline:none;">
+              <option>Instagram</option><option>Facebook</option>
+              <option>LinkedIn</option><option>TikTok</option><option>X / Twitter</option>
+            </select>
+          </div>
+        </div>
+        <button onclick="addTrackerEntry()" style="width:100%;margin-top:14px;padding:12px;background:linear-gradient(135deg,var(--green),#22c55e);border:none;border-radius:var(--rs);color:#000;font-family:'Heebo',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;">
+          ✅ שמור תוצאות וקבל תובנות
+        </button>
+      </div>
+
+      <!-- Tracked posts -->
+      <div id="trackerList" class="tracker-list"></div>
+
+      <div id="trackerEmpty" style="text-align:center;padding:40px;color:var(--muted);">
+        <div style="font-size:40px;margin-bottom:12px;">📊</div>
+        <div style="font-size:16px;font-weight:700;margin-bottom:8px;">אין עדיין נתונים</div>
+        <div style="font-size:14px;">פרסם פוסט, חכה 24-48 שעות, ואז הכנס את המספרים</div>
+      </div>
+    </div><!-- /tab-tracker -->
+
+    <!-- TAB: COMPETITOR -->
+    <div class="tool-pane" id="tab-competitor">
+      <div class="comp-setup">
+        <div class="lbl" style="margin-bottom:6px">🎯 ניתוח מתחרים</div>
+        <p style="font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.6;">הדבק פוסטים של המתחרה שלך — ה-AI יגיד לך מה הוא עושה שאתה לא, ואיך לנצח אותו.</p>
+        <div style="margin-bottom:14px;">
+          <div class="lbl" style="margin-bottom:8px">שם המתחרה / שם העסק שלו</div>
+          <input type="text" id="compName" placeholder="לדוגמה: סלון יופי מיכל"
+            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:11px 14px;color:var(--text);font-family:'Heebo',sans-serif;font-size:14px;outline:none;transition:border-color .2s;"
+            onfocus="this.style.borderColor='var(--accent2)'" onblur="this.style.borderColor='var(--border)'"/>
+        </div>
+        <div style="margin-bottom:14px;">
+          <div class="lbl" style="margin-bottom:8px">הדבק 3-5 פוסטים של המתחרה (כיתוב בלבד)</div>
+          <textarea class="comp-posts-area" id="compPosts" placeholder="פוסט 1:
+&quot;טקסט של פוסט ראשון...&quot;
+
+פוסט 2:
+&quot;טקסט של פוסט שני...&quot;
+
+פוסט 3:
+..."></textarea>
+        </div>
+        <div style="margin-bottom:14px;">
+          <div class="lbl" style="margin-bottom:8px">תחום העסק שלך</div>
+          <select id="compNiche" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:11px 14px;color:var(--text);font-family:'Heebo',sans-serif;font-size:14px;outline:none;">
+            <option value="beauty">קוסמטיקה / יופי</option>
+            <option value="restaurant">מסעדה / אוכל</option>
+            <option value="fitness">כושר / תזונה</option>
+            <option value="fashion">אופנה</option>
+            <option value="ecommerce">חנות אונליין</option>
+            <option value="realEstate">נדל"ן</option>
+            <option value="tech">טכנולוגיה</option>
+            <option value="health">בריאות</option>
+            <option value="education">חינוך</option>
+            <option value="localBusiness">עסק מקומי</option>
+            <option value="general">כללי</option>
+          </select>
+        </div>
+        <button onclick="analyzeCompetitor()" style="width:100%;padding:14px;background:linear-gradient(135deg,#fc5c9c,#facc15);border:none;border-radius:var(--rs);color:#000;font-family:'Heebo',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;" id="compBtn">
+          🎯 נתח את המתחרה
+        </button>
+      </div>
+
+      <div id="compLoading" style="display:none;text-align:center;padding:40px;">
+        <div class="ring"></div>
+        <div style="color:var(--muted);margin-top:16px;">מנתח את פוסטי המתחרה...</div>
+      </div>
+
+      <div id="compResults" style="display:none;"></div>
+    </div><!-- /tab-competitor -->
+
+  </div><!-- /tool-wrap -->
 </div><!-- /toolPage -->
 
 <!-- ══ PAYWALL ══ -->
@@ -1328,13 +1666,7 @@ function copyImproved(){
   const btn=document.querySelector('.copy-btn');
   btn.textContent='✅ הועתק!';setTimeout(()=>btn.textContent='📋 העתק',2000);
 }
-function copyText(t){
-  navigator.clipboard.writeText(t).catch(()=>{
-    const ta=document.createElement('textarea');ta.value=t;
-    document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
-  });
-}
-</script>
+
 
 <!-- STICKY CTA -->
 <div id="stickyCTA" style="position:fixed;bottom:0;left:0;right:0;z-index:999;
