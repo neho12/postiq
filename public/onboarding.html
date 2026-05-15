@@ -157,7 +157,7 @@ body{background:#faf9ff;font-family:'Heebo',sans-serif;min-height:100vh;
           <div class="opt-sub">תחום שלא מופיע</div>
         </div>
       </div>
-      <button class="btn-next" onclick="goTo2()" id="btn1" disabled>המשך ←</button>
+      <button class="btn-next" onclick="goTo2()" id="btn1">המשך ←</button>
     </div>
 
     <!-- Step 2: Platform -->
@@ -186,7 +186,7 @@ body{background:#faf9ff;font-family:'Heebo',sans-serif;min-height:100vh;
           <div><div class="opt-title">X / Twitter</div><div class="opt-sub">טוויטים, Threads</div></div>
         </div>
       </div>
-      <button class="btn-next" onclick="goTo3()" id="btn2" disabled>המשך ←</button>
+      <button class="btn-next" onclick="goTo3()" id="btn2">המשך ←</button>
     </div>
 
     <!-- Step 3: Goal -->
@@ -215,7 +215,7 @@ body{background:#faf9ff;font-family:'Heebo',sans-serif;min-height:100vh;
           <div class="opt-sub">לייקים ותגובות</div>
         </div>
       </div>
-      <button class="btn-next" onclick="goTo4()" id="btn3" disabled>המשך ←</button>
+      <button class="btn-next" onclick="goTo4()" id="btn3">המשך ←</button>
     </div>
 
     <!-- Step 4: Tone -->
@@ -244,7 +244,7 @@ body{background:#faf9ff;font-family:'Heebo',sans-serif;min-height:100vh;
           <div class="opt-sub">מצחיק, קליל, יצירתי</div>
         </div>
       </div>
-      <button class="btn-next" onclick="goTo5()" id="btn4" disabled>המשך ←</button>
+      <button class="btn-next" onclick="goTo5()" id="btn4">המשך ←</button>
     </div>
 
     <!-- Step 5: Target audience -->
@@ -286,7 +286,7 @@ body{background:#faf9ff;font-family:'Heebo',sans-serif;min-height:100vh;
           onfocus="this.style.borderColor='#7c3aed'" onblur="this.style.borderColor='#e8e4f8'"
           oninput="checkStep5()"></textarea>
       </div>
-      <button class="btn-next" onclick="finish()" id="btn5" disabled>סיום — בוא ננתח! ⚡</button>
+      <button class="btn-next" onclick="finish()" id="btn5">סיום — בוא ננתח! ⚡</button>
       <span class="btn-skip" onclick="skip()">דלג על השאלון</span>
     </div>
 
@@ -310,50 +310,68 @@ function select1(el, val){
   document.querySelectorAll('#step1 .option').forEach(o=>o.classList.remove('selected'));
   el.classList.add('selected');
   data.niche = val;
-  document.getElementById('btn1').disabled = false;
 }
 function select2(el, val){
   document.querySelectorAll('#step2 .option-wide').forEach(o=>o.classList.remove('selected'));
   el.classList.add('selected');
   data.platform = val;
-  document.getElementById('btn2').disabled = false;
 }
 function select3(el, val){
   document.querySelectorAll('#step3 .option').forEach(o=>o.classList.remove('selected'));
   el.classList.add('selected');
   data.goal = val;
-  document.getElementById('btn3').disabled = false;
+}
+function select4(el, val){
+  document.querySelectorAll('#step4 .option').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  data.tone = val;
+}
+function selectAge(el, val){
+  document.querySelectorAll('#step5 [onclick^="selectAge"]').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  data.age = val;
+}
+function selectGender(el, val){
+  document.querySelectorAll('#step5 [onclick^="selectGender"]').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  data.gender = val;
+}
+function checkStep5(){
+  const desc = document.getElementById('audienceDesc')?.value.trim()||'';
+  if(desc.length > 5) data.audience = desc;
 }
 
 function goTo(step){
   document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
   document.getElementById('step'+step).classList.add('active');
-  // Update progress circles
-  for(let i=1;i<=3;i++){
+  for(let i=1;i<=5;i++){
     const sc=document.getElementById('sc'+i);
+    if(!sc) continue;
     if(i<step){sc.className='step-circle done';sc.innerHTML='✓';}
     else if(i===step){sc.className='step-circle active';sc.innerHTML=i;}
     else{sc.className='step-circle upcoming';sc.innerHTML=i;}
   }
-  for(let i=1;i<=2;i++){
-    document.getElementById('sl'+i).className='step-line '+(i<step?'done':'upcoming');
+  for(let i=1;i<=4;i++){
+    const sl=document.getElementById('sl'+i);
+    if(sl) sl.className='step-line '+(i<step?'done':'upcoming');
   }
-  document.getElementById('progressLabel').innerHTML='שלב <span>'+step+'</span> מתוך 3';
+  const pl=document.getElementById('progressLabel');
+  if(pl) pl.innerHTML='שלב <span>'+step+'</span> מתוך 5';
   window.scrollTo({top:0,behavior:'smooth'});
 }
-
-function goTo2(){ if(data.niche) goTo(2); }
-function goTo3(){ if(data.platform) goTo(3); }
+function goTo2(){ if(!data.niche) data.niche='general'; goTo(2); }
+function goTo3(){ if(!data.platform) data.platform='instagram'; goTo(3); }
+function goTo4(){ if(!data.goal) data.goal='awareness'; goTo(4); }
+function goTo5(){ if(!data.tone) data.tone='friendly'; goTo(5); }
 
 function finish(){
-  if(!data.goal) return;
+  if(!data.audience) data.audience='';
   localStorage.setItem('piq_onboard', JSON.stringify(data));
   document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
   document.getElementById('step6').classList.add('active');
-  // Update all circles to done
-  for(let i=1;i<=3;i++){const sc=document.getElementById('sc'+i);sc.className='step-circle done';sc.innerHTML='✓';}
-  for(let i=1;i<=2;i++){document.getElementById('sl'+i).className='step-line done';}
-  document.querySelector('.progress-label').style.display='none';
+  for(let i=1;i<=5;i++){const sc=document.getElementById('sc'+i);if(sc){sc.className='step-circle done';sc.innerHTML='✓';}}
+  for(let i=1;i<=4;i++){const sl=document.getElementById('sl'+i);if(sl)sl.className='step-line done';}
+  const pl=document.getElementById('progressLabel');if(pl)pl.style.display='none';
 }
 
 function skip(){
