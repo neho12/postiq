@@ -994,6 +994,7 @@ textarea:focus{border-color:var(--accent);}
   <div class="tool-wrap">
     <div class="tool-topbar">
       <button class="back-btn" onclick="showLanding()">← חזרה</button>
+
       <div class="usage-pill" id="usagePill">
         <span style="font-size:13px;color:var(--muted)">ניתוחים החודש: <strong id="usageCount" style="color:var(--text)">0</strong>/<strong id="usageMax" style="color:var(--text)">3</strong></span>
         <div class="usage-dots" id="usageDots"></div>
@@ -1016,6 +1017,19 @@ textarea:focus{border-color:var(--accent);}
       <button class="main-tab" onclick="swMainTab(this,'tab-tracker')">
         <span class="tab-icon">📊</span> מעקב תוצאות
       </button>
+    </div>
+
+    <!-- Personalize button -->
+    <div style="text-align:center;margin-bottom:16px;">
+      <a href="onboarding.html"
+        style="background:linear-gradient(135deg,#7c3aed,#ec4899);border:none;border-radius:100px;
+        padding:10px 24px;color:#fff;font-family:'Heebo',sans-serif;font-size:14px;font-weight:700;
+        cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .2s;
+        box-shadow:0 4px 16px rgba(124,58,237,.3);text-decoration:none;"
+        onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(124,58,237,.45)'"
+        onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 16px rgba(124,58,237,.3)'">
+        🎯 התאם את הכלי לעסק שלך
+      </a>
     </div>
 
     <!-- TAB: ANALYZE -->
@@ -1397,54 +1411,101 @@ textarea:focus{border-color:var(--accent);}
 <!-- ══ ONBOARDING ══ -->
 <div class="onboard-overlay" id="onboardOverlay">
   <div class="onboard-modal">
-    <div class="onboard-progress">
+
+    <!-- Progress bar -->
+    <div style="display:flex;gap:8px;margin-bottom:32px;">
       <div class="onboard-prog-dot done" id="odot1"></div>
       <div class="onboard-prog-dot" id="odot2"></div>
       <div class="onboard-prog-dot" id="odot3"></div>
     </div>
 
-    <!-- Step 1: Business type -->
+    <!-- Step 1 -->
     <div class="onboard-step on" id="ostep1">
-      <div class="onboard-q">🎯 מה תחום העסק שלך?</div>
-      <div class="onboard-sub">הניתוחים יהיו מותאמים לתחום שלך</div>
+      <div style="font-size:13px;color:#7c3aed;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;">שלב 1 מתוך 3</div>
+      <div class="onboard-q">מה תחום העסק שלך?</div>
+      <div class="onboard-sub">הניתוחים יותאמו בדיוק לתחום שלך</div>
       <div class="onboard-options">
-        <button class="onboard-option" onclick="selectOnboard(this,'niche','beauty')">💅 קוסמטיקה / יופי</button>
-        <button class="onboard-option" onclick="selectOnboard(this,'niche','restaurant')">🍕 מסעדה / אוכל</button>
-        <button class="onboard-option" onclick="selectOnboard(this,'niche','fitness')">🏋️ כושר / תזונה</button>
-        <button class="onboard-option" onclick="selectOnboard(this,'niche','ecommerce')">🛍️ חנות אונליין</button>
-        <button class="onboard-option" onclick="selectOnboard(this,'niche','localBusiness')">🏪 עסק מקומי / שירות</button>
-        <button class="onboard-option" onclick="selectOnboard(this,'niche','general')">✨ אחר</button>
+        <button class="onboard-option" onclick="selectOnboard(this,'niche','beauty')">
+          <span style="font-size:22px">💅</span>
+          <div><div style="font-weight:700;margin-bottom:2px;">קוסמטיקה / יופי</div><div style="font-size:12px;color:#6b7280;">ציפורניים, שיער, פנים, גוף</div></div>
+        </button>
+        <button class="onboard-option" onclick="selectOnboard(this,'niche','restaurant')">
+          <span style="font-size:22px">🍕</span>
+          <div><div style="font-weight:700;margin-bottom:2px;">מסעדה / אוכל</div><div style="font-size:12px;color:#6b7280;">מסעדה, בית קפה, קייטרינג</div></div>
+        </button>
+        <button class="onboard-option" onclick="selectOnboard(this,'niche','fitness')">
+          <span style="font-size:22px">🏋️</span>
+          <div><div style="font-weight:700;margin-bottom:2px;">כושר / תזונה</div><div style="font-size:12px;color:#6b7280;">מאמן, חדר כושר, תזונאי</div></div>
+        </button>
+        <button class="onboard-option" onclick="selectOnboard(this,'niche','ecommerce')">
+          <span style="font-size:22px">🛍️</span>
+          <div><div style="font-weight:700;margin-bottom:2px;">חנות אונליין</div><div style="font-size:12px;color:#6b7280;">מוצרים, שילוח, מותג</div></div>
+        </button>
+        <button class="onboard-option" onclick="selectOnboard(this,'niche','localBusiness')">
+          <span style="font-size:22px">🏪</span>
+          <div><div style="font-weight:700;margin-bottom:2px;">עסק מקומי</div><div style="font-size:12px;color:#6b7280;">שירות, חנות פיזית, קליניקה</div></div>
+        </button>
+        <button class="onboard-option" onclick="selectOnboard(this,'niche','general')">
+          <span style="font-size:22px">✨</span>
+          <div><div style="font-weight:700;margin-bottom:2px;">אחר</div><div style="font-size:12px;color:#6b7280;">תחום שלא מופיע כאן</div></div>
+        </button>
       </div>
       <button class="onboard-next" onclick="onboardNext(2)">המשך ←</button>
     </div>
 
-    <!-- Step 2: Platform -->
+    <!-- Step 2 -->
     <div class="onboard-step" id="ostep2">
-      <div class="onboard-q">📱 איפה אתה מפרסם הכי הרבה?</div>
-      <div class="onboard-sub">נתאים את הניתוח לפלטפורמה שלך</div>
+      <div style="font-size:13px;color:#7c3aed;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;">שלב 2 מתוך 3</div>
+      <div class="onboard-q">איפה אתה מפרסם הכי הרבה?</div>
+      <div class="onboard-sub">הניתוח יותאם לאלגוריתם של הפלטפורמה</div>
       <div class="onboard-options">
-        <button class="onboard-option" onclick="selectOnboard(this,'platform','instagram')">📸 Instagram</button>
-        <button class="onboard-option" onclick="selectOnboard(this,'platform','facebook')">👥 Facebook</button>
-        <button class="onboard-option" onclick="selectOnboard(this,'platform','tiktok')">🎵 TikTok</button>
-        <button class="onboard-option" onclick="selectOnboard(this,'platform','linkedin')">💼 LinkedIn</button>
-        <button class="onboard-option" onclick="selectOnboard(this,'platform','twitter')">✖ X / Twitter</button>
+        <button class="onboard-option" onclick="selectOnboard(this,'platform','instagram')">
+          <span style="font-size:22px">📸</span>
+          <div><div style="font-weight:700;margin-bottom:2px;">Instagram</div><div style="font-size:12px;color:#6b7280;">תמונות, Reels, Stories</div></div>
+        </button>
+        <button class="onboard-option" onclick="selectOnboard(this,'platform','facebook')">
+          <span style="font-size:22px">👥</span>
+          <div><div style="font-weight:700;margin-bottom:2px;">Facebook</div><div style="font-size:12px;color:#6b7280;">פוסטים, קבוצות, עמוד עסקי</div></div>
+        </button>
+        <button class="onboard-option" onclick="selectOnboard(this,'platform','tiktok')">
+          <span style="font-size:22px">🎵</span>
+          <div><div style="font-weight:700;margin-bottom:2px;">TikTok</div><div style="font-size:12px;color:#6b7280;">סרטונים קצרים, טרנדים</div></div>
+        </button>
+        <button class="onboard-option" onclick="selectOnboard(this,'platform','linkedin')">
+          <span style="font-size:22px">💼</span>
+          <div><div style="font-weight:700;margin-bottom:2px;">LinkedIn</div><div style="font-size:12px;color:#6b7280;">רשת מקצועית, B2B</div></div>
+        </button>
       </div>
       <button class="onboard-next" onclick="onboardNext(3)">המשך ←</button>
     </div>
 
-    <!-- Step 3: Goal -->
+    <!-- Step 3 -->
     <div class="onboard-step" id="ostep3">
-      <div class="onboard-q">🚀 מה המטרה הראשית שלך ברשתות?</div>
-      <div class="onboard-sub">נתאים את הניתוח והפוסט המשופר למטרה שלך</div>
+      <div style="font-size:13px;color:#7c3aed;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;">שלב 3 מתוך 3</div>
+      <div class="onboard-q">מה המטרה שלך ברשתות?</div>
+      <div class="onboard-sub">נתאים את הפוסט המשופר למטרה שלך</div>
       <div class="onboard-options">
-        <button class="onboard-option" onclick="selectOnboard(this,'goal','leads')">📞 לקבל לקוחות חדשים</button>
-        <button class="onboard-option" onclick="selectOnboard(this,'goal','sales')">💰 למכור מוצרים / שירותים</button>
-        <button class="onboard-option" onclick="selectOnboard(this,'goal','awareness')">📣 להגדיל את החשיפה</button>
-        <button class="onboard-option" onclick="selectOnboard(this,'goal','engagement')">❤️ להגדיל מעורבות</button>
+        <button class="onboard-option" onclick="selectOnboard(this,'goal','leads')">
+          <span style="font-size:22px">📞</span>
+          <div><div style="font-weight:700;margin-bottom:2px;">לקבל פניות ולקוחות</div><div style="font-size:12px;color:#6b7280;">הגדל את כמות הפניות לעסק</div></div>
+        </button>
+        <button class="onboard-option" onclick="selectOnboard(this,'goal','sales')">
+          <span style="font-size:22px">💰</span>
+          <div><div style="font-weight:700;margin-bottom:2px;">למכור מוצרים / שירותים</div><div style="font-size:12px;color:#6b7280;">הגדל מכירות ישירות</div></div>
+        </button>
+        <button class="onboard-option" onclick="selectOnboard(this,'goal','awareness')">
+          <span style="font-size:22px">📣</span>
+          <div><div style="font-weight:700;margin-bottom:2px;">להגדיל חשיפה ועוקבים</div><div style="font-size:12px;color:#6b7280;">בנה קהל ומודעות למותג</div></div>
+        </button>
+        <button class="onboard-option" onclick="selectOnboard(this,'goal','engagement')">
+          <span style="font-size:22px">❤️</span>
+          <div><div style="font-weight:700;margin-bottom:2px;">להגדיל מעורבות</div><div style="font-size:12px;color:#6b7280;">יותר לייקים, תגובות ושיתופים</div></div>
+        </button>
       </div>
       <button class="onboard-next" onclick="onboardFinish()">סיום — בוא ננתח! ⚡</button>
-      <div class="onboard-skip" onclick="onboardSkip()">דלג</div>
+      <div class="onboard-skip" onclick="onboardSkip()">דלג על השאלון</div>
     </div>
+
   </div>
 </div>
 
@@ -1484,6 +1545,55 @@ let mediaB64 = null;
 let mediaType = null;
 let fileType  = 'image/jpeg';
 let selPlanId = 'monthly';
+let onboardData = {};
+let pendingAnalysis = false;
+
+/* ══ ONBOARDING — defined early so button works ══ */
+function openOnboarding(){
+  const overlay=document.getElementById('onboardOverlay');
+  if(!overlay) return;
+  overlay.style.cssText='display:flex;position:fixed;inset:0;z-index:99999;background:rgba(26,26,46,.6);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:20px;';
+  document.querySelectorAll('.onboard-step').forEach(s=>{s.style.display='none';s.classList.remove('on');});
+  const s1=document.getElementById('ostep1');
+  if(s1){s1.style.display='block';s1.classList.add('on');}
+  ['odot1','odot2','odot3'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.classList.toggle('done',i===0);});
+}
+function showOnboarding(){ openOnboarding(); }
+function closeOnboarding(){ const o=document.getElementById('onboardOverlay');if(o)o.style.display='none'; }
+function selectOnboard(btn,key,val){
+  btn.closest('.onboard-options').querySelectorAll('.onboard-option').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  onboardData[key]=val;
+}
+function onboardNext(step){
+  document.querySelectorAll('.onboard-step').forEach(s=>{s.style.display='none';s.classList.remove('on');});
+  const el=document.getElementById('ostep'+step);
+  if(el){el.style.display='block';el.classList.add('on');}
+  for(let i=1;i<=3;i++){const d=document.getElementById('odot'+i);if(d)d.classList.toggle('done',i<step);}
+}
+function onboardFinish(){
+  if(onboardData.niche){const n=document.getElementById('nicheSelect');const c=document.getElementById('calNiche');if(n)n.value=onboardData.niche;if(c)c.value=onboardData.niche;}
+  if(onboardData.platform){document.querySelectorAll('.plat-btn').forEach(b=>b.classList.toggle('on',b.dataset.p===onboardData.platform));platform=onboardData.platform;const c=document.getElementById('calPlatform');if(c)c.value=onboardData.platform;}
+  if(onboardData.goal){const g=document.getElementById('goalSelect');if(g)g.value=onboardData.goal;}
+  localStorage.setItem('piq_onboard',JSON.stringify(onboardData));
+  closeOnboarding();
+  if(pendingAnalysis){pendingAnalysis=false;setTimeout(()=>doAnalyze(),300);}
+}
+function onboardSkip(){
+  localStorage.setItem('piq_onboard',JSON.stringify({skipped:true}));
+  closeOnboarding();
+}
+function checkOnboarding(){
+  const saved=localStorage.getItem('piq_onboard');
+  if(!saved){ setTimeout(()=>{ window.location.href='onboarding.html'; },300); return; }
+  const data=JSON.parse(saved);
+  if(!data.skipped){
+    onboardData=data;
+    if(data.niche){const n=document.getElementById('nicheSelect');const c=document.getElementById('calNiche');if(n)n.value=data.niche;if(c)c.value=data.niche;}
+    if(data.platform){document.querySelectorAll('.plat-btn').forEach(b=>b.classList.toggle('on',b.dataset.p===data.platform));platform=data.platform;}
+    if(data.goal){const g=document.getElementById('goalSelect');if(g)g.value=data.goal;}
+  }
+}
 
 /* ══ MAIN TAB SWITCHING ══ */
 function swMainTab(btn,pane){
@@ -1717,7 +1827,7 @@ async function doAnalyze(){
   const compJSON = hasComp ? ',"competitor_analysis":{"competitor_strengths":["<1>","<2>","<3>"],"your_advantages":["<1>","<2>","<3>"],"gap":"<השוואה>","counter_post":"<פוסט>"}' : '';
   const visualJSON = hasMedia ? ',"visual_analysis":{"scores":[{"label":"Hook ויזואלי","desc":"<ניתוח>","score":0},{"label":"איכות טכנית","desc":"<ניתוח>","score":0},{"label":"קומפוזיציה","desc":"<ניתוח>","score":0},{"label":"מיתוג","desc":"<ניתוח>","score":0},{"label":"התאמה למטרה","desc":"<ניתוח>","score":0}],"strengths":["<1>","<2>","<3>"],"weaknesses":["<1>","<2>","<3>"],"design_tips":["<1>","<2>","<3>","<4>"],"text_alignment":"<פסקה>"}' : '';
 
-  const prompt = 'נתח את הפוסט:\nפלטפורמה: ' + pL[platform] + '\nתחום: ' + nL[niche] + '\nמטרה: ' + gL[goal] + (mediaLine?'\n'+mediaLine:'') + compLine + '\nכיתוב:\n"""' + post + '"""\n\nחשוב: ציונים מציאותיים (35-55 לפוסט ממוצע). הפוסט המשופר חייב להיות שונה לגמרי עם hook חזק.\n\nהחזר JSON בלבד:\n{"score":<0-100>,"verdict":"<3-5 מילים>","summary":"<2-3 משפטים>","tags":["<תג1>","<תג2>"],"loss_estimate":"<משפט אחד>","categories":[{"name":"Hook ופתיחה","icon":"🎣","score":<0-100>,"desc":"<ניתוח>"},{"name":"קריאה לפעולה","icon":"🎯","score":<0-100>,"desc":"<ניתוח>"},{"name":"התאמה לאלגוריתם","icon":"⚡","score":<0-100>,"desc":"<ניתוח>"},{"name":"מסר ותועלת","icon":"💎","score":<0-100>,"desc":"<ניתוח>"},{"name":"שפה ורגש","icon":"❤️","score":<0-100>,"desc":"<ניתוח>"},{"name":"מבנה וקריאות","icon":"📐","score":<0-100>,"desc":"<ניתוח>"}],"strengths":["<1>","<2>","<3>"],"weaknesses":["<1>","<2>","<3>"],"improved":"<פוסט משופר>","hashtags":["#1","#2","#3","#4","#5","#6","#7","#8","#9","#10"],"next_steps":["<1>","<2>","<3>","<4>"]' + compJSON + visualJSON + '\n}';
+  const prompt = 'נתח את הפוסט:\nפלטפורמה: ' + pL[platform] + '\nתחום: ' + nL[niche] + '\nמטרה: ' + gL[goal] + obLine + (mediaLine?'\n'+mediaLine:'') + compLine + '\nכיתוב:\n"""' + post + '"""\n\nחשוב: ציונים מציאותיים (35-55 לפוסט ממוצע). הפוסט המשופר חייב להיות שונה לגמרי עם hook חזק.\n\nהחזר JSON בלבד:\n{"score":<0-100>,"verdict":"<3-5 מילים>","summary":"<2-3 משפטים>","tags":["<תג1>","<תג2>"],"loss_estimate":"<משפט אחד>","categories":[{"name":"Hook ופתיחה","icon":"🎣","score":<0-100>,"desc":"<ניתוח>"},{"name":"קריאה לפעולה","icon":"🎯","score":<0-100>,"desc":"<ניתוח>"},{"name":"התאמה לאלגוריתם","icon":"⚡","score":<0-100>,"desc":"<ניתוח>"},{"name":"מסר ותועלת","icon":"💎","score":<0-100>,"desc":"<ניתוח>"},{"name":"שפה ורגש","icon":"❤️","score":<0-100>,"desc":"<ניתוח>"},{"name":"מבנה וקריאות","icon":"📐","score":<0-100>,"desc":"<ניתוח>"}],"strengths":["<1>","<2>","<3>"],"weaknesses":["<1>","<2>","<3>"],"improved":"<פוסט משופר>","hashtags":["#1","#2","#3","#4","#5","#6","#7","#8","#9","#10"],"next_steps":["<1>","<2>","<3>","<4>"]' + compJSON + visualJSON + '\n}';
 
   try{
     const parts=[];
@@ -1846,52 +1956,6 @@ function renderResults(r,hasMedia,origPost){
   }
 
   setTimeout(()=>document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'}),100);
-}
-
-/* ══ ONBOARDING ══ */
-let onboardData={};
-let pendingAnalysis=false;
-
-function showOnboarding(){
-  document.getElementById('onboardOverlay').classList.add('on');
-  document.querySelectorAll('.onboard-step').forEach(s=>s.classList.remove('on'));
-  document.getElementById('ostep1').classList.add('on');
-  ['odot1','odot2','odot3'].forEach((id,i)=>document.getElementById(id).classList.toggle('done',i===0));
-}
-function selectOnboard(btn,key,val){
-  btn.closest('.onboard-options').querySelectorAll('.onboard-option').forEach(b=>b.classList.remove('selected'));
-  btn.classList.add('selected');
-  onboardData[key]=val;
-}
-function onboardNext(step){
-  document.querySelectorAll('.onboard-step').forEach(s=>s.classList.remove('on'));
-  document.getElementById('ostep'+step).classList.add('on');
-  for(let i=1;i<=3;i++) document.getElementById('odot'+i).classList.toggle('done',i<step);
-}
-function onboardFinish(){
-  if(onboardData.niche){const n=document.getElementById('nicheSelect');const c=document.getElementById('calNiche');if(n)n.value=onboardData.niche;if(c)c.value=onboardData.niche;}
-  if(onboardData.platform){document.querySelectorAll('.plat-btn').forEach(b=>b.classList.toggle('on',b.dataset.p===onboardData.platform));platform=onboardData.platform;const c=document.getElementById('calPlatform');if(c)c.value=onboardData.platform;}
-  if(onboardData.goal){const g=document.getElementById('goalSelect');if(g)g.value=onboardData.goal;}
-  localStorage.setItem('piq_onboard',JSON.stringify(onboardData));
-  document.getElementById('onboardOverlay').classList.remove('on');
-  if(pendingAnalysis){pendingAnalysis=false;setTimeout(()=>doAnalyze(),300);}
-}
-function onboardSkip(){
-  localStorage.setItem('piq_onboard',JSON.stringify({skipped:true}));
-  document.getElementById('onboardOverlay').classList.remove('on');
-  if(pendingAnalysis){pendingAnalysis=false;setTimeout(()=>doAnalyze(),300);}
-}
-function checkOnboarding(){
-  const saved=localStorage.getItem('piq_onboard');
-  if(saved){
-    const data=JSON.parse(saved);
-    if(!data.skipped){
-      onboardData=data;
-      if(data.niche){const n=document.getElementById('nicheSelect');const c=document.getElementById('calNiche');if(n)n.value=data.niche;if(c)c.value=data.niche;}
-      if(data.platform){document.querySelectorAll('.plat-btn').forEach(b=>b.classList.toggle('on',b.dataset.p===data.platform));platform=data.platform;}
-      if(data.goal){const g=document.getElementById('goalSelect');if(g)g.value=data.goal;}
-    }
-  }
 }
 
 /* ══ CALENDAR ══ */
