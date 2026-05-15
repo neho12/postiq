@@ -207,86 +207,6 @@ body{background:var(--bg);color:var(--text);font-family:'Heebo',sans-serif;min-h
 .tool-pane{display:none;}
 .tool-pane.on{display:block;}
 
-/* ══ ONBOARDING ══ */
-let onboardData = {};
-let pendingAnalysis = false;
-
-function showOnboarding(){
-  document.getElementById('onboardOverlay').classList.add('on');
-  // Set step 1 active
-  document.querySelectorAll('.onboard-step').forEach(s=>s.classList.remove('on'));
-  document.getElementById('ostep1').classList.add('on');
-  // Reset progress
-  ['odot1','odot2','odot3'].forEach((id,i)=>{
-    document.getElementById(id).classList.toggle('done', i===0);
-  });
-}
-
-function selectOnboard(btn, key, val){
-  btn.closest('.onboard-options').querySelectorAll('.onboard-option').forEach(b=>b.classList.remove('selected'));
-  btn.classList.add('selected');
-  onboardData[key] = val;
-}
-
-function onboardNext(step){
-  document.querySelectorAll('.onboard-step').forEach(s=>s.classList.remove('on'));
-  document.getElementById('ostep'+step).classList.add('on');
-  // Update progress
-  for(let i=1;i<=3;i++){
-    document.getElementById('odot'+i).classList.toggle('done', i<step);
-  }
-}
-
-function onboardFinish(){
-  if(onboardData.niche){
-    const nicheEl=document.getElementById('nicheSelect');
-    const calEl=document.getElementById('calNiche');
-    if(nicheEl) nicheEl.value=onboardData.niche;
-    if(calEl) calEl.value=onboardData.niche;
-  }
-  if(onboardData.platform){
-    document.querySelectorAll('.plat-btn').forEach(b=>{b.classList.toggle('on',b.dataset.p===onboardData.platform);});
-    platform=onboardData.platform;
-    const calEl=document.getElementById('calPlatform');
-    if(calEl) calEl.value=onboardData.platform;
-  }
-  if(onboardData.goal){const goalEl=document.getElementById('goalSelect');if(goalEl)goalEl.value=onboardData.goal;}
-  localStorage.setItem('piq_onboard',JSON.stringify(onboardData));
-  document.getElementById('onboardOverlay').classList.remove('on');
-  // If analysis was pending, run it now
-  if(pendingAnalysis){pendingAnalysis=false;setTimeout(()=>doAnalyze(),300);}
-}
-
-function onboardSkip(){
-  localStorage.setItem('piq_onboard',JSON.stringify({skipped:true}));
-  document.getElementById('onboardOverlay').classList.remove('on');
-  if(pendingAnalysis){pendingAnalysis=false;setTimeout(()=>doAnalyze(),300);}
-}
-
-function checkOnboarding(){
-  const saved = localStorage.getItem('piq_onboard');
-  if(!saved){
-    setTimeout(()=>showOnboarding(), 500);
-  } else {
-    // Apply saved preferences
-    const data = JSON.parse(saved);
-    if(!data.skipped){
-      onboardData = data;
-      if(data.niche){
-        const nicheEl=document.getElementById('nicheSelect');
-        const calEl=document.getElementById('calNiche');
-        if(nicheEl) nicheEl.value=data.niche;
-        if(calEl) calEl.value=data.niche;
-      }
-      if(data.platform){
-        document.querySelectorAll('.plat-btn').forEach(b=>{b.classList.toggle('on',b.dataset.p===data.platform);});
-        platform=data.platform;
-      }
-      if(data.goal){const goalEl=document.getElementById('goalSelect');if(goalEl)goalEl.value=data.goal;}
-    }
-  }
-}
-
 /* ══ CALENDAR ══ */
 .cal-setup{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:20px;position:relative;overflow:hidden;}
 .cal-setup::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#5cf4fc,#7c5cfc,#fc5c9c);}
@@ -1775,13 +1695,6 @@ const SYS=`אתה מומחה שיווק דיגיטלי ברמה עולמית ע�
 async function doAnalyze(){
   const post=document.getElementById('postInput').value.trim();
   if(!post||post.length<5){showErr('אנא הכנס כיתוב של לפחות 5 תווים');return;}
-  // Show onboarding before first analysis
-  if(!localStorage.getItem('piq_onboard')){
-    pendingAnalysis=true;
-    showOnboarding();
-    return;
-  }
-  pendingAnalysis=false;
   if(!isPro()&&getUsage()>=FREE_LIMIT){showPaywall('monthly');return;}
   hideErr();
 
@@ -1829,7 +1742,7 @@ async function doAnalyze(){
     const raw=data.content.map(c=>c.text||'').join('');
     const result=JSON.parse(raw.replace(/```json|```/g,'').trim());
     incUsage(); updateUsage();
-  // (onboarding now shown before first analysis)
+
     await new Promise(r=>setTimeout(r,200));
     renderResults(result,hasMedia,post);
   }catch(err){
@@ -1936,81 +1849,47 @@ function renderResults(r,hasMedia,origPost){
 }
 
 /* ══ ONBOARDING ══ */
-let onboardData = {};
-let pendingAnalysis = false;
+let onboardData={};
+let pendingAnalysis=false;
 
 function showOnboarding(){
   document.getElementById('onboardOverlay').classList.add('on');
-  // Set step 1 active
   document.querySelectorAll('.onboard-step').forEach(s=>s.classList.remove('on'));
   document.getElementById('ostep1').classList.add('on');
-  // Reset progress
-  ['odot1','odot2','odot3'].forEach((id,i)=>{
-    document.getElementById(id).classList.toggle('done', i===0);
-  });
+  ['odot1','odot2','odot3'].forEach((id,i)=>document.getElementById(id).classList.toggle('done',i===0));
 }
-
-function selectOnboard(btn, key, val){
+function selectOnboard(btn,key,val){
   btn.closest('.onboard-options').querySelectorAll('.onboard-option').forEach(b=>b.classList.remove('selected'));
   btn.classList.add('selected');
-  onboardData[key] = val;
+  onboardData[key]=val;
 }
-
 function onboardNext(step){
   document.querySelectorAll('.onboard-step').forEach(s=>s.classList.remove('on'));
   document.getElementById('ostep'+step).classList.add('on');
-  // Update progress
-  for(let i=1;i<=3;i++){
-    document.getElementById('odot'+i).classList.toggle('done', i<step);
-  }
+  for(let i=1;i<=3;i++) document.getElementById('odot'+i).classList.toggle('done',i<step);
 }
-
 function onboardFinish(){
-  if(onboardData.niche){
-    const nicheEl=document.getElementById('nicheSelect');
-    const calEl=document.getElementById('calNiche');
-    if(nicheEl) nicheEl.value=onboardData.niche;
-    if(calEl) calEl.value=onboardData.niche;
-  }
-  if(onboardData.platform){
-    document.querySelectorAll('.plat-btn').forEach(b=>{b.classList.toggle('on',b.dataset.p===onboardData.platform);});
-    platform=onboardData.platform;
-    const calEl=document.getElementById('calPlatform');
-    if(calEl) calEl.value=onboardData.platform;
-  }
-  if(onboardData.goal){const goalEl=document.getElementById('goalSelect');if(goalEl)goalEl.value=onboardData.goal;}
+  if(onboardData.niche){const n=document.getElementById('nicheSelect');const c=document.getElementById('calNiche');if(n)n.value=onboardData.niche;if(c)c.value=onboardData.niche;}
+  if(onboardData.platform){document.querySelectorAll('.plat-btn').forEach(b=>b.classList.toggle('on',b.dataset.p===onboardData.platform));platform=onboardData.platform;const c=document.getElementById('calPlatform');if(c)c.value=onboardData.platform;}
+  if(onboardData.goal){const g=document.getElementById('goalSelect');if(g)g.value=onboardData.goal;}
   localStorage.setItem('piq_onboard',JSON.stringify(onboardData));
   document.getElementById('onboardOverlay').classList.remove('on');
-  // If analysis was pending, run it now
   if(pendingAnalysis){pendingAnalysis=false;setTimeout(()=>doAnalyze(),300);}
 }
-
 function onboardSkip(){
   localStorage.setItem('piq_onboard',JSON.stringify({skipped:true}));
   document.getElementById('onboardOverlay').classList.remove('on');
   if(pendingAnalysis){pendingAnalysis=false;setTimeout(()=>doAnalyze(),300);}
 }
-
 function checkOnboarding(){
-  const saved = localStorage.getItem('piq_onboard');
-  if(!saved){
-    setTimeout(()=>showOnboarding(), 500);
-  } else {
-    // Apply saved preferences
-    const data = JSON.parse(saved);
+  const saved=localStorage.getItem('piq_onboard');
+  if(saved){
+    const data=JSON.parse(saved);
     if(!data.skipped){
-      onboardData = data;
-      if(data.niche){
-        const nicheEl=document.getElementById('nicheSelect');
-        const calEl=document.getElementById('calNiche');
-        if(nicheEl) nicheEl.value=data.niche;
-        if(calEl) calEl.value=data.niche;
-      }
-      if(data.platform){
-        document.querySelectorAll('.plat-btn').forEach(b=>{b.classList.toggle('on',b.dataset.p===data.platform);});
-        platform=data.platform;
-      }
-      if(data.goal){const goalEl=document.getElementById('goalSelect');if(goalEl)goalEl.value=data.goal;}
+      onboardData=data;
+      if(data.niche){const n=document.getElementById('nicheSelect');const c=document.getElementById('calNiche');if(n)n.value=data.niche;if(c)c.value=data.niche;}
+      if(data.platform){document.querySelectorAll('.plat-btn').forEach(b=>b.classList.toggle('on',b.dataset.p===data.platform));platform=data.platform;}
+      if(data.goal){const g=document.getElementById('goalSelect');if(g)g.value=data.goal;}
     }
   }
 }
