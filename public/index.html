@@ -2078,7 +2078,14 @@ async function addTrackerEntry(){
   loadTracker();
 }
 
-document.addEventListener('DOMContentLoaded',()=>loadTracker());
+document.addEventListener('DOMContentLoaded',()=>{
+  loadTracker();
+  // If coming from onboarding, go directly to tool
+  if(sessionStorage.getItem('goToTool')==='1'){
+    sessionStorage.removeItem('goToTool');
+    startTrial();
+  }
+});
 
 function copyImproved(){
   copyText(document.getElementById('improvedText').textContent);
