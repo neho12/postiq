@@ -297,6 +297,56 @@ body{background:var(--bg);color:var(--text);font-family:'Heebo',sans-serif;min-h
 .comp-pattern{background:rgba(250,204,21,.06);border:1px solid rgba(250,204,21,.2);
   border-radius:8px;padding:10px 12px;font-size:13px;color:var(--yellow);margin-bottom:8px;line-height:1.6;}
 
+/* ══ HISTORY ══ */
+.hist-empty{text-align:center;padding:48px 20px;color:var(--muted);}
+.hist-empty-icon{font-size:48px;margin-bottom:14px;}
+.hist-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:20px;margin-bottom:12px;transition:border-color .2s,transform .2s;cursor:pointer;}
+.hist-card:hover{border-color:rgba(124,58,237,.35);transform:translateY(-2px);}
+.hist-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px;}
+.hist-post{font-size:14px;color:var(--muted);line-height:1.5;flex:1;}
+.hist-meta{display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;}
+.hist-date{font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;}
+.hist-plat{font-size:11px;background:var(--surface2);border:1px solid var(--border);
+  border-radius:100px;padding:3px 10px;color:var(--muted);}
+.hist-cats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.hist-cat{background:var(--surface2);border-radius:8px;padding:8px 10px;text-align:center;}
+.hist-cat-name{font-size:11px;color:var(--muted);margin-bottom:3px;}
+.hist-cat-score{font-size:16px;font-weight:900;font-family:'Space Mono',monospace;}
+.hist-improved{background:rgba(124,58,237,.05);border:1px solid rgba(124,58,237,.15);
+  border-radius:8px;padding:12px;font-size:13px;line-height:1.65;color:var(--muted);
+  margin-bottom:10px;white-space:pre-wrap;}
+.hist-actions{display:flex;gap:8px;}
+.hist-act-btn{background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+  padding:6px 12px;font-size:12px;color:var(--muted);cursor:pointer;
+  font-family:'Heebo',sans-serif;transition:all .2s;}
+.hist-act-btn:hover{border-color:var(--accent);color:var(--accent);}
+.hist-score-ring{position:relative;flex-shrink:0;}
+.hist-score-svg{width:54px;height:54px;transform:rotate(-90deg);}
+.hist-score-track{fill:none;stroke:var(--border);stroke-width:5;}
+.hist-score-fill{fill:none;stroke-width:5;stroke-linecap:round;}
+.hist-score-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:900;}
+.hist-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.hist-stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  padding:14px;text-align:center;}
+.hist-stat-num{font-size:22px;font-weight:900;font-family:'Space Mono',monospace;color:var(--accent);}
+.hist-stat-lbl{font-size:11px;color:var(--muted);margin-top:3px;}
+.hist-trend{background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:18px;margin-bottom:16px;}
+.hist-trend-title{font-size:13px;font-weight:700;margin-bottom:12px;}
+.hist-bars{display:flex;align-items:flex-end;gap:6px;height:60px;}
+.hist-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.hist-bar{width:100%;border-radius:4px 4px 0 0;transition:height .5s ease;min-height:4px;}
+.hist-bar-lbl{font-size:9px;color:var(--muted);font-family:'Space Mono',monospace;}
+.hist-expand{display:none;}
+.hist-expand.on{display:block;animation:fadeUp .3s ease;}
+
+@media(max-width:600px){
+  .hist-cats{grid-template-columns:repeat(2,1fr);}
+  .hist-stats{grid-template-columns:1fr 1fr;}
+}
+
 @media(max-width:600px){
   .main-tabs{border-radius:10px;}
   .main-tab{font-size:12px;min-width:80px;padding:8px 4px;}
@@ -1018,6 +1068,9 @@ textarea:focus{border-color:var(--accent);}
       <button class="main-tab" onclick="swMainTab(this,'tab-tracker')">
         <span class="tab-icon">📊</span> מעקב תוצאות
       </button>
+      <button class="main-tab" onclick="swMainTab(this,'tab-history')">
+        <span class="tab-icon">📈</span> היסטוריה
+      </button>
     </div>
 
     <!-- Personalize button -->
@@ -1404,6 +1457,43 @@ textarea:focus{border-color:var(--accent);}
       </div>
     </div><!-- /tab-tracker -->
 
+    <!-- TAB: HISTORY -->
+    <div class="tool-pane" id="tab-history">
+
+      <!-- Stats summary -->
+      <div class="hist-stats" id="histStats" style="display:none;">
+        <div class="hist-stat">
+          <div class="hist-stat-num" id="histTotal">0</div>
+          <div class="hist-stat-lbl">ניתוחים סה"כ</div>
+        </div>
+        <div class="hist-stat">
+          <div class="hist-stat-num" id="histAvg">--</div>
+          <div class="hist-stat-lbl">ציון ממוצע</div>
+        </div>
+        <div class="hist-stat">
+          <div class="hist-stat-num" id="histBest">--</div>
+          <div class="hist-stat-lbl">ציון הכי גבוה</div>
+        </div>
+      </div>
+
+      <!-- Trend chart -->
+      <div class="hist-trend" id="histTrend" style="display:none;">
+        <div class="hist-trend-title">📈 מגמת ציונים</div>
+        <div class="hist-bars" id="histBars"></div>
+      </div>
+
+      <!-- List -->
+      <div id="histList"></div>
+
+      <!-- Empty -->
+      <div class="hist-empty" id="histEmpty">
+        <div class="hist-empty-icon">📭</div>
+        <div style="font-size:16px;font-weight:700;margin-bottom:8px;">אין עדיין ניתוחים</div>
+        <div style="font-size:14px;">נתח פוסט ראשון — הוא יישמר כאן אוטומטית</div>
+      </div>
+
+    </div><!-- /tab-history -->
+
 
 
   </div><!-- /tool-wrap -->
@@ -1602,6 +1692,7 @@ function swMainTab(btn,pane){
   document.querySelectorAll('.tool-pane').forEach(p=>p.classList.remove('on'));
   btn.classList.add('on');
   document.getElementById(pane).classList.add('on');
+  if(pane==='tab-history') loadHistory();
 }
 
 /* ══ COMPETITOR TOGGLE ══ */
@@ -2111,6 +2202,123 @@ document.addEventListener('DOMContentLoaded',()=>{
     startTrial();
   }
 });
+
+/* ══ HISTORY ══ */
+function saveToHistory(result, post, platform, niche, goal){
+  const entry = {
+    id: Date.now(),
+    date: new Date().toLocaleDateString('he-IL'),
+    time: new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'}),
+    post: post.slice(0,120)+(post.length>120?'...':''),
+    platform, niche, goal,
+    score: result.score,
+    verdict: result.verdict,
+    improved: result.improved||'',
+    hashtags: result.hashtags||[],
+    categories: result.categories||[],
+    loss_estimate: result.loss_estimate||''
+  };
+  const hist = JSON.parse(localStorage.getItem('piq_history')||'[]');
+  hist.unshift(entry);
+  // Keep last 50 analyses
+  if(hist.length>50) hist.pop();
+  localStorage.setItem('piq_history', JSON.stringify(hist));
+}
+
+function loadHistory(){
+  const hist = JSON.parse(localStorage.getItem('piq_history')||'[]');
+  const empty = document.getElementById('histEmpty');
+  const list = document.getElementById('histList');
+  const stats = document.getElementById('histStats');
+  const trend = document.getElementById('histTrend');
+  if(!list) return;
+
+  if(!hist.length){
+    empty.style.display='block';
+    stats.style.display='none';
+    trend.style.display='none';
+    list.innerHTML='';
+    return;
+  }
+
+  empty.style.display='none';
+  stats.style.display='grid';
+  trend.style.display='block';
+
+  // Stats
+  const scores = hist.map(h=>h.score).filter(s=>s>0);
+  document.getElementById('histTotal').textContent = hist.length;
+  document.getElementById('histAvg').textContent = scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : '--';
+  document.getElementById('histBest').textContent = scores.length ? Math.max(...scores) : '--';
+
+  // Trend bars
+  const last8 = hist.slice(0,8).reverse();
+  const maxScore = Math.max(...last8.map(h=>h.score||0), 1);
+  document.getElementById('histBars').innerHTML = last8.map(h=>{
+    const pct = Math.round((h.score/maxScore)*100);
+    const col = h.score>=80?'var(--green)':h.score>=60?'var(--yellow)':'var(--red)';
+    return `<div class="hist-bar-wrap">
+      <div class="hist-bar" style="height:${pct}%;background:${col};"></div>
+      <div class="hist-bar-lbl">${h.score}</div>
+    </div>`;
+  }).join('');
+
+  // List
+  list.innerHTML = hist.map((h,i)=>{
+    const col = h.score>=80?'var(--green)':h.score>=60?'var(--yellow)':'var(--red)';
+    const circ = 2*Math.PI*22;
+    const offset = circ - (h.score/100)*circ;
+    return `<div class="hist-card">
+      <div class="hist-header">
+        <div>
+          <div class="hist-post">${h.post}</div>
+          <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;">
+            <span class="hist-plat">${h.platform||''}</span>
+            <span class="hist-date">${h.date} ${h.time||''}</span>
+          </div>
+        </div>
+        <div class="hist-score-ring">
+          <svg class="hist-score-svg" viewBox="0 0 54 54">
+            <circle class="hist-score-track" cx="27" cy="27" r="22"/>
+            <circle class="hist-score-fill" cx="27" cy="27" r="22"
+              stroke="${col}" stroke-dasharray="${circ}" stroke-dashoffset="${offset}"/>
+          </svg>
+          <div class="hist-score-num" style="color:${col}">${h.score}</div>
+        </div>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:10px;">${h.verdict||''}</div>
+      ${h.categories.length ? `<div class="hist-cats">${h.categories.slice(0,6).map(c=>{
+        const cc=c.score>=80?'var(--green)':c.score>=60?'var(--yellow)':'var(--red)';
+        return `<div class="hist-cat"><div class="hist-cat-name">${c.icon||''} ${c.name}</div><div class="hist-cat-score" style="color:${cc}">${c.score}</div></div>`;
+      }).join('')}</div>` : ''}
+      <div class="hist-actions">
+        <button class="hist-act-btn" onclick="histCopyImproved(${i})">📋 העתק פוסט משופר</button>
+        <button class="hist-act-btn" onclick="histReAnalyze(${i})">🔄 נתח שוב</button>
+        <button class="hist-act-btn" onclick="histDelete(${i})" style="color:var(--red)">🗑️ מחק</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function histCopyImproved(idx){
+  const hist = JSON.parse(localStorage.getItem('piq_history')||'[]');
+  if(hist[idx]) copyText(hist[idx].improved);
+}
+
+function histReAnalyze(idx){
+  const hist = JSON.parse(localStorage.getItem('piq_history')||'[]');
+  if(!hist[idx]) return;
+  document.getElementById('postInput').value = hist[idx].post;
+  swMainTab(document.querySelector('.main-tab'), 'tab-analyze');
+  document.querySelector('.main-tab').classList.add('on');
+}
+
+function histDelete(idx){
+  const hist = JSON.parse(localStorage.getItem('piq_history')||'[]');
+  hist.splice(idx,1);
+  localStorage.setItem('piq_history', JSON.stringify(hist));
+  loadHistory();
+}
 
 function copyImproved(){
   copyText(document.getElementById('improvedText').textContent);
