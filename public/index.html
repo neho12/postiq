@@ -1920,6 +1920,9 @@ async function doAnalyze(){
   const hasMedia=!!mediaB64;
   const niche=document.getElementById('nicheSelect').value;
   const goal=document.getElementById('goalSelect').value;
+  const compName=document.getElementById('compNameInline')?.value.trim()||'';
+  const compPosts=document.getElementById('compPostsInline')?.value.trim()||'';
+  const hasComp=compPosts.length>20;
   const nL={general:'כללי',ecommerce:'חנות אונליין',restaurant:'מסעדה',beauty:'קוסמטיקה',fitness:'כושר',realEstate:'נדל"ן',tech:'טכנולוגיה',fashion:'אופנה',health:'בריאות',education:'חינוך',finance:'פיננסים',localBusiness:'עסק מקומי',creative:'יצירה',travel:'תיירות'};
   const gL={awareness:'מודעות למותג',engagement:'מעורבות',leads:'לידים',sales:'מכירה',traffic:'תנועה לאתר',launch:'השקת מוצר',promo:'מבצע',education:'תוכן חינוכי'};
   const pL={instagram:'Instagram',facebook:'Facebook',linkedin:'LinkedIn',tiktok:'TikTok',twitter:'X / Twitter'};
@@ -1935,6 +1938,9 @@ async function doAnalyze(){
   const compLine = hasComp ? ('\nפוסטים של המתחרה ' + (compName?'('+compName+')':'') + ':\n"""\n' + compPosts + '\n"""') : '';
   const compJSON = hasComp ? ',"competitor_analysis":{"competitor_strengths":["<1>","<2>","<3>"],"your_advantages":["<1>","<2>","<3>"],"gap":"<השוואה>","counter_post":"<פוסט>"}' : '';
   const visualJSON = hasMedia ? ',"visual_analysis":{"scores":[{"label":"Hook ויזואלי","desc":"<ניתוח>","score":0},{"label":"איכות טכנית","desc":"<ניתוח>","score":0},{"label":"קומפוזיציה","desc":"<ניתוח>","score":0},{"label":"מיתוג","desc":"<ניתוח>","score":0},{"label":"התאמה למטרה","desc":"<ניתוח>","score":0}],"strengths":["<1>","<2>","<3>"],"weaknesses":["<1>","<2>","<3>"],"design_tips":["<1>","<2>","<3>","<4>"],"text_alignment":"<פסקה>"}' : '';
+  const ob=onboardData||{};
+  const toneL={professional:'מקצועי',friendly:'חברי',inspiring:'מעורר השראה',funny:'הומוריסטי'};
+  const obLine=(ob.tone||ob.audience)?(' טון:'+(toneL[ob.tone]||'')+(ob.audience?' קהל:'+ob.audience:'')):'';
 
   const prompt = 'פלטפורמה:'+pL[platform]+' תחום:'+nL[niche]+' מטרה:'+gL[goal]+obLine+(mediaLine?'\n'+mediaLine:'')+compLine+'\nפוסט:"""'+post+'"""\n\nהחזר JSON:\n{"score":<0-100>,"verdict":"<3מילים>","summary":"<2משפטים>","tags":["<1>","<2>"],"loss_estimate":"<משפט>","categories":[{"name":"Hook","icon":"🎣","score":<0-100>,"desc":"<ניתוח>"},{"name":"קריאה לפעולה","icon":"🎯","score":<0-100>,"desc":"<ניתוח>"},{"name":"אלגוריתם","icon":"⚡","score":<0-100>,"desc":"<ניתוח>"},{"name":"מסר","icon":"💎","score":<0-100>,"desc":"<ניתוח>"},{"name":"רגש","icon":"❤️","score":<0-100>,"desc":"<ניתוח>"},{"name":"מבנה","icon":"📐","score":<0-100>,"desc":"<ניתוח>"}],"strengths":["<1>","<2>","<3>"],"weaknesses":["<1>","<2>","<3>"],"improved":"<פוסט משופר עם hook חזק>","hashtags":["#1","#2","#3","#4","#5"],"next_steps":["<1>","<2>","<3>"]' + compJSON + visualJSON + '}';
 
