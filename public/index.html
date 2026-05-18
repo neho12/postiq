@@ -1936,7 +1936,7 @@ async function doAnalyze(){
   const compJSON = hasComp ? ',"competitor_analysis":{"competitor_strengths":["<1>","<2>","<3>"],"your_advantages":["<1>","<2>","<3>"],"gap":"<השוואה>","counter_post":"<פוסט>"}' : '';
   const visualJSON = hasMedia ? ',"visual_analysis":{"scores":[{"label":"Hook ויזואלי","desc":"<ניתוח>","score":0},{"label":"איכות טכנית","desc":"<ניתוח>","score":0},{"label":"קומפוזיציה","desc":"<ניתוח>","score":0},{"label":"מיתוג","desc":"<ניתוח>","score":0},{"label":"התאמה למטרה","desc":"<ניתוח>","score":0}],"strengths":["<1>","<2>","<3>"],"weaknesses":["<1>","<2>","<3>"],"design_tips":["<1>","<2>","<3>","<4>"],"text_alignment":"<פסקה>"}' : '';
 
-  const prompt = 'נתח את הפוסט:\nפלטפורמה: ' + pL[platform] + '\nתחום: ' + nL[niche] + '\nמטרה: ' + gL[goal] + obLine + (mediaLine?'\n'+mediaLine:'') + compLine + '\nכיתוב:\n"""' + post + '"""\n\nחשוב: ציונים מציאותיים (35-55 לפוסט ממוצע). הפוסט המשופר חייב להיות שונה לגמרי עם hook חזק.\n\nהחזר JSON בלבד:\n{"score":<0-100>,"verdict":"<3-5 מילים>","summary":"<2-3 משפטים>","tags":["<תג1>","<תג2>"],"loss_estimate":"<משפט אחד>","categories":[{"name":"Hook ופתיחה","icon":"🎣","score":<0-100>,"desc":"<ניתוח>"},{"name":"קריאה לפעולה","icon":"🎯","score":<0-100>,"desc":"<ניתוח>"},{"name":"התאמה לאלגוריתם","icon":"⚡","score":<0-100>,"desc":"<ניתוח>"},{"name":"מסר ותועלת","icon":"💎","score":<0-100>,"desc":"<ניתוח>"},{"name":"שפה ורגש","icon":"❤️","score":<0-100>,"desc":"<ניתוח>"},{"name":"מבנה וקריאות","icon":"📐","score":<0-100>,"desc":"<ניתוח>"}],"strengths":["<1>","<2>","<3>"],"weaknesses":["<1>","<2>","<3>"],"improved":"<פוסט משופר>","hashtags":["#1","#2","#3","#4","#5","#6","#7","#8","#9","#10"],"next_steps":["<1>","<2>","<3>","<4>"]' + compJSON + visualJSON + '\n}';
+  const prompt = 'פלטפורמה:'+pL[platform]+' תחום:'+nL[niche]+' מטרה:'+gL[goal]+obLine+(mediaLine?'\n'+mediaLine:'')+compLine+'\nפוסט:"""'+post+'"""\n\nהחזר JSON:\n{"score":<0-100>,"verdict":"<3מילים>","summary":"<2משפטים>","tags":["<1>","<2>"],"loss_estimate":"<משפט>","categories":[{"name":"Hook","icon":"🎣","score":<0-100>,"desc":"<ניתוח>"},{"name":"קריאה לפעולה","icon":"🎯","score":<0-100>,"desc":"<ניתוח>"},{"name":"אלגוריתם","icon":"⚡","score":<0-100>,"desc":"<ניתוח>"},{"name":"מסר","icon":"💎","score":<0-100>,"desc":"<ניתוח>"},{"name":"רגש","icon":"❤️","score":<0-100>,"desc":"<ניתוח>"},{"name":"מבנה","icon":"📐","score":<0-100>,"desc":"<ניתוח>"}],"strengths":["<1>","<2>","<3>"],"weaknesses":["<1>","<2>","<3>"],"improved":"<פוסט משופר עם hook חזק>","hashtags":["#1","#2","#3","#4","#5"],"next_steps":["<1>","<2>","<3>"]' + compJSON + visualJSON + '}';
 
   try{
     const parts=[];
@@ -1949,7 +1949,7 @@ async function doAnalyze(){
     const res=await fetch('/api/analyze',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:4000,system:SYS,messages:[{role:'user',content:parts}]})
+      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:2000,system:SYS,messages:[{role:'user',content:parts}]})
     });
 
     if(!res.ok){
