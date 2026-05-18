@@ -585,6 +585,7 @@ textarea:focus{border-color:var(--accent);}
   .loss-banner{flex-direction:column;text-align:center;}
 }
 </style>
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
 </head>
 <body>
 <div class="glow-bg"></div>
@@ -1536,8 +1537,8 @@ textarea:focus{border-color:var(--accent);}
 <script>
 /* ══ CONSTANTS ══ */
 const FREE_LIMIT = 999;
-const PAY_MONTHLY = 'https://YOUR-PAYMENT-LINK-MONTHLY';
-const PAY_YEARLY  = 'https://YOUR-PAYMENT-LINK-YEARLY';
+const PADDLE_MONTHLY_ID = 'pri_01krxttvpt1e38da5a0zt0pasq';
+const PADDLE_YEARLY_ID  = ''; // יתווסף בהמשך
 
 /* ══ STATE ══ */
 let platform = 'instagram';
@@ -1690,7 +1691,24 @@ function hlPlan(p){
   document.getElementById('mp-monthly').classList.toggle('on',p==='monthly');
   document.getElementById('mp-yearly').classList.toggle('on',p==='yearly');
 }
-function goToPay(){ window.open(selPlanId==='yearly'?PAY_YEARLY:PAY_MONTHLY,'_blank'); }
+function goToPay(){
+  const priceId = selPlanId==='yearly' ? PADDLE_YEARLY_ID : PADDLE_MONTHLY_ID;
+  if(!priceId){ alert('מנוי שנתי יתווסף בקרוב!'); return; }
+  if(typeof Paddle === 'undefined'){
+    alert('שגיאה בטעינת מערכת התשלום. אנא רענן את הדף.');
+    return;
+  }
+  try {
+    Paddle.Checkout.open({
+      items:[{priceId:priceId, quantity:1}],
+      settings:{displayMode:'overlay',theme:'light'}
+    });
+    closePaywall();
+  } catch(e) {
+    console.error('Paddle error:', e);
+    alert('שגיאה: ' + e.message);
+  }
+}
 
 /* ══ PLATFORM ══ */
 function selPlat(btn){
@@ -2079,6 +2097,13 @@ async function addTrackerEntry(){
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
+  // Initialize Paddle after it loads
+  setTimeout(()=>{
+    if(typeof Paddle !== 'undefined'){
+      Paddle.Environment.set('production');
+      Paddle.Initialize({ token: 'live_b77421bdc14555084ec7a8bf05a' });
+    }
+  }, 500);
   loadTracker();
   // If coming from onboarding, go directly to tool
   if(sessionStorage.getItem('goToTool')==='1'){
