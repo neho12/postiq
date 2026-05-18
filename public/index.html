@@ -1949,7 +1949,7 @@ async function doAnalyze(){
     const res=await fetch('/api/analyze',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:2000,system:SYS,messages:[{role:'user',content:parts}]})
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:2000,system:SYS,messages:[{role:'user',content:parts}]})
     });
 
     if(!res.ok){
@@ -2087,7 +2087,7 @@ async function generateCalendar(){
   const prompt='צור '+freq+' פוסטים לחודש '+month+'/'+year+' עבור עסק בתחום '+nicheL[niche]+' בפלטפורמה '+platL[platform]+', מטרה: '+goalL[goal]+(desc?', עסק: '+desc:'')+'.\nהחזר JSON בלבד, כל פוסט עד 3 שורות:\n{"month_theme":"<נושא>","posts":[{"day":<יום 1-28>,"type":"<חינוכי/בידורי/מכירתי>","title":"<כותרת>","content":"<פוסט קצר>","hashtags":["#1","#2","#3"],"best_time":"<שעה>"}],"weekly_tips":["<טיפ1>","<טיפ2>"]}';
   try{
     const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1000,
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,
         system:'אתה מומחה תוכן ושיווק. צור תוכן מקצועי קצר בעברית. כל פוסט עד 3 שורות.',
         messages:[{role:'user',content:prompt}]})});
     if(!res.ok) throw new Error('שגיאה '+res.status);
@@ -2175,7 +2175,7 @@ async function addTrackerEntry(){
   try{
     const engRate=views>0?((likes+comments)/views*100).toFixed(1):0;
     const r=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:120,
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:120,
         messages:[{role:'user',content:'פוסט: "'+text+'"\nציון PostIQ: '+score+'\nתוצאות: '+likes+' לייקים, '+comments+' תגובות, '+views+' צפיות, מעורבות: '+engRate+'%\nתן תובנה קצרה ב-1-2 משפטים בעברית.'}]})});
     if(r.ok){const d=await r.json();insight=d.content.map(c=>c.text||'').join('').trim();}
   }catch(e){}
