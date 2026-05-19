@@ -639,7 +639,7 @@ textarea:focus{border-color:var(--accent);}
 <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
 </head>
 <body>
-<div class="glow-bg"></div>
+
 
 <!-- ══ LANDING ══ -->
 <div id="landingPage" style="position:relative;">
@@ -1038,6 +1038,16 @@ textarea:focus{border-color:var(--accent);}
     <button class="btn-primary" onclick="startTrial()">⚡ תפסיק להפסיד — נסה חינם עכשיו ←</button>
     <p class="hero-note" style="margin-top:14px;">ללא כרטיס אשראי · ללא הרשמה</p>
   </div>
+
+  <!-- FOOTER -->
+  <footer style="background:rgba(124,58,237,.05);border-top:1px solid #e8e4f8;padding:16px 20px;text-align:center;position:relative;z-index:1;">
+    <div style="max-width:860px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;">
+      <span style="font-size:13px;color:var(--muted);">© 2026 PostIQ · כל הזכויות שמורות</span>
+      <a href="terms.html" style="font-size:13px;color:var(--accent);text-decoration:none;">תנאי שימוש</a>
+      <a href="privacy.html" style="font-size:13px;color:var(--accent);text-decoration:none;">מדיניות פרטיות</a>
+      <a href="refund.html" style="font-size:13px;color:var(--accent);text-decoration:none;">מדיניות החזרים</a>
+    </div>
+  </footer>
 
 </div><!-- /landingPage -->
 
@@ -1500,106 +1510,6 @@ textarea:focus{border-color:var(--accent);}
   </div><!-- /tool-wrap -->
 </div><!-- /toolPage -->
 
-<!-- ══ ONBOARDING ══ -->
-<div class="onboard-overlay" id="onboardOverlay">
-  <div class="onboard-modal">
-
-    <!-- Progress bar -->
-    <div style="display:flex;gap:8px;margin-bottom:32px;">
-      <div class="onboard-prog-dot done" id="odot1"></div>
-      <div class="onboard-prog-dot" id="odot2"></div>
-      <div class="onboard-prog-dot" id="odot3"></div>
-    </div>
-
-    <!-- Step 1 -->
-    <div class="onboard-step on" id="ostep1">
-      <div style="font-size:13px;color:#7c3aed;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;">שלב 1 מתוך 3</div>
-      <div class="onboard-q">מה תחום העסק שלך?</div>
-      <div class="onboard-sub">הניתוחים יותאמו בדיוק לתחום שלך</div>
-      <div class="onboard-options">
-        <button class="onboard-option" onclick="selectOnboard(this,'niche','beauty')">
-          <span style="font-size:22px">💅</span>
-          <div><div style="font-weight:700;margin-bottom:2px;">קוסמטיקה / יופי</div><div style="font-size:12px;color:#6b7280;">ציפורניים, שיער, פנים, גוף</div></div>
-        </button>
-        <button class="onboard-option" onclick="selectOnboard(this,'niche','restaurant')">
-          <span style="font-size:22px">🍕</span>
-          <div><div style="font-weight:700;margin-bottom:2px;">מסעדה / אוכל</div><div style="font-size:12px;color:#6b7280;">מסעדה, בית קפה, קייטרינג</div></div>
-        </button>
-        <button class="onboard-option" onclick="selectOnboard(this,'niche','fitness')">
-          <span style="font-size:22px">🏋️</span>
-          <div><div style="font-weight:700;margin-bottom:2px;">כושר / תזונה</div><div style="font-size:12px;color:#6b7280;">מאמן, חדר כושר, תזונאי</div></div>
-        </button>
-        <button class="onboard-option" onclick="selectOnboard(this,'niche','ecommerce')">
-          <span style="font-size:22px">🛍️</span>
-          <div><div style="font-weight:700;margin-bottom:2px;">חנות אונליין</div><div style="font-size:12px;color:#6b7280;">מוצרים, שילוח, מותג</div></div>
-        </button>
-        <button class="onboard-option" onclick="selectOnboard(this,'niche','localBusiness')">
-          <span style="font-size:22px">🏪</span>
-          <div><div style="font-weight:700;margin-bottom:2px;">עסק מקומי</div><div style="font-size:12px;color:#6b7280;">שירות, חנות פיזית, קליניקה</div></div>
-        </button>
-        <button class="onboard-option" onclick="selectOnboard(this,'niche','general')">
-          <span style="font-size:22px">✨</span>
-          <div><div style="font-weight:700;margin-bottom:2px;">אחר</div><div style="font-size:12px;color:#6b7280;">תחום שלא מופיע כאן</div></div>
-        </button>
-      </div>
-      <button class="onboard-next" onclick="onboardNext(2)">המשך ←</button>
-    </div>
-
-    <!-- Step 2 -->
-    <div class="onboard-step" id="ostep2">
-      <div style="font-size:13px;color:#7c3aed;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;">שלב 2 מתוך 3</div>
-      <div class="onboard-q">איפה אתה מפרסם הכי הרבה?</div>
-      <div class="onboard-sub">הניתוח יותאם לאלגוריתם של הפלטפורמה</div>
-      <div class="onboard-options">
-        <button class="onboard-option" onclick="selectOnboard(this,'platform','instagram')">
-          <span style="font-size:22px">📸</span>
-          <div><div style="font-weight:700;margin-bottom:2px;">Instagram</div><div style="font-size:12px;color:#6b7280;">תמונות, Reels, Stories</div></div>
-        </button>
-        <button class="onboard-option" onclick="selectOnboard(this,'platform','facebook')">
-          <span style="font-size:22px">👥</span>
-          <div><div style="font-weight:700;margin-bottom:2px;">Facebook</div><div style="font-size:12px;color:#6b7280;">פוסטים, קבוצות, עמוד עסקי</div></div>
-        </button>
-        <button class="onboard-option" onclick="selectOnboard(this,'platform','tiktok')">
-          <span style="font-size:22px">🎵</span>
-          <div><div style="font-weight:700;margin-bottom:2px;">TikTok</div><div style="font-size:12px;color:#6b7280;">סרטונים קצרים, טרנדים</div></div>
-        </button>
-        <button class="onboard-option" onclick="selectOnboard(this,'platform','linkedin')">
-          <span style="font-size:22px">💼</span>
-          <div><div style="font-weight:700;margin-bottom:2px;">LinkedIn</div><div style="font-size:12px;color:#6b7280;">רשת מקצועית, B2B</div></div>
-        </button>
-      </div>
-      <button class="onboard-next" onclick="onboardNext(3)">המשך ←</button>
-    </div>
-
-    <!-- Step 3 -->
-    <div class="onboard-step" id="ostep3">
-      <div style="font-size:13px;color:#7c3aed;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;">שלב 3 מתוך 3</div>
-      <div class="onboard-q">מה המטרה שלך ברשתות?</div>
-      <div class="onboard-sub">נתאים את הפוסט המשופר למטרה שלך</div>
-      <div class="onboard-options">
-        <button class="onboard-option" onclick="selectOnboard(this,'goal','leads')">
-          <span style="font-size:22px">📞</span>
-          <div><div style="font-weight:700;margin-bottom:2px;">לקבל פניות ולקוחות</div><div style="font-size:12px;color:#6b7280;">הגדל את כמות הפניות לעסק</div></div>
-        </button>
-        <button class="onboard-option" onclick="selectOnboard(this,'goal','sales')">
-          <span style="font-size:22px">💰</span>
-          <div><div style="font-weight:700;margin-bottom:2px;">למכור מוצרים / שירותים</div><div style="font-size:12px;color:#6b7280;">הגדל מכירות ישירות</div></div>
-        </button>
-        <button class="onboard-option" onclick="selectOnboard(this,'goal','awareness')">
-          <span style="font-size:22px">📣</span>
-          <div><div style="font-weight:700;margin-bottom:2px;">להגדיל חשיפה ועוקבים</div><div style="font-size:12px;color:#6b7280;">בנה קהל ומודעות למותג</div></div>
-        </button>
-        <button class="onboard-option" onclick="selectOnboard(this,'goal','engagement')">
-          <span style="font-size:22px">❤️</span>
-          <div><div style="font-weight:700;margin-bottom:2px;">להגדיל מעורבות</div><div style="font-size:12px;color:#6b7280;">יותר לייקים, תגובות ושיתופים</div></div>
-        </button>
-      </div>
-      <button class="onboard-next" onclick="onboardFinish()">סיום — בוא ננתח! ⚡</button>
-      <div class="onboard-skip" onclick="onboardSkip()">דלג על השאלון</div>
-    </div>
-
-  </div>
-</div>
 
 <!-- ══ PAYWALL ══ -->
 <div class="overlay" id="paywallOverlay">
