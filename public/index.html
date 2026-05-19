@@ -1942,7 +1942,37 @@ async function doAnalyze(){
   const toneL={professional:'מקצועי',friendly:'חברי',inspiring:'מעורר השראה',funny:'הומוריסטי'};
   const obLine=(ob.tone||ob.audience)?(' טון:'+(toneL[ob.tone]||'')+(ob.audience?' קהל:'+ob.audience:'')):'';
 
-  const prompt = 'פלטפורמה:'+pL[platform]+' תחום:'+nL[niche]+' מטרה:'+gL[goal]+obLine+(mediaLine?'\n'+mediaLine:'')+compLine+'\nפוסט:"""'+post+'"""\n\nהחזר JSON:\n{"score":<0-100>,"verdict":"<3מילים>","summary":"<2משפטים>","tags":["<1>","<2>"],"loss_estimate":"<משפט>","categories":[{"name":"Hook","icon":"🎣","score":<0-100>,"desc":"<ניתוח>"},{"name":"קריאה לפעולה","icon":"🎯","score":<0-100>,"desc":"<ניתוח>"},{"name":"אלגוריתם","icon":"⚡","score":<0-100>,"desc":"<ניתוח>"},{"name":"מסר","icon":"💎","score":<0-100>,"desc":"<ניתוח>"},{"name":"רגש","icon":"❤️","score":<0-100>,"desc":"<ניתוח>"},{"name":"מבנה","icon":"📐","score":<0-100>,"desc":"<ניתוח>"}],"strengths":["<1>","<2>","<3>"],"weaknesses":["<1>","<2>","<3>"],"improved":"<פוסט משופר עם hook חזק>","hashtags":["#1","#2","#3","#4","#5"],"next_steps":["<1>","<2>","<3>"]' + compJSON + visualJSON + '}';
+  const prompt = `נתח את הפוסט הבא ותחזיר JSON בלבד ללא שום טקסט נוסף.
+
+פרטים:
+פלטפורמה: ${pL[platform]}
+תחום: ${nL[niche]}
+מטרה: ${gL[goal]}${obLine ? '\n' + obLine : ''}${mediaLine ? '\nמדיה: ' + mediaLine : ''}${compLine}
+
+פוסט לניתוח:
+${post}
+
+החזר את הJSON הבא עם כל השדות ממולאים:
+{
+  "score": 45,
+  "verdict": "פוסט ממוצע",
+  "summary": "תיאור קצר של הפוסט ונקודות עיקריות",
+  "tags": ["תג1", "תג2"],
+  "loss_estimate": "הפוסט מפסיד בערך X לקוחות כי...",
+  "categories": [
+    {"name": "Hook ופתיחה", "icon": "🎣", "score": 50, "desc": "ניתוח ה-hook"},
+    {"name": "קריאה לפעולה", "icon": "🎯", "score": 50, "desc": "ניתוח ה-CTA"},
+    {"name": "התאמה לאלגוריתם", "icon": "⚡", "score": 50, "desc": "ניתוח האלגוריתם"},
+    {"name": "מסר ותועלת", "icon": "💎", "score": 50, "desc": "ניתוח המסר"},
+    {"name": "שפה ורגש", "icon": "❤️", "score": 50, "desc": "ניתוח השפה"},
+    {"name": "מבנה וקריאות", "icon": "📐", "score": 50, "desc": "ניתוח המבנה"}
+  ],
+  "strengths": ["חוזק 1", "חוזק 2", "חוזק 3"],
+  "weaknesses": ["חולשה 1", "חולשה 2", "חולשה 3"],
+  "improved": "הפוסט המשופר המלא כאן",
+  "hashtags": ["#האשטג1", "#האשטג2", "#האשטג3", "#האשטג4", "#האשטג5"],
+  "next_steps": ["צעד 1", "צעד 2", "צעד 3"]${hasComp ? ',\n  "competitor_analysis": {"competitor_strengths": ["1","2","3"], "your_advantages": ["1","2","3"], "gap": "השוואה", "counter_post": "פוסט מוכן"}' : ''}
+}`;
 
   try{
     const parts=[];
