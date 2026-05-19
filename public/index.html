@@ -16,6 +16,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
+#landingPage{overflow:hidden;}
 body{background:var(--bg);color:var(--text);font-family:'Heebo',sans-serif;min-height:100vh;overflow-x:hidden;}
 
 /* Ambient glow */
@@ -188,7 +189,7 @@ body{background:var(--bg);color:var(--text);font-family:'Heebo',sans-serif;min-h
 .faq-item.open .faq-a{display:block;}
 
 /* ── FINAL CTA ── */
-.final-cta{text-align:center;padding:40px 20px 60px;position:relative;z-index:1;}
+.final-cta{text-align:center;padding:32px 20px 20px;position:relative;z-index:1;}
 .final-cta h2{font-size:clamp(28px,6vw,56px);font-weight:900;
   margin-bottom:16px;line-height:1.1;letter-spacing:-1px;}
 .final-cta p{font-size:17px;color:var(--muted);margin-bottom:36px;}
@@ -641,7 +642,7 @@ textarea:focus{border-color:var(--accent);}
 <div class="glow-bg"></div>
 
 <!-- ══ LANDING ══ -->
-<div id="landingPage">
+<div id="landingPage" style="position:relative;">
 
   <nav class="nav">
     <div class="nav-logo">PostIQ</div>
