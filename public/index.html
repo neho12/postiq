@@ -1995,7 +1995,15 @@ ${post}
     }
     const data=await res.json();
     const raw=data.content.map(c=>c.text||'').join('');
-    const result=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    // Extract JSON from response robustly
+    let jsonStr = raw.replace(/```json|```/g,'').trim();
+    // Find first { and last }
+    const firstBrace = jsonStr.indexOf('{');
+    const lastBrace = jsonStr.lastIndexOf('}');
+    if(firstBrace !== -1 && lastBrace !== -1){
+      jsonStr = jsonStr.slice(firstBrace, lastBrace+1);
+    }
+    const result=JSON.parse(jsonStr);
     incUsage(); updateUsage();
 
     await new Promise(r=>setTimeout(r,200));
