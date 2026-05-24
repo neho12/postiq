@@ -1537,7 +1537,7 @@ textarea:focus{border-color:var(--accent);}
 
 <script>
 /* ══ CONSTANTS ══ */
-const FREE_LIMIT = 999;
+const FREE_LIMIT = 3;
 const PADDLE_MONTHLY_ID = 'pri_01krxttvpt1e38da5a0zt0pasq';
 const PADDLE_YEARLY_ID  = ''; // יתווסף בהמשך
 
@@ -1548,6 +1548,8 @@ let mediaType = null;
 let fileType  = 'image/jpeg';
 let selPlanId = 'monthly';
 let onboardData = {};
+let calCurrentView = 'list';
+let calCurrentData = null;
 let pendingAnalysis = false;
 
 /* ══ ONBOARDING — defined early so button works ══ */
@@ -1916,6 +1918,7 @@ ${post}
     }
     const result=JSON.parse(jsonStr);
     incUsage(); updateUsage();
+    saveToHistory(result, post, pL[platform], nL[niche], gL[goal]);
 
     await new Promise(r=>setTimeout(r,200));
     renderResults(result,hasMedia,post);
@@ -2023,7 +2026,17 @@ function renderResults(r,hasMedia,origPost){
 }
 
 /* ══ CALENDAR ══ */
+/* calView - FIX: was missing */
+function calView(type){
+  calCurrentView=type;
+  document.getElementById('calViewList').classList.toggle('on',type==='list');
+  document.getElementById('calViewGrid').classList.toggle('on',type==='grid');
+  if(calCurrentData) renderCalendar(calCurrentData);
+}
+
 async function generateCalendar(){
+  if(window._isGenCal) return;
+  window._isGenCal = true;
   const niche=document.getElementById('calNiche').value;
   const platform=document.getElementById('calPlatform').value;
   const freq=document.getElementById('calFreq').value;
@@ -2050,6 +2063,7 @@ async function generateCalendar(){
     const raw=data.content.map(c=>c.text||'').join('');
     const result=JSON.parse(raw.replace(/```json|```/g,'').trim());
     result._meta={month,year};
+    calCurrentData=result;
     const calRes=document.getElementById('calResults');
     calRes.dataset.calData=JSON.stringify(result);
     calRes.dataset.posts=JSON.stringify(result.posts||[]);
@@ -2059,6 +2073,7 @@ async function generateCalendar(){
     document.getElementById('calBtn').disabled=false;
     document.getElementById('calBtn').textContent='📅 צור לוח שנה לחודש הקרוב';
     document.getElementById('calLoading').style.display='none';
+    window._isGenCal = false;
   }
 }
 
@@ -2264,8 +2279,11 @@ function histReAnalyze(idx){
   const hist = JSON.parse(localStorage.getItem('piq_history')||'[]');
   if(!hist[idx]) return;
   document.getElementById('postInput').value = hist[idx].post;
-  swMainTab(document.querySelector('.main-tab'), 'tab-analyze');
-  document.querySelector('.main-tab').classList.add('on');
+  document.querySelectorAll('.main-tab').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.tool-pane').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.main-tab')[0].classList.add('on');
+  document.getElementById('tab-analyze').classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function histDelete(idx){
