@@ -50,6 +50,8 @@
     setupLenis();
     injectMarquees();
     injectPetals();
+    layerCake();
+    sprinkles();
     var heroIntro = prepareHero();
     playPreloader(heroIntro);
 
@@ -65,6 +67,8 @@
     progressFallback();
     magnetic();
     cursor();
+
+    frostingPath();
 
     var ro = new ResizeObserver(debounce(function () { ST.refresh(); }, 200));
     ro.observe($('#main') || document.body);
@@ -109,24 +113,20 @@
     var content = $('#top > div:last-of-type');
     var bits = content ? $$('p, div > a', content).filter(function (el) { return !el.closest('h1'); }) : [];
     var nav = $$('#top header > *, #top header nav > *');
-    var video = $('#top .banner-video');
 
     gsap.set(h1Lines, { yPercent: 110, rotate: 3, clipPath: 'inset(0% 0% 100% 0%)', transformOrigin: '100% 100%' });
     gsap.set(bits, { y: 40, autoAlpha: 0 });
     gsap.set(nav, { y: -24, autoAlpha: 0 });
-    if (video) gsap.set(video, { scale: 1.35 });
 
     var tl = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } });
-    if (video) tl.to(video, { scale: 1, duration: 2.4 }, 0);
     tl.to(h1Lines, { yPercent: 0, rotate: 0, clipPath: 'inset(0% 0% -20% 0%)', duration: 1.5, stagger: 0.12 }, 0.1)
       .to(bits, { y: 0, autoAlpha: 1, duration: 1.2, stagger: 0.08 }, 0.45)
       .to(nav, { y: 0, autoAlpha: 1, duration: 1, stagger: 0.04 }, 0.3);
 
-    // Scroll: content lifts away, video pushes in, the panel rounds off.
+    // Scroll: content lifts away and the dome rises (the video itself stays still).
     if (hero) {
       var st = { trigger: hero, start: 'top top', end: 'bottom top', scrub: true };
       if (content) gsap.to(content, { yPercent: -28, autoAlpha: 0, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: '75% top', scrub: true } });
-      if (video) gsap.to(video, { yPercent: 18, ease: 'none', scrollTrigger: st });
       heroDome(hero, h1Lines);
 
       // Mouse depth on the headline + petals.
@@ -201,6 +201,169 @@
       var inner = el.firstElementChild;
       gsap.to(inner, { y: gsap.utils.random(-22, -10), rotate: gsap.utils.random(-30, 30), duration: gsap.utils.random(3, 5.5), ease: 'sine.inOut', yoyo: true, repeat: -1, delay: i * 0.3 });
       gsap.to(el, { yPercent: -((i % 3) + 1) * 220, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
+    });
+  }
+
+
+  // ---------------------------------------------------------------- layer cake
+  // A pinned, scroll-driven build: plate, sponge, cream, sponge, cream,
+  // sponge, frosting, topping, candle. Illustration only, no copy.
+  function layerCake() {
+    var cakes = $('#cakes');
+    if (!cakes) return;
+    var sec = document.createElement('section');
+    sec.id = 'build';
+    sec.className = 'yl-build';
+    sec.setAttribute('aria-hidden', 'true');
+    sec.innerHTML =
+      '<div class="yl-build__halo"></div>' +
+      '<svg class="yl-build__svg" viewBox="0 0 400 470" role="presentation" focusable="false">' +
+        '<ellipse class="b-shadow" cx="200" cy="428" rx="150" ry="13" fill="#F4C3D1"/>' +
+        '<g class="b-plate"><ellipse cx="200" cy="410" rx="150" ry="22" fill="#FFFFFF" stroke="#E3A9BB" stroke-width="3"/><ellipse cx="200" cy="406" rx="116" ry="13" fill="#FAE4EA"/></g>' +
+        '<g class="b-layer"><rect x="70" y="344" width="260" height="56" rx="12" fill="#694B3A"/></g>' +
+        '<g class="b-layer"><rect x="62" y="332" width="276" height="18" rx="9" fill="#FFFFFF"/></g>' +
+        '<g class="b-layer"><rect x="70" y="284" width="260" height="52" rx="12" fill="#A08373"/></g>' +
+        '<g class="b-layer"><rect x="62" y="272" width="276" height="18" rx="9" fill="#FFFFFF"/></g>' +
+        '<g class="b-layer"><rect x="70" y="224" width="260" height="54" rx="12" fill="#694B3A"/></g>' +
+        '<g class="b-frost"><rect x="58" y="204" width="284" height="36" rx="18" fill="#F4C3D1"/>' +
+          '<rect x="84" y="226" width="22" height="46" rx="11" fill="#F4C3D1"/><rect x="132" y="226" width="22" height="30" rx="11" fill="#F4C3D1"/>' +
+          '<rect x="196" y="226" width="22" height="54" rx="11" fill="#F4C3D1"/><rect x="250" y="226" width="22" height="34" rx="11" fill="#F4C3D1"/>' +
+          '<rect x="296" y="226" width="22" height="44" rx="11" fill="#F4C3D1"/></g>' +
+        '<g class="b-top"><circle cx="110" cy="196" r="13" fill="#694B3A"/><circle cx="150" cy="190" r="9" fill="#FFFFFF"/><circle cx="250" cy="190" r="9" fill="#FFFFFF"/><circle cx="290" cy="196" r="13" fill="#694B3A"/><circle cx="130" cy="180" r="6" fill="#E3A9BB"/><circle cx="270" cy="180" r="6" fill="#E3A9BB"/></g>' +
+        '<g class="b-candle"><rect x="193" y="142" width="14" height="58" rx="5" fill="#FFFFFF"/><path d="M193 156l14 8M193 172l14 8M193 188l14 8" stroke="#E3A9BB" stroke-width="4" stroke-linecap="round"/>' +
+          '<g class="b-flame-wrap"><path class="b-flame" d="M200 111c9 11 12 19 6 27-3 4-9 4-12 0-6-8-3-16 6-27z" fill="#F5B94A"/></g></g>' +
+        '<g class="b-dots"><circle cx="52" cy="150" r="5" fill="#E3A9BB"/><circle cx="348" cy="130" r="6" fill="#694B3A"/><circle cx="332" cy="86" r="4" fill="#F4C3D1"/><circle cx="70" cy="96" r="6" fill="#F4C3D1"/><circle cx="360" cy="200" r="4" fill="#A08373"/><circle cx="38" cy="214" r="4" fill="#694B3A"/></g>' +
+      '</svg>';
+    cakes.parentNode.insertBefore(sec, cakes.nextSibling);
+
+    var q = function (c) { return $$(c, sec); };
+    var layers = q('.b-layer');
+    var tl = gsap.timeline({
+      defaults: { ease: 'power2.out' },
+      scrollTrigger: { trigger: sec, start: 'top top', end: function () { return '+=' + Math.round(innerHeight * (innerWidth < 700 ? 1.8 : 2.4)); }, pin: true, scrub: 0.6, invalidateOnRefresh: true }
+    });
+    tl.from(q('.b-shadow'), { scaleX: 0.3, opacity: 0, transformOrigin: '50% 50%', duration: 1 }, 0)
+      .from(q('.b-plate'), { y: 90, opacity: 0, duration: 1 }, 0)
+      .from(q('.yl-build__halo'), { scale: 0.4, opacity: 0, duration: 7 }, 0);
+    layers.forEach(function (el, i) {
+      tl.from(el, { y: -320, opacity: 0, duration: 1.1, ease: 'power3.out' }, 1 + i * 1.05);
+      tl.from(el, { scaleY: 1.12, transformOrigin: '50% 100%', duration: 0.35, ease: 'power2.in' }, 1 + i * 1.05 + 0.75);
+    });
+    tl.from(q('.b-frost'), { y: -320, opacity: 0, duration: 1.1, ease: 'power3.out' }, 6.3)
+      .from(q('.b-frost rect:not(:first-child)'), { scaleY: 0, transformOrigin: '50% 0%', duration: 0.9, stagger: 0.08 }, 7.1)
+      .from(q('.b-top circle'), { scale: 0, y: -40, transformOrigin: '50% 50%', duration: 0.7, stagger: 0.07, ease: 'back.out(2.4)' }, 7.4)
+      .from(q('.b-candle rect, .b-candle path:not(.b-flame)'), { y: -120, opacity: 0, duration: 0.9, ease: 'power3.out' }, 8)
+      .from(q('.b-flame-wrap'), { scale: 0, transformOrigin: '50% 100%', duration: 0.6, ease: 'back.out(3)' }, 8.8)
+      .from(q('.b-dots circle'), { scale: 0, transformOrigin: '50% 50%', duration: 0.6, stagger: 0.06, ease: 'back.out(3)' }, 8.9)
+      .to(q('.yl-build__svg'), { scale: 1.06, transformOrigin: '50% 60%', duration: 1.2, ease: 'sine.inOut' }, 9);
+    gsap.to(q('.b-flame'), { scaleY: 1.14, scaleX: 0.92, transformOrigin: '50% 100%', duration: 0.35, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+  }
+
+  // ---------------------------------------------------------------- sprinkles (parallax)
+  function sprinkles() {
+    var colors = ['#E3A9BB', '#F4C3D1', '#694B3A', '#A08373', '#FFFFFF', '#9DB89A'];
+    var shapes = [
+      function (c) { return '<svg viewBox="0 0 30 12"><rect x="1" y="1" width="28" height="10" rx="5" fill="' + c + '"/></svg>'; },
+      function (c) { return '<svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="' + c + '"/></svg>'; },
+      function (c) { return '<svg viewBox="0 0 24 22"><path d="M12 2l10 18H2z" fill="' + c + '" stroke="' + c + '" stroke-width="3" stroke-linejoin="round"/></svg>'; },
+      function (c) { return '<svg viewBox="0 0 30 20"><ellipse cx="15" cy="10" rx="12" ry="7.5" fill="' + c + '"/><path d="M5 10c6-3 14-3 20 0" stroke="#FFF9FA" stroke-opacity=".55" stroke-width="2" fill="none"/></svg>'; },
+      function (c) { return '<svg viewBox="0 0 30 24"><path d="M3 21C3 9 12 3 27 3c0 12-8 18-24 18z" fill="' + c + '"/><path d="M5 19C12 13 18 9 24 6" stroke="#FFF9FA" stroke-opacity=".5" stroke-width="1.6" fill="none"/></svg>'; }
+    ];
+    var seed = 7;
+    var rnd = function () { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+    ['#workshops', '#desserts', '#about'].forEach(function (id) {
+      var sec = $(id);
+      if (!sec) return;
+      var wrap = document.createElement('div');
+      wrap.className = 'yl-sprinkles';
+      wrap.setAttribute('aria-hidden', 'true');
+      var items = [];
+      for (var i = 0; i < 16; i++) {
+        var side = i % 2 ? 1 : 0;
+        var depth = [0.35, 0.7, 1.1][i % 3];
+        var el = document.createElement('i');
+        var c = i % 5 === 4 ? '#9DB89A' : colors[Math.floor(rnd() * 5)];
+        var shape = c === '#9DB89A' ? shapes[4] : shapes[Math.floor(rnd() * 4)];
+        el.innerHTML = shape(c);
+        var size = 16 + depth * 14 + rnd() * 6;
+        var x = side ? -1.3 + rnd() * 1.5 : 98.3 + rnd() * 1.5; // peek in from the edges, clear of the text
+        el.style.cssText = 'top:' + (3 + (i / 16) * 94 + rnd() * 4) + '%;' + (side ? 'left:' : 'left:') + x + '%;width:' + size + 'px;rotate:' + Math.round(rnd() * 360) + 'deg;' + (depth > 1 ? 'filter:blur(1.2px);' : '');
+        wrap.appendChild(el);
+        items.push([el, depth]);
+      }
+      sec.insertBefore(wrap, sec.firstChild);
+      items.forEach(function (it) {
+        gsap.fromTo(it[0], { y: 140 * it[1] }, { y: -140 * it[1], rotate: '+=' + (it[1] * 70), ease: 'none',
+          scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: true } });
+      });
+    });
+  }
+
+  // ---------------------------------------------------------------- piped line down the page
+  function frostingPath() {
+    var main = $('#main'), first = $('#cakes');
+    if (!main || !first || window.matchMedia('(max-width: 700px)').matches) return;
+    var NS = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('class', 'yl-pipe');
+    svg.setAttribute('aria-hidden', 'true');
+    var outline = document.createElementNS(NS, 'path');
+    var fill = document.createElementNS(NS, 'path');
+    [outline, fill].forEach(function (p, i) {
+      p.setAttribute('pathLength', '1');
+      p.setAttribute('fill', 'none');
+      p.setAttribute('stroke', i ? '#F4C3D1' : '#E3A9BB');
+      p.setAttribute('stroke-width', i ? '8' : '13');
+      p.setAttribute('stroke-linecap', 'round');
+      p.setAttribute('stroke-linejoin', 'round');
+      p.style.strokeDasharray = '1';
+      p.style.strokeDashoffset = '1.002';
+      svg.appendChild(p);
+    });
+    main.appendChild(svg);
+
+    function top(el) {
+      var y = 0;
+      while (el && el !== main) { y += el.offsetTop; el = el.offsetParent; }
+      return y;
+    }
+    function layout() {
+      var W = main.offsetWidth, y0 = top(first) + 60, H = main.offsetHeight - y0;
+      if (H < 400) return;
+      var m = Math.max(16, W * 0.011);
+      var tops = ['#workshops', '#desserts', '#about', '#faq'].map(function (id) { var e = $(id); return e ? top(e) - y0 : null; }).filter(function (v) { return v !== null; });
+      var R = W - m, L = m, x = R, y = 0, d = 'M ' + R + ' 0';
+      var wave = function (toY, xx) {
+        // gentle bead-like wobble while running straight down the margin
+        var n = Math.max(1, Math.round((toY - y) / 260)), step = (toY - y) / n;
+        for (var k = 0; k < n; k++) {
+          var amp = (k % 2 ? -1 : 1) * 7 * (xx === R ? -1 : 1);
+          d += ' C ' + (xx + amp) + ' ' + (y + step * 0.35) + ', ' + (xx - amp) + ' ' + (y + step * 0.65) + ', ' + xx + ' ' + (y + step);
+          y += step;
+        }
+      };
+      tops.forEach(function (t, i) {
+        var nx = i % 2 ? R : L, cy = t - 130;
+        wave(cy, x);
+        d += ' C ' + x + ' ' + (cy + 70) + ', ' + nx + ' ' + (cy + 40) + ', ' + nx + ' ' + (cy + 130);
+        y = cy + 130; x = nx;
+      });
+      wave(H - 40, x);
+      svg.style.top = y0 + 'px';
+      svg.setAttribute('width', W); svg.setAttribute('height', H);
+      svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+      outline.setAttribute('d', d); fill.setAttribute('d', d);
+    }
+    layout();
+    ST.addEventListener('refresh', layout);
+    var state = { p: 0 };
+    gsap.to(state, {
+      p: 1, ease: 'none',
+      scrollTrigger: { trigger: svg, start: 'top 75%', end: 'bottom 70%', scrub: 0.5 },
+      onUpdate: function () {
+        var off = state.p <= 0.001 ? 1.002 : 1 - state.p;
+        outline.style.strokeDashoffset = off; fill.style.strokeDashoffset = off;
+      }
     });
   }
 
@@ -321,33 +484,12 @@
   // ---------------------------------------------------------------- galleries
   function galleries() {
     var main = ['#gal', '#wgal', '#dgal'].map(function (s) { return $(s); }).filter(Boolean);
-    var swatches = ['#694B3A', '#E3A9BB', '#F4C3D1', '#A08373', '#FAE4EA'];
     main.forEach(function (track) {
       var slides = $$('.gal-slide', track);
       gsap.from(slides.slice(0, 6), {
         y: 90, autoAlpha: 0, duration: 1.4, ease: 'expo.out', stagger: 0.07,
         scrollTrigger: { trigger: track, start: 'top 85%', once: true }
       });
-      // Each photo waits behind a colour panel that drops away once the
-      // slide is actually in view (works for the sideways strip too).
-      slides.forEach(function (fig, i) {
-        var sw = document.createElement('span');
-        sw.className = 'yl-swatch';
-        sw.setAttribute('aria-hidden', 'true');
-        sw.style.background = swatches[i % swatches.length];
-        fig.appendChild(sw);
-      });
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) {
-          if (!en.isIntersecting) return;
-          io.unobserve(en.target);
-          var sw = $('.yl-swatch', en.target), img = $('img', en.target);
-          gsap.timeline()
-            .to(sw, { yPercent: 101, duration: 0.9, ease: 'power3.inOut' }, 0)
-            .fromTo(img, { scale: 1.35 }, { scale: 1, duration: 1.4, ease: 'power2.out' }, 0.15);
-        });
-      }, { threshold: 0.3 });
-      slides.forEach(function (f) { io.observe(f); });
       // Images drift inside their frames as the page moves.
       gsap.fromTo($$('img', track), { yPercent: -5 }, {
         yPercent: 5, ease: 'none',

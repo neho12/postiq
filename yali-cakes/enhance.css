@@ -86,7 +86,6 @@ html.fx #top.hero-full{will-change:clip-path}
 
 /* ---------- Galleries ---------- */
 html.fx .gal-slide{position:relative}
-.yl-swatch{position:absolute;inset:0;z-index:1;pointer-events:none;will-change:transform}
 html.yl-gal-pinned #gal{scroll-snap-type:none}
 html.fx .gal-slide{will-change:transform;transform-origin:50% 100%}
 html.fx .gal-slide img{will-change:transform;scale:1.12;transition:scale 1.1s var(--ease-out)}
@@ -138,3 +137,21 @@ html.fx .float{animation:none}
   .yl-cursor,.yl-cursor-dot{display:none}
   .yl-marquee__row{transform:none!important}
 }
+
+/* ---------- Layer cake scene ---------- */
+.yl-build{position:relative;z-index:1;height:100vh;height:100svh;min-height:560px;display:grid;place-items:center;overflow:hidden;background:var(--cream)}
+.yl-build__halo{position:absolute;left:50%;top:50%;width:min(86vmin,760px);aspect-ratio:1;margin:calc(min(86vmin,760px)/-2) 0 0 calc(min(86vmin,760px)/-2);border-radius:50%;background:radial-gradient(circle,var(--blush) 0,var(--blush) 62%,transparent 63%)}
+.yl-build__svg{position:relative;width:min(88vw,520px);height:auto;max-height:84vh;overflow:visible}
+.yl-build__svg *{transform-box:fill-box}
+
+/* ---------- Sprinkles ---------- */
+.yl-sprinkles{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.yl-sprinkles i{position:absolute;display:block;will-change:transform;opacity:.9}
+.yl-sprinkles svg{display:block;width:100%;height:auto}
+html.fx #workshops>div:not(.yl-sprinkles),html.fx #desserts>div:not(.yl-sprinkles),html.fx #about>div:not(.yl-sprinkles){position:relative;z-index:1}
+@media (max-width:700px){.yl-sprinkles i:nth-child(n+7){display:none}.yl-sprinkles i{opacity:.55}}
+
+/* ---------- Piped line ---------- */
+#main{position:relative}
+.yl-pipe{position:absolute;left:0;z-index:2;pointer-events:none;overflow:visible}
+@media (max-width:700px){.yl-pipe{display:none}}
