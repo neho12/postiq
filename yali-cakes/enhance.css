@@ -56,3 +56,12 @@ html.pre:not(.fx-ready) body{overflow:hidden}
 .yl-pre.out .yl-pre__bar{opacity:0}
 .yl-pre.out .yl-pre__layer{clip-path:inset(0 0 100% 0)}
 @media (prefers-reduced-motion:reduce){.yl-pre{display:none}}
+
+/* Forms: one column, every field the same width and height */
+#order-panel .row2,#quote .row2,#dessert-quote .row2{display:contents}
+#order-panel .grp,#quote .grp,#dessert-quote .grp{max-width:none!important;flex:none!important;width:100%}
+#order-panel .grp:empty,#quote .grp:empty,#dessert-quote .grp:empty{display:none}
+#order-panel .field,#quote .field,#dessert-quote .field{max-width:520px}
+input.field{height:48px}
+input.field[type="date"],input.field[type="time"]{-webkit-appearance:none;appearance:none;display:block;min-width:0;line-height:1.4;text-align:start}
+input.field[type="date"]::-webkit-date-and-time-value,input.field[type="time"]::-webkit-date-and-time-value{text-align:start;min-height:1.4em}
