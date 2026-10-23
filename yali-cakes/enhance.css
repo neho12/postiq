@@ -47,13 +47,14 @@ html.pre .yl-pre{display:grid}
 html.pre:not(.fx-ready) body{overflow:hidden}
 .yl-pre__layer{position:absolute;inset:0;background:#FAE4EA;clip-path:inset(0 0 0 0);transition:clip-path 1s cubic-bezier(.76,0,.24,1) .12s}
 .yl-pre__layer--b{background:#694B3A;transition-delay:0s}
-.yl-pre__logo{position:relative;width:min(120px,28vw);height:auto;opacity:0;transform:translateY(16px);transition:opacity .8s ease,transform .8s var(--ease-out)}
-.yl-pre__bar{position:absolute;left:50%;bottom:16vh;width:min(220px,50vw);height:2px;margin-left:calc(min(220px,50vw)/-2);background:rgba(105,75,58,.16);overflow:hidden;border-radius:2px;transition:opacity .4s ease}
-.yl-pre__bar i{position:absolute;inset:0;background:#694B3A;transform:scaleX(0);transform-origin:100% 50%;transition:transform 1.1s ease}
-.yl-pre.in .yl-pre__logo{opacity:1;transform:none}
-.yl-pre.in .yl-pre__bar i{transform:scaleX(1)}
-.yl-pre.out .yl-pre__logo{opacity:0;transform:translateY(-16px)}
-.yl-pre.out .yl-pre__bar{opacity:0}
+.yl-pre__logo{position:relative;width:min(300px,62vw);height:auto;overflow:visible;transition:opacity .5s ease,transform .5s var(--ease-out)}
+.yl-pre__logo .yl-fill{opacity:0;transition:opacity .9s ease 1.7s}
+.yl-pre__logo .yl-draw path{stroke-dasharray:1 1;stroke-dashoffset:1}
+.yl-pre.in .yl-fill{opacity:1}
+.yl-pre.in .yl-draw path{animation:yl-draw .95s cubic-bezier(.55,.1,.25,1) forwards;animation-delay:calc(.25s + var(--i)*85ms)}
+.yl-pre.in .yl-draw{transition:opacity .8s ease 2s;opacity:0}
+@keyframes yl-draw{to{stroke-dashoffset:0}}
+.yl-pre.out .yl-pre__logo{opacity:0;transform:translateY(-14px)}
 .yl-pre.out .yl-pre__layer{clip-path:inset(0 0 100% 0)}
 @media (prefers-reduced-motion:reduce){.yl-pre{display:none}}
 

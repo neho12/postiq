@@ -12,8 +12,8 @@
     var pre = document.querySelector('.yl-pre');
     if (!pre) return;
     var fonts = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
-    var min = new Promise(function (r) { setTimeout(r, 1300); });
-    var cap = new Promise(function (r) { setTimeout(r, 3000); });
+    var min = new Promise(function (r) { setTimeout(r, 3000); });
+    var cap = new Promise(function (r) { setTimeout(r, 5000); });
     requestAnimationFrame(function () { requestAnimationFrame(function () { pre.classList.add('in'); }); });
     Promise.race([Promise.all([fonts, min]), cap]).then(function () {
       if (!location.hash) window.scrollTo(0, 0);
