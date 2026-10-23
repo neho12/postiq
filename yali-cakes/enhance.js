@@ -7,6 +7,21 @@
 
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
+  // Opening screen: logo and progress line, then two colour layers lift away.
+  (function opening() {
+    var pre = document.querySelector('.yl-pre');
+    if (!pre) return;
+    var fonts = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+    var min = new Promise(function (r) { setTimeout(r, 1300); });
+    var cap = new Promise(function (r) { setTimeout(r, 3000); });
+    requestAnimationFrame(function () { requestAnimationFrame(function () { pre.classList.add('in'); }); });
+    Promise.race([Promise.all([fonts, min]), cap]).then(function () {
+      pre.classList.add('out');
+      setTimeout(function () { doc.classList.add('fx-ready'); }, 300);
+      setTimeout(function () { if (pre.parentNode) pre.parentNode.removeChild(pre); }, 1400);
+    });
+  })();
+
   (function boot() {
     var t0 = performance.now();
     (function poll() {
