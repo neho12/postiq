@@ -127,8 +127,7 @@
       var st = { trigger: hero, start: 'top top', end: 'bottom top', scrub: true };
       if (content) gsap.to(content, { yPercent: -28, autoAlpha: 0, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: '75% top', scrub: true } });
       if (video) gsap.to(video, { yPercent: 18, ease: 'none', scrollTrigger: st });
-      gsap.fromTo(hero, { clipPath: 'inset(0% 0% 0% 0% round 0px 0px 0px 0px)' },
-        { clipPath: 'inset(0% 3% 0% 3% round 0px 0px 64px 64px)', ease: 'none', scrollTrigger: st });
+      heroDome(hero, h1Lines);
 
       // Mouse depth on the headline + petals.
       if (finePointer) {
@@ -147,6 +146,29 @@
       }
     }
     return tl;
+  }
+
+  // A small arch waits at the foot of the hero, then swells into a full
+  // cocoa dome that hands over to the marquee band below.
+  function heroDome(hero, lines) {
+    var dome = document.createElement('div');
+    dome.className = 'yl-dome';
+    dome.setAttribute('aria-hidden', 'true');
+    hero.appendChild(dome);
+    var g = {};
+    var measure = function () {
+      g.W = hero.clientWidth; g.H = hero.clientHeight;
+      g.w = g.W < 720 ? 34 : 64; g.h = g.W < 720 ? 52 : 100;
+    };
+    measure();
+    var from = function () { return 'inset(calc(100% - ' + g.h + 'px) calc(50% - ' + g.w / 2 + 'px) 0px calc(50% - ' + g.w / 2 + 'px) round ' + g.w / 2 + 'px ' + g.w / 2 + 'px 0px 0px / ' + g.w / 2 + 'px ' + g.w / 2 + 'px 0px 0px)'; };
+    // Same shape of string as `from`, so GSAP can tween number by number.
+    var to = function () { return 'inset(calc(0% - 0px) calc(0% - 0px) 0px calc(0% - 0px) round ' + g.W / 2 + 'px ' + g.W / 2 + 'px 0px 0px / ' + g.H + 'px ' + g.H + 'px 0px 0px)'; };
+    gsap.set(dome, { clipPath: from() });
+    gsap.timeline({ scrollTrigger: { trigger: hero, start: 'bottom bottom', end: 'bottom 25%', scrub: true, invalidateOnRefresh: true, onRefreshInit: measure } })
+      .fromTo(dome, { clipPath: from }, { clipPath: to, ease: 'power1.in' }, 0)
+      .fromTo(lines[0] || {}, { xPercent: 0, scale: 1 }, { xPercent: 14, scale: 0.86, ease: 'power1.in' }, 0)
+      .fromTo(lines[1] || {}, { xPercent: 0, scale: 1 }, { xPercent: -14, scale: 0.86, ease: 'power1.in' }, 0);
   }
 
   function playPreloader(heroIntro) {
@@ -229,8 +251,8 @@
   function sectionCards() {
     $$('#cakes, #workshops, #desserts, #about, #faq').forEach(function (sec) {
       gsap.fromTo(sec,
-        { clipPath: 'inset(0% 4% 0% 4% round 72px 72px 0px 0px)' },
-        { clipPath: 'inset(0% 0% 0% 0% round 0px 0px 0px 0px)', ease: 'none',
+        { clipPath: 'inset(0% 6% 0% 6% round 50% 50% 0px 0px / 160px 160px 0px 0px)' },
+        { clipPath: 'inset(0% 0% 0% 0% round 0% 0% 0px 0px / 0px 0px 0px 0px)', ease: 'none',
           scrollTrigger: { trigger: sec, start: 'top bottom', end: 'top 20%', scrub: true } });
     });
   }
@@ -299,12 +321,33 @@
   // ---------------------------------------------------------------- galleries
   function galleries() {
     var main = ['#gal', '#wgal', '#dgal'].map(function (s) { return $(s); }).filter(Boolean);
+    var swatches = ['#694B3A', '#E3A9BB', '#F4C3D1', '#A08373', '#FAE4EA'];
     main.forEach(function (track) {
       var slides = $$('.gal-slide', track);
-      gsap.from(slides, {
-        xPercent: -40, y: 80, rotate: -6, autoAlpha: 0, duration: 1.5, ease: 'expo.out', stagger: 0.07,
+      gsap.from(slides.slice(0, 6), {
+        y: 90, autoAlpha: 0, duration: 1.4, ease: 'expo.out', stagger: 0.07,
         scrollTrigger: { trigger: track, start: 'top 85%', once: true }
       });
+      // Each photo waits behind a colour panel that drops away once the
+      // slide is actually in view (works for the sideways strip too).
+      slides.forEach(function (fig, i) {
+        var sw = document.createElement('span');
+        sw.className = 'yl-swatch';
+        sw.setAttribute('aria-hidden', 'true');
+        sw.style.background = swatches[i % swatches.length];
+        fig.appendChild(sw);
+      });
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (!en.isIntersecting) return;
+          io.unobserve(en.target);
+          var sw = $('.yl-swatch', en.target), img = $('img', en.target);
+          gsap.timeline()
+            .to(sw, { yPercent: 101, duration: 0.9, ease: 'power3.inOut' }, 0)
+            .fromTo(img, { scale: 1.35 }, { scale: 1, duration: 1.4, ease: 'power2.out' }, 0.15);
+        });
+      }, { threshold: 0.3 });
+      slides.forEach(function (f) { io.observe(f); });
       // Images drift inside their frames as the page moves.
       gsap.fromTo($$('img', track), { yPercent: -5 }, {
         yPercent: 5, ease: 'none',
@@ -312,9 +355,12 @@
       });
     });
 
+    var pinned = pinGallery();
+
     // Velocity skew — the strip leans into the scroll.
-    if (lenis && main.length) {
-      var setters = main.map(function (t) { return gsap.quickTo(t, 'skewY', { duration: 0.5, ease: 'power3' }); });
+    var leaners = main.filter(function (t) { return t !== pinned; });
+    if (lenis && leaners.length) {
+      var setters = leaners.map(function (t) { return gsap.quickTo(t, 'skewY', { duration: 0.5, ease: 'power3' }); });
       lenis.on('scroll', function (l) {
         var s = gsap.utils.clamp(-4, 4, l.velocity * -0.18);
         setters.forEach(function (fn) { fn(s); });
@@ -325,6 +371,27 @@
     $$('.gal-btn').forEach(function (b) {
       gsap.from(b, { scale: 0, duration: 0.9, ease: 'back.out(2)', scrollTrigger: { trigger: b.parentNode, start: 'top 80%', once: true } });
     });
+  }
+
+  // Desktop: the works strip holds in place and slides sideways while the
+  // page scrolls, then lets go. Arrows and swiping keep working.
+  function pinGallery() {
+    var track = $('#gal');
+    if (!track || !window.matchMedia('(min-width: 900px)').matches) return null;
+    var gal = track.closest('.gal');
+    // Modern engines count RTL scrollLeft from 0 down to negative values.
+    var sign = getComputedStyle(track).direction === 'rtl' ? -1 : 1;
+    var dist = 0;
+    var measure = function () { dist = Math.max(0, Math.min(track.scrollWidth - track.clientWidth, innerHeight * 3)); };
+    measure();
+    if (dist < 200) return null;
+    doc.classList.add('yl-gal-pinned');
+    ST.create({
+      trigger: gal, start: 'center center', end: function () { return '+=' + dist; },
+      pin: true, pinSpacing: true, scrub: true, invalidateOnRefresh: true, onRefreshInit: measure,
+      onUpdate: function (self) { track.scrollLeft = sign * self.progress * dist; }
+    });
+    return track;
   }
 
   // ---------------------------------------------------------------- workshops & desserts
@@ -358,9 +425,11 @@
     var frame = $('.about-photo > div');
     var img = frame && $('img', frame);
     if (frame) {
-      gsap.fromTo(frame, { clipPath: 'inset(22% 22% 22% 22% round 200px)', rotate: -4 },
-        { clipPath: 'inset(0% 0% 0% 0% round 40px)', rotate: 0, ease: 'none',
-          scrollTrigger: { trigger: frame, start: 'top 95%', end: 'center 55%', scrub: true } });
+      var w = function () { return frame.offsetWidth; };
+      gsap.fromTo(frame,
+        { clipPath: function () { return 'inset(38% 26% 0% 26% round ' + w() * 0.24 + 'px ' + w() * 0.24 + 'px 24px 24px)'; } },
+        { clipPath: function () { return 'inset(0% 0% 0% 0% round ' + w() / 2 + 'px ' + w() / 2 + 'px 40px 40px)'; }, ease: 'none',
+          scrollTrigger: { trigger: frame, start: 'top 95%', end: 'center 55%', scrub: true, invalidateOnRefresh: true } });
     }
     if (img) {
       gsap.fromTo(img, { scale: 1.5 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: frame, start: 'top bottom', end: 'bottom top', scrub: true } });
