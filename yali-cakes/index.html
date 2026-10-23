@@ -17,6 +17,16 @@
 </script>
 <link rel="stylesheet" href="./enhance.css">
 <script>
+  (function(){
+    // Always open at the top, even after a reload or when coming back to the tab.
+    if('scrollRestoration' in history)history.scrollRestoration='manual';
+    var top=function(){if(!location.hash)window.scrollTo(0,0);};
+    top();
+    window.addEventListener('load',top);
+    window.addEventListener('pageshow',function(e){if(e.persisted)top();});
+  })();
+</script>
+<script>
   (function(){var d=document.documentElement;if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('pre');setTimeout(function(){d.classList.add('fx-ready');var p=document.querySelector('.yl-pre');if(p)p.remove();},7000);}})();
 </script>
 </head>

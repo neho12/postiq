@@ -16,6 +16,7 @@
     var cap = new Promise(function (r) { setTimeout(r, 3000); });
     requestAnimationFrame(function () { requestAnimationFrame(function () { pre.classList.add('in'); }); });
     Promise.race([Promise.all([fonts, min]), cap]).then(function () {
+      if (!location.hash) window.scrollTo(0, 0);
       pre.classList.add('out');
       setTimeout(function () { doc.classList.add('fx-ready'); }, 300);
       setTimeout(function () { if (pre.parentNode) pre.parentNode.removeChild(pre); }, 1400);
