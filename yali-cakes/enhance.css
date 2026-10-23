@@ -66,3 +66,13 @@ html.pre:not(.fx-ready) body{overflow:hidden}
 input.field{height:48px}
 input.field[type="date"],input.field[type="time"]{-webkit-appearance:none;appearance:none;display:block;min-width:0;line-height:1.4;text-align:start}
 input.field[type="date"]::-webkit-date-and-time-value,input.field[type="time"]::-webkit-date-and-time-value{text-align:start;min-height:1.4em}
+
+/* Phones: fit the whole header row (links + social icons) without clipping,
+   and keep the video pause button clear of the hero buttons. */
+@media (max-width:640px){
+  html .hero-full .vpause{bottom:16px!important}
+}
+@media (max-width:420px){
+  html .hero-full header nav{gap:0 10px!important;font-size:14px!important}
+  html .hero-full header nav .soc{width:40px;height:40px}
+}
