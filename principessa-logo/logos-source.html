@@ -1,0 +1,70 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;1,400;1,500&family=Pinyon+Script&family=Montserrat:wght@300;400&family=Frank+Ruhl+Libre:wght@300;500&family=Heebo:wght@300;400&display=block" rel="stylesheet">
+<style>body{margin:0;background:#888}svg{display:block;margin:20px}</style></head><body>
+<svg width="0" height="0" style="position:absolute"><defs>
+ <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0" stop-color="#E9D29A"/><stop offset=".45" stop-color="#C9A45C"/><stop offset=".7" stop-color="#F3E3B3"/><stop offset="1" stop-color="#A9823F"/></linearGradient>
+ <g id="crown">
+  <path d="M22 92 L10 32 L56 62 L100 12 L144 62 L190 32 L178 92 Z" fill="none" stroke="url(#gold)" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M22 104 H178" stroke="url(#gold)" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="10" cy="28" r="7" fill="url(#gold)"/><circle cx="100" cy="8" r="8" fill="url(#gold)"/><circle cx="190" cy="28" r="7" fill="url(#gold)"/>
+  <circle cx="64" cy="80" r="8" fill="#009246" stroke="url(#gold)" stroke-width="3"/>
+  <circle cx="100" cy="74" r="9" fill="#FFFFFF" stroke="url(#gold)" stroke-width="3"/>
+  <circle cx="136" cy="80" r="8" fill="#CE2B37" stroke="url(#gold)" stroke-width="3"/>
+ </g>
+ <g id="tri"><rect x="0" y="0" width="40" height="4" fill="#009246"/><rect x="40.5" y=".5" width="39" height="3" fill="#FFFFFF" stroke="#C9A45C" stroke-width="1"/><rect x="80" y="0" width="40" height="4" fill="#CE2B37"/></g>
+ <path id="top" d="M170,500 a330,330 0 0,1 660,0"/><path id="bot" d="M140,500 a360,360 0 0,0 720,0"/>
+</defs></svg>
+
+<!-- A: Corona (black & gold) -->
+<svg id="A" width="1000" height="1000" viewBox="0 0 1000 1000">
+ <rect width="1000" height="1000" fill="#0E0E0E"/>
+ <use href="#crown" transform="translate(410 190) scale(.9)"/>
+ <text x="500" y="495" text-anchor="middle" font-family="Pinyon Script" font-size="190" fill="url(#gold)">Principessa</text>
+ <line x1="250" y1="640" x2="440" y2="640" stroke="#C9A45C" stroke-width="1.5"/>
+ <use href="#tri" transform="translate(440 638)"/>
+ <line x1="560" y1="640" x2="750" y2="640" stroke="#C9A45C" stroke-width="1.5"/>
+ <text x="500" y="725" text-anchor="middle" font-family="Cormorant Garamond" font-weight="500" font-size="50" letter-spacing="22" fill="#E9D29A">ITALIA STYLE</text>
+ <text x="500" y="790" text-anchor="middle" font-family="Montserrat" font-weight="300" font-size="20" letter-spacing="9" fill="#9C8A66">MODA DONNA · MADE IN ITALY</text>
+</svg>
+
+<!-- B: Monogram seal (ivory) -->
+<svg id="B" width="1000" height="1000" viewBox="0 0 1000 1000">
+ <rect width="1000" height="1000" fill="#F7F2EA"/>
+ <circle cx="500" cy="500" r="395" fill="none" stroke="url(#gold)" stroke-width="3"/>
+ <circle cx="500" cy="500" r="380" fill="none" stroke="url(#gold)" stroke-width="1"/>
+ <circle cx="500" cy="500" r="285" fill="none" stroke="url(#gold)" stroke-width="1"/>
+ <text font-family="Cormorant Garamond" font-weight="500" font-size="44" letter-spacing="15" fill="#2A2420">
+  <textPath href="#top" startOffset="50%" text-anchor="middle">PRINCIPESSA</textPath></text>
+ <text font-family="Cormorant Garamond" font-weight="500" font-size="44" letter-spacing="15" fill="#2A2420">
+  <textPath href="#bot" startOffset="50%" text-anchor="middle">ITALIA STYLE</textPath></text>
+ <circle cx="155" cy="500" r="7" fill="#009246"/><circle cx="845" cy="500" r="7" fill="#CE2B37"/>
+ <use href="#crown" transform="translate(440 265) scale(.6)"/>
+ <text x="490" y="640" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-weight="400" font-size="330" fill="url(#gold)">P</text>
+ <use href="#tri" transform="translate(440 690)"/>
+</svg>
+
+<!-- C: Hebrew -->
+<svg id="C" width="1000" height="1000" viewBox="0 0 1000 1000">
+ <rect width="1000" height="1000" fill="#F6EDE8"/>
+ <use href="#crown" transform="translate(420 230) scale(.8)"/>
+ <text x="500" y="500" text-anchor="middle" direction="rtl" font-family="Frank Ruhl Libre" font-weight="300" font-size="170" fill="#2B2422">פרינססה</text>
+ <line x1="270" y1="565" x2="440" y2="565" stroke="#B8955A" stroke-width="1.5"/>
+ <use href="#tri" transform="translate(440 563)"/>
+ <line x1="560" y1="565" x2="730" y2="565" stroke="#B8955A" stroke-width="1.5"/>
+ <text x="500" y="650" text-anchor="middle" direction="rtl" font-family="Heebo" font-weight="300" font-size="56" letter-spacing="14" fill="#9A7B45">איטליה סטייל</text>
+ <text x="500" y="730" text-anchor="middle" font-family="Pinyon Script" font-size="58" fill="#B8955A">Principessa Italia Style</text>
+</svg>
+
+<!-- D: Horizontal signage (emerald) -->
+<svg id="D" width="1600" height="600" viewBox="0 0 1600 600">
+ <rect width="1600" height="600" fill="#0F3B2E"/>
+ <circle cx="300" cy="300" r="190" fill="none" stroke="url(#gold)" stroke-width="3"/>
+ <use href="#crown" transform="translate(250 130) scale(.5)"/>
+ <text x="300" y="400" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="230" fill="url(#gold)">P</text>
+ <line x1="560" y1="130" x2="560" y2="470" stroke="#C9A45C" stroke-width="1.5"/>
+ <text x="640" y="300" font-family="Pinyon Script" font-size="190" fill="url(#gold)">Principessa</text>
+ <use href="#tri" transform="translate(645 413) scale(1.2 1)"/>
+ <text x="810" y="430" font-family="Cormorant Garamond" font-weight="500" font-size="44" letter-spacing="20" fill="#E9D29A">ITALIA STYLE</text>
+</svg>
+</body></html>
