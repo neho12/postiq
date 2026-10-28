@@ -5,6 +5,7 @@
  * and compares the text on screen with docs/yali-cakes/CONTENT.md word by word.
  *
  *   node docs/yali-cakes/check-content.js            (needs the `playwright` package)
+ *   MOTION=1 node docs/yali-cakes/check-content.js   (same check with animations on)
  *
  * Exit code 0 when nothing differs, 1 otherwise.
  */
@@ -133,12 +134,15 @@ function serve() {
   const srv = await serve();
   const url = 'http://localhost:' + srv.address().port + '/';
   const browser = await chromium.launch();
-  const page = await (await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' })).newPage();
+  // MOTION=1 runs with animations on (word-split headlines and so on); the default turns them off.
+  const motion = !!process.env.MOTION;
+  const page = await (await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: motion ? 'no-preference' : 'reduce' })).newPage();
   // Block third-party requests (analytics, fonts) so the check is offline and deterministic.
   await page.route('**/*', (r) => (r.request().url().startsWith(url) ? r.continue() : r.abort()));
   const pageErrors = [];
   page.on('pageerror', (e) => pageErrors.push(e.message));
   await page.goto(url, { waitUntil: 'load' });
+  if (motion) await page.waitForTimeout(5500);
 
   const report = [];
   const check = (name, exp, act) => report.push({ name, hunks: diff(exp, act) });
