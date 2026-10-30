@@ -808,7 +808,7 @@ html{scroll-padding-top:72px}
 <div style="display:{{ show.garden }};flex-direction:column;gap:28px">
 <div style="display:flex;flex-direction:column;gap:6px">
 <h3 style="margin:0;font-family:'Heebo',sans-serif;font-weight:800;font-size:32px;line-height:1.2">עוגת גן</h3>
-<p style="margin:0;font-size:16px;color:#735A4B">עוגה בתבנית עוגת גן, כזו שמספיקה לכל הכיתה: עוגת אלופים עם כיתוב, או עוגה עם תמונה על דף סוכר.</p>
+<p style="margin:0;font-size:16px;color:#735A4B">עוגה בתבנית עוגת גן, כזו שמספיקה לכל הכיתה: עוגת זילופים עם כיתוב, או עוגה עם תמונה על דף סוכר.</p>
 </div>
 <div class="ex-gal"><div class="gal" role="region" aria-roledescription="carousel" aria-label="דוגמאות לעוגות גן"><div class="gal-track" id="ggal" tabindex="0">
 <figure class="gal-slide"><img src="./assets/91ea804a4f37003469362502145261e2.webp" alt="עוגת גן עם סוכריות צבעוניות ורינבואים" width="1200" height="1200" loading="lazy" decoding="async"></figure>
@@ -831,7 +831,7 @@ html{scroll-padding-top:72px}
 </sc-for>
 </div>
 </fieldset>
-<p class="cap" style="margin:-12px 0 0">עוגת גן היא עוגה בתבנית עוגת גן. אפשר עוגת אלופים עם כיתוב, או עוגה עם תמונה מודפסת על דף סוכר וקישוטים מזויפים מסביב.</p>
+<p class="cap" style="margin:-12px 0 0">עוגת גן היא עוגה בתבנית עוגת גן. אפשר עוגת זילופים עם כיתוב, או עוגה עם תמונה מודפסת על דף סוכר וקישוטים מזויפים מסביב.</p>
 <fieldset class="fs"><legend class="lbl">טעם</legend>
 <div class="pills">
 <sc-for list="{{ gFlavor }}" as="o" hint-placeholder-count="2">
@@ -1233,7 +1233,7 @@ m_name: '', m_date: '', m_design: '', m_ins: '', m_notes: '',
 w_place: '', w_count: '', w_ages: '', w_date: '', w_time: '',
 t_time: '', n_time: '', m_time: '', d_time: '',
 b_flavor: 'וניל', b_dairy: 'חלבי', b_design: 'פסטל ורוד', b_qty: '1', b_ins: '', b_name: '', b_date: '', b_time: '', b_notes: '',
-g_kind: 'עוגת אלופים', g_flavor: 'וניל', g_dairy: 'חלבי', g_colors: '', g_link: '', g_ins: '', g_name: '', g_date: '', g_time: '', g_notes: '',
+g_kind: 'עוגת זילופים', g_flavor: 'וניל', g_dairy: 'חלבי', g_colors: '', g_link: '', g_ins: '', g_name: '', g_date: '', g_time: '', g_notes: '',
 d_type: 'אירוע חברה', d_dairy: 'חלבי', d_items: [],
 d_count: '', d_place: '', d_date: '', d_name: '', d_notes: ''
 };
@@ -1426,11 +1426,11 @@ toggleD: () => { this.setState({ dOpen: !s.dOpen }); if (!s.dOpen) reveal('desse
 bFlavor: opts(['וניל', 'שוקולד'], 'b_flavor'),
 bDairy: opts(['חלבי', 'פרווה'], 'b_dairy'),
 bDesign: opts(['פסטל ורוד', 'לבן מינימליסטי', 'יום הולדת צבעוני', 'לבבות ופרחים', 'עיצוב חופשי (אפרט בהערות)'], 'b_design'),
-gKind: opts(['עוגת אלופים', 'עוגה עם תמונה'], 'g_kind'),
+gKind: opts(['עוגת זילופים', 'עוגה עם תמונה'], 'g_kind'),
 gFlavor: opts(['וניל', 'שוקולד'], 'g_flavor'),
 gDairy: opts(['חלבי', 'פרווה'], 'g_dairy'),
 gPicDisp: gPic ? 'flex' : 'none',
-gInsLabel: gPic ? 'כיתוב על העוגה (אופציונלי)' : 'כיתוב על עוגת האלופים (אופציונלי)',
+gInsLabel: gPic ? 'כיתוב על העוגה (אופציונלי)' : 'כיתוב על עוגת הזילופים (אופציונלי)',
 wLabel: s.wOpen ? 'סגירת הטופס' : 'אני רוצה סדנה',
 dLabel: s.dOpen ? 'סגירת הטופס' : 'אני רוצה שולחן קינוחים',
 tabs: { torte: tab('torte'), number: tab('number'), mousse: tab('mousse'), bento: tab('bento'), garden: tab('garden') },
