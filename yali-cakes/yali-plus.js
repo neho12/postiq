@@ -1,37 +1,22 @@
 /* YALI CAKES: behaviour for the additions (top menu, gallery arrows, smooth FAQ and legal sections). */
 (function () {
   'use strict';
-  var doc = document.documentElement;
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
   /* ---------- Top menu: a floating capsule after scrolling, hides on the way down ---------- */
   var head = document.getElementById('yp-head');
-  var menu = document.getElementById('yp-menu');
-  var nav = document.getElementById('yp-nav');
   if (head) {
     var lastY = window.scrollY;
     var onScroll = function () {
       var y = window.scrollY;
       head.classList.toggle('is-stuck', y > 24);
-      if (!doc.classList.contains('yp-menu-open') && y > 640 && y > lastY + 2 && !head.contains(document.activeElement)) head.classList.add('is-hidden');
+      if (y > 640 && y > lastY + 2 && !head.contains(document.activeElement)) head.classList.add('is-hidden');
       if (y < lastY - 2 || y < 640) head.classList.remove('is-hidden');
       lastY = y;
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
-
-    var setMenu = function (open) {
-      menu.setAttribute('aria-expanded', open ? 'true' : 'false');
-      nav.classList.toggle('is-open', open);
-      doc.classList.toggle('yp-menu-open', open);
-    };
-    menu.addEventListener('click', function () { setMenu(menu.getAttribute('aria-expanded') !== 'true'); });
-    nav.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && nav.classList.contains('is-open')) { setMenu(false); menu.focus(); }
-    });
-    window.matchMedia('(min-width: 901px)').addEventListener('change', function (m) { if (m.matches) setMenu(false); });
   }
 
   // The page is rendered by the design runtime, so wait for the sections before wiring them up.
