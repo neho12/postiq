@@ -4,14 +4,17 @@
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
-  /* ---------- Top menu: a floating capsule after scrolling, hides on the way down ---------- */
+  /* ---------- Top menu: a floating capsule after scrolling. On desktop it hides on the way
+     down; on phones and tablets it stays, since the section links live in it. ---------- */
   var head = document.getElementById('yp-head');
   if (head) {
     var lastY = window.scrollY;
+    var wide = window.matchMedia('(min-width: 901px)');
     var onScroll = function () {
       var y = window.scrollY;
       head.classList.toggle('is-stuck', y > 24);
-      if (y > 640 && y > lastY + 2 && !head.contains(document.activeElement)) head.classList.add('is-hidden');
+      if (!wide.matches) head.classList.remove('is-hidden');
+      else if (y > 640 && y > lastY + 2 && !head.contains(document.activeElement)) head.classList.add('is-hidden');
       if (y < lastY - 2 || y < 640) head.classList.remove('is-hidden');
       lastY = y;
     };
