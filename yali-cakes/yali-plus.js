@@ -1,4 +1,4 @@
-/* YALI CAKES: behaviour for the additions (top menu, smooth FAQ answers). */
+/* YALI CAKES: behaviour for the additions (top menu, gallery arrows, smooth FAQ and legal sections). */
 (function () {
   'use strict';
   var doc = document.documentElement;
@@ -54,16 +54,43 @@
       ['top', 'cakes', 'workshops', 'desserts', 'about', 'faq'].forEach(function (id) { var el = document.getElementById(id); if (el) spy.observe(el); });
     }
 
-    /* FAQ answers open and close smoothly */
+    /* Gallery arrows only when there is something to scroll to.
+       The design runtime re-renders the galleries and drops added classes, so the rules
+       go into a style element of our own, keyed by each track's id. */
+    var fitCss = document.createElement('style');
+    fitCss.id = 'yp-gal-fit';
+    document.head.appendChild(fitCss);
+    var fit = function () {
+      var css = '';
+      $$('.gal > .gal-track[id]').forEach(function (t) {
+        if (t.clientWidth && t.scrollWidth <= t.clientWidth + 2) {
+          var g = '.gal:has(> #' + t.id + ')';
+          css += g + ' .gal-btn{display:none}' + g + '{padding-bottom:0}';
+        }
+      });
+      if (fitCss.textContent !== css) fitCss.textContent = css;
+    };
+    var fitSoon = function () { requestAnimationFrame(function () { requestAnimationFrame(fit); }); };
+    fit();
+    window.addEventListener('resize', fitSoon);
+    window.addEventListener('load', fitSoon);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitSoon);
+    // Opening a cake-type form shows its photo gallery.
+    document.addEventListener('click', fitSoon);
+    [500, 1500, 3500].forEach(function (ms) { setTimeout(fit, ms); });
+
+    /* FAQ answers and the footer's legal sections open and close smoothly */
     if (reduce) return;
-    $$('#faq details').forEach(function (d) {
+    $$('#faq details, #legal details').forEach(function (d) {
       var sum = d.querySelector('summary');
       if (!sum || !d.animate) return;
       sum.addEventListener('click', function (e) {
         e.preventDefault();
         var start = d.offsetHeight;
         if (d.open) {
-          var a = d.animate({ height: [start + 'px', sum.offsetHeight + 'px'] }, { duration: 450, easing: 'cubic-bezier(.2,.7,.2,1)' });
+          var cs = getComputedStyle(d);
+          var end = sum.offsetHeight + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth);
+          var a = d.animate({ height: [start + 'px', end + 'px'] }, { duration: 450, easing: 'cubic-bezier(.2,.7,.2,1)' });
           a.onfinish = function () { d.open = false; };
         } else {
           d.open = true;

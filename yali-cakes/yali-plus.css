@@ -112,3 +112,42 @@ html body section#desserts{background:
   #faq .faq-in>h2{grid-column:1;grid-row:auto;position:static;margin-bottom:28px}
   #faq .faq-in>details{grid-column:1}
 }
+
+/* ---------- Design review fixes ---------- */
+
+/* Reduced motion: the design export's scroll-linked animations (hero zoom, heading unmask,
+   card lift, progress bar) run unless the motion layer is active, so switch them off here. */
+@media (prefers-reduced-motion:reduce){
+  h1,h2,.typecard,#order-panel,#quote,#dessert-quote,#workshops ul,#workshops [style*="grid-template-columns"]>div,#contact ul>li,
+  .ph,#desserts svg[role="img"],.marq-track,.hero-full .banner-video,.hero-full>div,.progress,
+  #cakes>div,#workshops>div,#desserts>div,#about>div,#faq>div{animation:none!important}
+  .progress{display:none}
+}
+
+/* The small Y above each section goes; the space it held stays. */
+#cakes::before,#workshops::before,#desserts::before,#about::before,#faq::before{background:none!important}
+
+/* Quote forms: a narrower card, centred, instead of a full-width card with an empty half. */
+#quote,#dessert-quote{width:100%;max-width:760px;margin-inline:auto;box-sizing:border-box}
+
+/* Gallery arrows (hidden by yali-plus.js when everything already fits): on phones they sit in a row under the
+   gallery instead of on top of the cards and photos. */
+@media (max-width:600px){
+  .gal{padding-bottom:56px}
+  .gal .gal-btn{top:auto;bottom:0;transform:none}
+  .gal .gal-prev{right:auto;left:calc(50% + 6px)}
+  .gal .gal-next{left:auto;right:calc(50% + 6px)}
+}
+
+/* Footer copyright: #5E4637 on #F4C3D1 is 5.6:1 (was 4.1:1). */
+footer span[style*="735A4B"]{color:#5E4637!important}
+
+/* Footer terms, privacy and accessibility: the same round + as the FAQ. */
+#legal details{overflow:hidden}
+#legal summary{list-style:none;justify-content:space-between;gap:24px;padding:10px 0;transition:color .3s ease}
+@media (hover:hover){#legal summary:hover{color:var(--yp-cocoa)}}
+#legal summary::after,#legal details[open]>summary::after{content:"";font-size:0;flex:none;margin-inline-start:0;width:44px;height:44px;border-radius:50%;background:linear-gradient(currentColor,currentColor) center/14px 1.5px no-repeat,linear-gradient(currentColor,currentColor) center/1.5px 14px no-repeat,#FFFFFF;box-shadow:0 0 0 1px var(--yp-line);color:var(--yp-ink);transition:transform .5s var(--yp-ease)}
+#legal details[open]>summary::after{transform:rotate(45deg)}
+
+/* Phone: keep the summary's WhatsApp button on one line. */
+@media (max-width:520px){#order-panel aside .cta{white-space:nowrap;padding-inline-start:18px!important;font-size:17px}}
