@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 898 132" width="449" height="66" role="img" aria-label="OPENFIELD">
+  <title>OPENFIELD</title>
+  <g id="symbol">
+    <path fill="currentColor" d="M123.16 33A66 66 0 1 1 99 8.84L91.14 22.45A50.29 50.29 0 1 0 109.55 40.86Z"/>
+    <circle fill="#7952F5" style="fill:var(--openfield-accent,#7952F5)" cx="109.34" cy="22.66" r="10.21"/>
+  </g>
+  <g id="wordmark" fill="currentColor" fill-rule="evenodd">
+    <!-- O -->
+    <path d="M186 66A51 51 0 1 0 288 66A51 51 0 1 0 186 66ZM201 66A36 37 0 1 0 273 66A36 37 0 1 0 201 66Z"/>
+    <!-- P -->
+    <path d="M309 16H343A31 31 0 0 1 343 78H324V116H309ZM324 30H343A16 17 0 0 1 343 64H324Z"/>
+    <!-- E -->
+    <path d="M393.5 16H447.5V30H408.5V56H440.5V70H408.5V102H447.5V116H393.5Z"/>
+    <!-- N -->
+    <path d="M466.5 16H483L525.74 90.02V16H540.74V116H524.24L481.5 41.98V116H466.5Z"/>
+    <!-- F -->
+    <path d="M566.74 16H618.74V30H581.74V56H610.74V70H581.74V116H566.74Z"/>
+    <!-- I -->
+    <path d="M636.24 16H651.24V116H636.24Z"/>
+    <!-- E -->
+    <path d="M676.24 16H730.24V30H691.24V56H723.24V70H691.24V102H730.24V116H676.24Z"/>
+    <!-- L -->
+    <path d="M748.74 16H763.74V102H800.74V116H748.74Z"/>
+    <!-- D -->
+    <path d="M818.24 16H846.24A50 50 0 0 1 846.24 116H818.24ZM833.24 30H846.24A35 36 0 0 1 846.24 102H833.24Z"/>
+  </g>
+</svg>

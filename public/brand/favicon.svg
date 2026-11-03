@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="OPENFIELD">
+  <title>OPENFIELD</title>
+  <style>
+    @media (prefers-color-scheme:dark){.r{fill:#FFFFFF}.b{fill:#A78BFA}}
+  </style>
+  <path class="r" fill="#101014" d="M29.81 10.14A15 15 0 1 1 21.86 2.19L20.03 6.51A10.31 10.31 0 1 0 25.49 11.97Z"/>
+  <circle class="b" fill="#7952F5" cx="25.55" cy="6.45" r="3.52"/>
+</svg>
