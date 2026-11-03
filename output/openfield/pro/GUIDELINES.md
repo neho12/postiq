@@ -4,7 +4,8 @@
 The bead is the brand's only accent. It repeats as the dot of the "i" in the wordmark.
 
 ## Files
-- `logo-horizontal-*` primary lockup. `logo-stacked-*` for square spaces.
+- `wordmark-*` primary logo: the "o" of openfield is the symbol, and the i-dot repeats the bead.
+- `logo-horizontal-*` symbol + wordmark lockup. `logo-stacked-*` for square spaces.
 - `symbol-*` the mark alone (avatars, social). `icon-*` app icons. `favicon.svg` for browser tabs.
 - Variants: `color-light` (for light backgrounds), `color-dark` (for dark backgrounds), `black`, `white`, `purple`.
 
