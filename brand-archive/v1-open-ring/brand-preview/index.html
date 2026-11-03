@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OPENFIELD — Brand Identity</title>
+<meta name="description" content="OPENFIELD brand identity: logo system, colour and typography.">
+<link rel="icon" type="image/svg+xml" href="../public/brand/favicon.svg">
+<style>
+@font-face{font-family:"Manrope";src:url("fonts/Manrope.ttf") format("truetype");font-weight:200 800;font-style:normal;font-display:swap}
+
+:root{
+  --ink:#101014; --paper:#ffffff; --purple:#7952F5; --lavender:#A78BFA; --charcoal:#24242B; --mist:#F4F4F6;
+  --line:rgba(16,16,20,.12); --muted:#5d5d68;
+  --radius:20px;
+  --font:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,"JetBrains Mono","SF Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--mist);color:var(--ink);font:400 16px/1.6 var(--font);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+code{font:500 12px var(--mono);background:rgba(16,16,20,.06);padding:2px 7px;border-radius:6px;white-space:nowrap}
+.wrap{max-width:1240px;margin:0 auto;padding:0 40px}
+
+/* ---- top bar */
+.top{position:sticky;top:0;z-index:20;background:var(--mist);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;gap:24px}
+.top img{height:26px;width:auto}
+.top nav{display:flex;gap:26px;flex-wrap:wrap}
+.top nav a{font:600 12px/1 var(--font);letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:var(--muted)}
+.top nav a:hover{color:var(--purple)}
+.top .ver{font:600 11px/1 var(--font);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+
+/* ---- hero */
+.hero{padding:88px 0 64px}
+.eyebrow{font:700 12px/1 var(--font);letter-spacing:.16em;text-transform:uppercase;color:var(--purple);margin:0 0 28px}
+.hero h1{font:800 clamp(44px,7.4vw,108px)/.96 var(--font);letter-spacing:-.045em;margin:0 0 28px;max-width:11ch}
+.hero .sub{font:500 20px/1.55 var(--font);color:var(--muted);max-width:620px;margin:0 0 64px}
+.hero-tiles{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.hero-tiles .tile{min-height:360px}
+
+/* ---- sections */
+.sec{padding:112px 0 24px;border-top:1px solid var(--line);margin-top:80px}
+.sec-head{display:grid;grid-template-columns:200px 1fr;gap:40px;margin-bottom:56px;align-items:start}
+.num{font:700 12px/1 var(--font);letter-spacing:.16em;color:var(--purple);padding-top:14px}
+.sec h2{font:800 clamp(34px,4.6vw,60px)/1.02 var(--font);letter-spacing:-.035em;margin:0 0 20px}
+.lead{font:500 19px/1.6 var(--font);color:var(--muted);max-width:660px;margin:0}
+h3{font:700 17px/1.3 var(--font);letter-spacing:-.01em;margin:0 0 4px}
+.card p,.note{font:500 14px/1.55 var(--font);color:var(--muted);margin:0}
+
+/* ---- tiles */
+.tile{position:relative;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;padding:56px 36px;min-height:240px;overflow:hidden}
+.tile.light{background:var(--paper);box-shadow:inset 0 0 0 1px var(--line)}
+.tile.dark{background:var(--ink)}
+.tile.mist{background:var(--mist);box-shadow:inset 0 0 0 1px var(--line)}
+.tile .tag{position:absolute;left:20px;top:18px;font:700 10px/1 var(--font);letter-spacing:.16em;text-transform:uppercase;opacity:.5}
+.tile.dark .tag{color:#fff}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:56px 16px}
+.card.wide{grid-column:1/-1}
+.cap{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-top:16px}
+.cap .files{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex:none}
+
+/* ---- idea */
+.idea{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:48px;align-items:start}
+.reading{list-style:none;margin:36px 0 0;padding:0;display:grid;gap:0;border-top:1px solid var(--line)}
+.reading li{display:grid;grid-template-columns:128px 1fr;gap:20px;padding:18px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.reading b{font:700 12px/1.2 var(--font);letter-spacing:.14em;text-transform:uppercase}
+.reading span{font:500 15px/1.5 var(--font);color:var(--muted)}
+.diagram{width:100%;height:auto;display:block}
+.diagram.wide{max-width:100%}
+
+/* ---- favicon */
+.fav{display:flex;align-items:flex-end;gap:30px;flex-wrap:wrap;justify-content:center}
+.fav figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:12px}
+.fav figcaption{font:600 11px/1 var(--mono);opacity:.55}
+.tile.dark .fav figcaption{color:#fff}
+
+/* ---- space */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.sizes{display:flex;gap:44px;align-items:flex-end;flex-wrap:wrap;justify-content:center}
+.sizes figure{margin:0;display:flex;flex-direction:column;align-items:flex-start;gap:14px}
+.sizes figcaption{font:600 11px/1.3 var(--mono);color:var(--muted)}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+.rules div{border-top:2px solid var(--ink);padding-top:14px}
+.rules b{display:block;font:700 14px/1.3 var(--font);margin-bottom:6px}
+.rules span{font:500 14px/1.55 var(--font);color:var(--muted)}
+
+/* ---- colour */
+.sw-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.sw .chip{height:190px;border-radius:var(--radius);padding:20px;display:flex;flex-direction:column;justify-content:space-between;font:600 14px/1.2 var(--font)}
+.sw .chip b{font:700 24px/1 var(--font);letter-spacing:-.01em}
+.sw dl{display:grid;grid-template-columns:auto 1fr;gap:4px 18px;margin:16px 0 8px;font:500 13px/1.4 var(--mono)}
+.sw dt{color:var(--muted)}
+.sw dd{margin:0}
+.sw p{font:500 14px/1.5 var(--font);color:var(--muted);margin:0}
+.sub-h{font:700 12px/1 var(--font);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:48px 0 18px}
+.ratio{display:flex;gap:3px;padding:3px;height:70px;border-radius:16px;background:#fff;box-shadow:inset 0 0 0 1px var(--line);margin-top:56px}
+.ratio i{display:block;height:100%;border-radius:10px;box-shadow:inset 0 0 0 1px rgba(16,16,20,.1)}
+.ratio-l{display:flex;justify-content:space-between;font:600 11px/1.2 var(--mono);color:var(--muted);margin-top:10px;flex-wrap:wrap;gap:6px 18px}
+.accent-rule{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.accent-rule .tile{min-height:190px;gap:28px;justify-content:flex-start;padding:36px}
+.accent-rule .tile p{margin:0;font:500 14px/1.55 var(--font)}
+.accent-rule .tile.dark p{color:#d6d6de}
+.accent-rule .tile.light p{color:var(--muted)}
+.dot{width:46px;height:46px;border-radius:50%;flex:none}
+
+/* ---- type */
+.type{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.type .tile{align-items:flex-start;justify-content:flex-start;flex-direction:column;padding:40px;gap:0;min-height:0}
+.spec-name{font:700 11px/1 var(--font);letter-spacing:.16em;text-transform:uppercase;color:var(--purple);margin:0 0 28px}
+.s-display{font:800 clamp(40px,5vw,68px)/1 var(--font);letter-spacing:-.04em;margin:0 0 6px}
+.s-head{font:700 30px/1.15 var(--font);letter-spacing:-.025em;margin:26px 0 6px}
+.s-body{font:400 16px/1.65 var(--font);color:var(--muted);margin:22px 0 0;max-width:46ch}
+.s-label{font:700 12px/1 var(--font);letter-spacing:.14em;text-transform:uppercase;margin:26px 0 0}
+.weights{display:grid;grid-template-columns:repeat(4,auto);gap:6px 28px;margin-top:28px;font-size:15px}
+.weights span{font-family:var(--font)}
+.meta{font:500 12px/1.5 var(--mono);color:var(--muted);margin-top:22px}
+.wm-tile{padding:36px 28px;min-height:0}
+
+/* ---- usage */
+.dont{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.dont figure{margin:0}
+.dont .tile{height:200px;min-height:0;padding:28px 18px}
+.dont .tile.bad::after{content:"";position:absolute;right:14px;top:14px;width:22px;height:22px;border-radius:50%;background:#E5484D;
+  -webkit-mask:linear-gradient(#000 0 0);mask:linear-gradient(#000 0 0)}
+.dont .tile.bad::before{content:"×";position:absolute;right:14px;top:14px;width:22px;height:22px;display:grid;place-items:center;color:#fff;font:700 15px/1 var(--font);z-index:2}
+.dont figcaption{font:600 13px/1.45 var(--font);margin-top:12px}
+.dont figcaption span{display:block;font-weight:500;color:var(--muted)}
+
+/* ---- files */
+.table{width:100%;border-collapse:collapse;background:var(--paper);border-radius:var(--radius);overflow:hidden;box-shadow:inset 0 0 0 1px var(--line)}
+.table th{font:700 11px/1 var(--font);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:left;padding:18px 22px;border-bottom:1px solid var(--line)}
+.table td{padding:16px 22px;border-bottom:1px solid var(--line);font:500 14px/1.5 var(--font);color:var(--muted);vertical-align:top}
+.table tr:last-child td{border-bottom:0}
+.table td:first-child{white-space:nowrap}
+.table td.num{font:500 12px/1.5 var(--mono);white-space:nowrap}
+.table a{text-decoration:none}
+.table a:hover code{background:rgba(121,82,245,.14)}
+
+footer{padding:96px 0 72px}
+footer .wrap>div{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:32px;font:500 13px/1.6 var(--font);color:var(--muted)}
+footer img{height:24px;width:auto}
+
+@media (max-width:980px){
+  .idea,.type,.two,.accent-rule{grid-template-columns:1fr}
+  .sec-head{grid-template-columns:1fr;gap:14px}
+  .dont{grid-template-columns:repeat(2,1fr)}
+  .rules{grid-template-columns:1fr}
+  .sw-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:720px){
+  .wrap{padding:0 20px}
+  .top nav{display:none}
+  .hero{padding-top:56px}
+  .hero-tiles,.pair,.cards{grid-template-columns:1fr}
+  .cap{flex-direction:column}
+  .cap .files{align-items:flex-start}
+  .sw-grid{grid-template-columns:1fr}
+  .reading li{grid-template-columns:1fr;gap:4px}
+  .sec{padding-top:72px;margin-top:56px}
+  .weights{grid-template-columns:repeat(2,auto)}
+  .table td:nth-child(3),.table th:nth-child(3){display:none}
+  .table{table-layout:fixed}
+  .table td:first-child{white-space:normal;width:46%}
+  .table code{white-space:normal;word-break:break-all}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <img src="../public/brand/openfield-primary.svg" alt="OPENFIELD">
+    <nav aria-label="Sections">
+      <a href="#idea">Idea</a><a href="#system">System</a><a href="#space">Space</a><a href="#colour">Colour</a><a href="#type">Type</a><a href="#usage">Usage</a><a href="#files">Files</a>
+    </nav>
+    <span class="ver">Identity v1.0</span>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Brand identity · Logo system</p>
+    <h1>Open by design.</h1>
+    <p class="sub">The identity for OPENFIELD, a digital agency for websites, interfaces and brands. One ring, one opening, one accent colour. Built to look the same on a favicon and on a building.</p>
+    <div class="hero-tiles">
+      <div class="tile dark"><span class="tag">Dark</span><img src="../public/brand/openfield-dark.svg" alt="OPENFIELD" style="width:min(78%,520px)"></div>
+      <div class="tile light"><span class="tag">Light</span><img src="../public/brand/openfield-primary.svg" alt="OPENFIELD" style="width:min(78%,520px)"></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="idea">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="num">01 — IDEA</div>
+      <div>
+        <h2>An O that opens.</h2>
+        <p class="lead">The symbol is a single ring, the O of OPEN, drawn with one opening. Through it, a bead steps out into the open field: an idea leaving the frame. Nothing else is added.</p>
+      </div>
+    </div>
+    <div class="idea">
+      <div>
+        <ul class="reading">
+          <li><b>The ring</b><span>The O of OPENFIELD. A perfect circle with a stroke equal to the weight of the wordmark’s letters, so symbol and name read as one voice.</span></li>
+          <li><b>The opening</b><span>30° at north-east. A radial cut, never a rounded one; its faces sit at exactly 30° and 60°, the same grid as the N’s diagonal. Crisp, architectural, optimistic.</span></li>
+          <li><b>The bead</b><span>The first step. Slightly outside the ring’s axis, as if it just left. It is the only place the accent colour lives.</span></li>
+          <li><b>The system</b><span>Ring and bead survive any colour reduction. In one colour the opening alone keeps them apart.</span></li>
+        </ul>
+      </div>
+      <div class="tile light" style="padding:28px 20px"><svg class="diagram" viewBox="0 0 800 660" role="img" aria-label="Construction of the OPENFIELD symbol"><style>.dim{font:600 17px Manrope,sans-serif;letter-spacing:.02em;fill:#101014}</style><g opacity=".14"><path fill="#101014" d="M461.08 237A186 186 0 1 1 393 168.92L370.86 207.27A141.71 141.71 0 1 0 422.73 259.14Z"/></g><circle cx="300" cy="330" r="186" fill="none" stroke="#101014" stroke-opacity=".35" stroke-width="1"/><circle cx="300" cy="330" r="141.71" fill="none" stroke="#101014" stroke-opacity=".35" stroke-width="1"/><circle cx="300" cy="330" r="163.86" fill="none" stroke="#101014" stroke-opacity=".35" stroke-width="1" stroke-dasharray="3 5"/><path d="M88 330H512M300 118V542" stroke="#101014" stroke-opacity=".18" stroke-width="1"/><path d="M300 330L521.7 202" stroke="#7952F5" stroke-width="1.2"/><path d="M300 330L428 108.3" stroke="#7952F5" stroke-width="1.2"/><path d="M300 330L481.02 148.98" stroke="#7952F5" stroke-width="1.2" stroke-dasharray="4 4"/><path d="M499.19 215A230 230 0 0 0 415 130.81" fill="none" stroke="#7952F5" stroke-width="1.2"/><text x="478.53" y="155.47" class="dim" fill="#7952F5">30°</text><path fill="#101014" d="M461.08 237A186 186 0 1 1 393 168.92L370.86 207.27A141.71 141.71 0 1 0 422.73 259.14Z"/><circle cx="422.13" cy="207.87" r="28.79" fill="#7952F5"/><circle cx="422.13" cy="207.87" r="2.4" fill="#fff"/><path d="M117 394H155.29M117 386v16M155.29 386v16" stroke="#fff" stroke-width="1.6"/><text x="180.29" y="400" class="dim">w</text><path d="M114 560H486M114 552v16M486 552v16" stroke="#101014" stroke-width="1.3"/><text x="300" y="586" text-anchor="middle" class="dim">Ø = 8.4 w</text><path d="M453.88 196.32L556 133" stroke="#101014" stroke-width="1" stroke-opacity=".6"/><text x="566" y="138" class="dim">bead Ø 1.3 w</text><text x="566" y="157" class="dim" fill-opacity=".55">0.2 w outside the ring axis</text><text x="566" y="200" class="dim">clearance ≈ 0.36 w</text><text x="566" y="219" class="dim" fill-opacity=".55">between bead and ring ends</text><text x="74" y="114" class="dim" fill-opacity=".55">opening at 45° (north-east)</text></svg></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="system">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="num">02 — SYSTEM</div>
+      <div>
+        <h2>The logo system.</h2>
+        <p class="lead">Every file is true vector, transparent, and drawn from the same proportions. Choose the lockup by available space, the colourway by background.</p>
+      </div>
+    </div>
+    <div class="cards">
+      <article class="card wide"><div class="pair"><div class="tile light "><span class="tag">Light</span><img src="../public/brand/openfield-primary.svg" alt="OPENFIELD" style="width:86%;max-width:420px"></div><div class="tile dark "><span class="tag">Dark</span><img src="../public/brand/openfield-dark.svg" alt="OPENFIELD" style="width:86%;max-width:420px"></div></div><div class="cap"><div><h3>Primary horizontal</h3><p>Symbol and wordmark on one line. The default lockup wherever width allows.</p></div><div class="files"><code>openfield-primary.svg</code><code>openfield-dark.svg</code></div></div></article>
+      <article class="card "><div class="pair"><div class="tile light "><span class="tag">Light</span><img src="../public/brand/openfield-stacked.svg" alt="OPENFIELD" style="width:76%;max-width:300px"></div><div class="tile dark "><span class="tag">Dark</span><img src="../public/brand/openfield-stacked-dark.svg" alt="OPENFIELD" style="width:76%;max-width:300px"></div></div><div class="cap"><div><h3>Vertical (stacked)</h3><p>For square and portrait formats, social headers, covers.</p></div><div class="files"><code>openfield-stacked.svg</code><code>openfield-stacked-dark.svg</code></div></div></article>
+      <article class="card "><div class="pair"><div class="tile light "><span class="tag">Light</span><img src="../public/brand/openfield-icon.svg" alt="OPENFIELD" style="width:128px"></div><div class="tile dark "><span class="tag">Dark</span><img src="../public/brand/openfield-icon-dark.svg" alt="OPENFIELD" style="width:128px"></div></div><div class="cap"><div><h3>Standalone symbol</h3><p>Profile images, app icon artwork, watermarks. Never place beside the full lockup.</p></div><div class="files"><code>openfield-icon.svg</code><code>openfield-icon-dark.svg</code></div></div></article>
+      <article class="card wide">
+        <div class="pair">
+          <div class="tile light"><span class="tag">Light</span><div class="fav"><figure><img src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%20width%3D%2232%22%20height%3D%2232%22%20role%3D%22img%22%20aria-label%3D%22OPENFIELD%22%3E%0A%20%20%3Ctitle%3EOPENFIELD%3C/title%3E%0A%20%20%3Cpath%20fill%3D%22%23101014%22%20d%3D%22M29.81%2010.14A15%2015%200%201%201%2021.86%202.19L20.03%206.51A10.31%2010.31%200%201%200%2025.49%2011.97Z%22/%3E%0A%20%20%3Ccircle%20fill%3D%22%237952F5%22%20cx%3D%2225.55%22%20cy%3D%226.45%22%20r%3D%223.52%22/%3E%0A%3C/svg%3E%0A" width="16" height="16" alt="favicon 16px"><figcaption>16</figcaption></figure><figure><img src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%20width%3D%2232%22%20height%3D%2232%22%20role%3D%22img%22%20aria-label%3D%22OPENFIELD%22%3E%0A%20%20%3Ctitle%3EOPENFIELD%3C/title%3E%0A%20%20%3Cpath%20fill%3D%22%23101014%22%20d%3D%22M29.81%2010.14A15%2015%200%201%201%2021.86%202.19L20.03%206.51A10.31%2010.31%200%201%200%2025.49%2011.97Z%22/%3E%0A%20%20%3Ccircle%20fill%3D%22%237952F5%22%20cx%3D%2225.55%22%20cy%3D%226.45%22%20r%3D%223.52%22/%3E%0A%3C/svg%3E%0A" width="24" height="24" alt="favicon 24px"><figcaption>24</figcaption></figure><figure><img src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%20width%3D%2232%22%20height%3D%2232%22%20role%3D%22img%22%20aria-label%3D%22OPENFIELD%22%3E%0A%20%20%3Ctitle%3EOPENFIELD%3C/title%3E%0A%20%20%3Cpath%20fill%3D%22%23101014%22%20d%3D%22M29.81%2010.14A15%2015%200%201%201%2021.86%202.19L20.03%206.51A10.31%2010.31%200%201%200%2025.49%2011.97Z%22/%3E%0A%20%20%3Ccircle%20fill%3D%22%237952F5%22%20cx%3D%2225.55%22%20cy%3D%226.45%22%20r%3D%223.52%22/%3E%0A%3C/svg%3E%0A" width="32" height="32" alt="favicon 32px"><figcaption>32</figcaption></figure><figure><img src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%20width%3D%2232%22%20height%3D%2232%22%20role%3D%22img%22%20aria-label%3D%22OPENFIELD%22%3E%0A%20%20%3Ctitle%3EOPENFIELD%3C/title%3E%0A%20%20%3Cpath%20fill%3D%22%23101014%22%20d%3D%22M29.81%2010.14A15%2015%200%201%201%2021.86%202.19L20.03%206.51A10.31%2010.31%200%201%200%2025.49%2011.97Z%22/%3E%0A%20%20%3Ccircle%20fill%3D%22%237952F5%22%20cx%3D%2225.55%22%20cy%3D%226.45%22%20r%3D%223.52%22/%3E%0A%3C/svg%3E%0A" width="48" height="48" alt="favicon 48px"><figcaption>48</figcaption></figure><figure><img src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%20width%3D%2232%22%20height%3D%2232%22%20role%3D%22img%22%20aria-label%3D%22OPENFIELD%22%3E%0A%20%20%3Ctitle%3EOPENFIELD%3C/title%3E%0A%20%20%3Cpath%20fill%3D%22%23101014%22%20d%3D%22M29.81%2010.14A15%2015%200%201%201%2021.86%202.19L20.03%206.51A10.31%2010.31%200%201%200%2025.49%2011.97Z%22/%3E%0A%20%20%3Ccircle%20fill%3D%22%237952F5%22%20cx%3D%2225.55%22%20cy%3D%226.45%22%20r%3D%223.52%22/%3E%0A%3C/svg%3E%0A" width="64" height="64" alt="favicon 64px"><figcaption>64</figcaption></figure><figure><img src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%20width%3D%2232%22%20height%3D%2232%22%20role%3D%22img%22%20aria-label%3D%22OPENFIELD%22%3E%0A%20%20%3Ctitle%3EOPENFIELD%3C/title%3E%0A%20%20%3Cpath%20fill%3D%22%23101014%22%20d%3D%22M29.81%2010.14A15%2015%200%201%201%2021.86%202.19L20.03%206.51A10.31%2010.31%200%201%200%2025.49%2011.97Z%22/%3E%0A%20%20%3Ccircle%20fill%3D%22%237952F5%22%20cx%3D%2225.55%22%20cy%3D%226.45%22%20r%3D%223.52%22/%3E%0A%3C/svg%3E%0A" width="96" height="96" alt="favicon 96px"><figcaption>96</figcaption></figure></div></div>
+          <div class="tile dark"><span class="tag">Dark</span><div class="fav"><figure><img src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%20width%3D%2232%22%20height%3D%2232%22%20role%3D%22img%22%20aria-label%3D%22OPENFIELD%22%3E%0A%20%20%3Ctitle%3EOPENFIELD%3C/title%3E%0A%20%20%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M29.81%2010.14A15%2015%200%201%201%2021.86%202.19L20.03%206.51A10.31%2010.31%200%201%200%2025.49%2011.97Z%22/%3E%0A%20%20%3Ccircle%20fill%3D%22%23A78BFA%22%20cx%3D%2225.55%22%20cy%3D%226.45%22%20r%3D%223.52%22/%3E%0A%3C/svg%3E%0A" width="16" height="16" alt="favicon 16px"><figcaption>16</figcaption></figure><figure><img src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%20width%3D%2232%22%20height%3D%2232%22%20role%3D%22img%22%20aria-label%3D%22OPENFIELD%22%3E%0A%20%20%3Ctitle%3EOPENFIELD%3C/title%3E%0A%20%20%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M29.81%2010.14A15%2015%200%201%201%2021.86%202.19L20.03%206.51A10.31%2010.31%200%201%200%2025.49%2011.97Z%22/%3E%0A%20%20%3Ccircle%20fill%3D%22%23A78BFA%22%20cx%3D%2225.55%22%20cy%3D%226.45%22%20r%3D%223.52%22/%3E%0A%3C/svg%3E%0A" width="24" height="24" alt="favicon 24px"><figcaption>24</figcaption></figure><figure><img src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%20width%3D%2232%22%20height%3D%2232%22%20role%3D%22img%22%20aria-label%3D%22OPENFIELD%22%3E%0A%20%20%3Ctitle%3EOPENFIELD%3C/title%3E%0A%20%20%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M29.81%2010.14A15%2015%200%201%201%2021.86%202.19L20.03%206.51A10.31%2010.31%200%201%200%2025.49%2011.97Z%22/%3E%0A%20%20%3Ccircle%20fill%3D%22%23A78BFA%22%20cx%3D%2225.55%22%20cy%3D%226.45%22%20r%3D%223.52%22/%3E%0A%3C/svg%3E%0A" width="32" height="32" alt="favicon 32px"><figcaption>32</figcaption></figure><figure><img src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%20width%3D%2232%22%20height%3D%2232%22%20role%3D%22img%22%20aria-label%3D%22OPENFIELD%22%3E%0A%20%20%3Ctitle%3EOPENFIELD%3C/title%3E%0A%20%20%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M29.81%2010.14A15%2015%200%201%201%2021.86%202.19L20.03%206.51A10.31%2010.31%200%201%200%2025.49%2011.97Z%22/%3E%0A%20%20%3Ccircle%20fill%3D%22%23A78BFA%22%20cx%3D%2225.55%22%20cy%3D%226.45%22%20r%3D%223.52%22/%3E%0A%3C/svg%3E%0A" width="48" height="48" alt="favicon 48px"><figcaption>48</figcaption></figure><figure><img src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%20width%3D%2232%22%20height%3D%2232%22%20role%3D%22img%22%20aria-label%3D%22OPENFIELD%22%3E%0A%20%20%3Ctitle%3EOPENFIELD%3C/title%3E%0A%20%20%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M29.81%2010.14A15%2015%200%201%201%2021.86%202.19L20.03%206.51A10.31%2010.31%200%201%200%2025.49%2011.97Z%22/%3E%0A%20%20%3Ccircle%20fill%3D%22%23A78BFA%22%20cx%3D%2225.55%22%20cy%3D%226.45%22%20r%3D%223.52%22/%3E%0A%3C/svg%3E%0A" width="64" height="64" alt="favicon 64px"><figcaption>64</figcaption></figure><figure><img src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%20width%3D%2232%22%20height%3D%2232%22%20role%3D%22img%22%20aria-label%3D%22OPENFIELD%22%3E%0A%20%20%3Ctitle%3EOPENFIELD%3C/title%3E%0A%20%20%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M29.81%2010.14A15%2015%200%201%201%2021.86%202.19L20.03%206.51A10.31%2010.31%200%201%200%2025.49%2011.97Z%22/%3E%0A%20%20%3Ccircle%20fill%3D%22%23A78BFA%22%20cx%3D%2225.55%22%20cy%3D%226.45%22%20r%3D%223.52%22/%3E%0A%3C/svg%3E%0A" width="96" height="96" alt="favicon 96px"><figcaption>96</figcaption></figure></div></div>
+        </div>
+        <div class="cap"><div><h3>Favicon</h3><p>A simplified symbol for 16 × 16: heavier ring, larger bead, a wider opening. Shown at true pixel sizes; the SVG switches to white and lavender in dark browser themes.</p></div><div class="files"><code>favicon.svg</code></div></div>
+      </article>
+      <article class="card wide"><div class="pair"><div class="tile light "><span class="tag">Light</span><img src="../public/brand/openfield-wordmark.svg" alt="OPENFIELD" style="width:88%;max-width:400px"></div><div class="tile dark "><span class="tag">Dark</span><img src="../public/brand/openfield-wordmark-white.svg" alt="OPENFIELD" style="width:88%;max-width:400px"></div></div><div class="cap"><div><h3>Wordmark</h3><p>Custom-drawn capitals, outlined. For tight horizontal strips and co-branding.</p></div><div class="files"><code>openfield-wordmark.svg</code><code>openfield-wordmark-white.svg</code></div></div></article>
+      <article class="card wide"><div class="pair"><div class="tile light "><span class="tag">Light</span><img src="../public/brand/openfield-monochrome.svg" alt="OPENFIELD" style="width:86%;max-width:420px"></div><div class="tile dark "><span class="tag">Dark</span><img src="../public/brand/openfield-monochrome-white.svg" alt="OPENFIELD" style="width:86%;max-width:420px"></div></div><div class="cap"><div><h3>Monochrome</h3><p>One colour only: pure black or pure white. The bead stays separate thanks to the opening.</p></div><div class="files"><code>openfield-monochrome.svg</code><code>openfield-monochrome-white.svg</code></div></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="space">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="num">03 — SPACE</div>
+      <div>
+        <h2>Space and size.</h2>
+        <p class="lead">Give the mark room. Clear space is half the height of the capitals, measured on every side, and the opening is never covered.</p>
+      </div>
+    </div>
+    <div class="two">
+      <div class="tile light" style="padding:44px 36px;min-height:300px"><span class="tag">Clear space = x</span><svg class="diagram wide" viewBox="-6 -6 1010 244" role="img" aria-label="Clear space around the horizontal logo"><style>.x{font:700 15px Manrope,sans-serif;fill:#7952F5}</style><rect x="0" y="0" width="998" height="232" fill="none" stroke="#7952F5" stroke-width="1.4" stroke-dasharray="6 6"/><rect x="0" y="0" width="50" height="50" fill="#A78BFA" fill-opacity=".28"/><text x="25" y="30" text-anchor="middle" class="x">x</text><rect x="948" y="0" width="50" height="50" fill="#A78BFA" fill-opacity=".28"/><text x="973" y="30" text-anchor="middle" class="x">x</text><rect x="0" y="182" width="50" height="50" fill="#A78BFA" fill-opacity=".28"/><text x="25" y="212" text-anchor="middle" class="x">x</text><rect x="948" y="182" width="50" height="50" fill="#A78BFA" fill-opacity=".28"/><text x="973" y="212" text-anchor="middle" class="x">x</text><rect x="50" y="50" width="898" height="132" fill="none" stroke="#101014" stroke-opacity=".25" stroke-width="1"/><g transform="translate(50 50)"><g>
+    <path fill="#101014" d="M123.16 33A66 66 0 1 1 99 8.84L91.14 22.45A50.29 50.29 0 1 0 109.55 40.86Z"/>
+    <circle fill="#7952F5" cx="109.34" cy="22.66" r="10.21"/>
+  </g>
+  <g fill="#101014" fill-rule="evenodd">
+    <path d="M186 66A51 51 0 1 0 288 66A51 51 0 1 0 186 66ZM201 66A36 37 0 1 0 273 66A36 37 0 1 0 201 66Z"/>
+    <path d="M309 16H343A31 31 0 0 1 343 78H324V116H309ZM324 30H343A16 17 0 0 1 343 64H324Z"/>
+    <path d="M393.5 16H447.5V30H408.5V56H440.5V70H408.5V102H447.5V116H393.5Z"/>
+    <path d="M466.5 16H483L525.74 90.02V16H540.74V116H524.24L481.5 41.98V116H466.5Z"/>
+    <path d="M566.74 16H618.74V30H581.74V56H610.74V70H581.74V116H566.74Z"/>
+    <path d="M636.24 16H651.24V116H636.24Z"/>
+    <path d="M676.24 16H730.24V30H691.24V56H723.24V70H691.24V102H730.24V116H676.24Z"/>
+    <path d="M748.74 16H763.74V102H800.74V116H748.74Z"/>
+    <path d="M818.24 16H846.24A50 50 0 0 1 846.24 116H818.24ZM833.24 30H846.24A35 36 0 0 1 846.24 102H833.24Z"/>
+  </g></g></svg></div>
+      <div class="tile mist" style="min-height:300px">
+        <span class="tag">Minimum sizes (screen)</span>
+        <div class="sizes">
+          <figure><img src="../public/brand/openfield-primary.svg" alt="" width="96"><figcaption>Horizontal<br>96 px wide</figcaption></figure>
+          <figure><img src="../public/brand/openfield-stacked.svg" alt="" width="72"><figcaption>Stacked<br>72 px wide</figcaption></figure>
+          <figure><img src="../public/brand/openfield-icon.svg" alt="" width="28" height="28"><figcaption>Symbol<br>28 px</figcaption></figure>
+          <figure><img src="../public/brand/favicon.svg" alt="" width="16" height="16"><figcaption>Favicon<br>16 px</figcaption></figure>
+        </div>
+      </div>
+    </div>
+    <div class="rules">
+      <div><b>x = ½ cap height</b><span>Keep x free on every side of any lockup. For the symbol alone, use a quarter of its diameter.</span></div>
+      <div><b>Below minimum, switch</b><span>Under 96 px wide use the symbol alone. Under 28 px use the favicon artwork.</span></div>
+      <div><b>Print minimum</b><span>Horizontal lockup 25 mm wide, symbol 8 mm. In one colour below 40 mm, use the monochrome files.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="colour">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="num">04 — COLOUR</div>
+      <div>
+        <h2>Black, white, one purple.</h2>
+        <p class="lead">A restrained palette where contrast does the work. Purple is an accent, never a background.</p>
+      </div>
+    </div>
+    <p class="sub-h" style="margin-top:0">Primary</p>
+    <div class="sw-grid"><div class="sw"><div class="chip" style="background:#101014;color:#FFFFFF"><span>Deep Black</span><b>#101014</b></div><dl><dt>RGB</dt><dd>16, 16, 20</dd><dt>On white</dt><dd>19.0:1</dd><dt>On black</dt><dd>1.0:1</dd></dl><p>Wordmark, ring, text. The brand’s anchor.</p></div><div class="sw"><div class="chip" style="background:#FFFFFF;color:#101014;box-shadow:inset 0 0 0 1px rgba(16,16,20,.14)"><span>Pure White</span><b>#FFFFFF</b></div><dl><dt>RGB</dt><dd>255, 255, 255</dd><dt>On white</dt><dd>1.0:1</dd><dt>On black</dt><dd>19.0:1</dd></dl><p>Reversed logo, surfaces, breathing room.</p></div><div class="sw"><div class="chip" style="background:#7952F5;color:#FFFFFF"><span>Electric Purple</span><b>#7952F5</b></div><dl><dt>RGB</dt><dd>121, 82, 245</dd><dt>On white</dt><dd>4.8:1</dd><dt>On black</dt><dd>3.9:1</dd></dl><p>The one accent. The bead, key actions, a single highlight.</p></div></div>
+    <p class="sub-h">Secondary</p>
+    <div class="sw-grid"><div class="sw"><div class="chip" style="background:#A78BFA;color:#101014"><span>Soft Lavender</span><b>#A78BFA</b></div><dl><dt>RGB</dt><dd>167, 139, 250</dd><dt>On white</dt><dd>2.7:1</dd><dt>On black</dt><dd>7.0:1</dd></dl><p>The accent on dark backgrounds; secondary highlights.</p></div><div class="sw"><div class="chip" style="background:#24242B;color:#FFFFFF"><span>Charcoal</span><b>#24242B</b></div><dl><dt>RGB</dt><dd>36, 36, 43</dd><dt>On white</dt><dd>15.4:1</dd><dt>On black</dt><dd>1.2:1</dd></dl><p>Dark surfaces, cards on black, secondary text on light.</p></div><div class="sw"><div class="chip" style="background:#F4F4F6;color:#101014;box-shadow:inset 0 0 0 1px rgba(16,16,20,.14)"><span>Light Gray</span><b>#F4F4F6</b></div><dl><dt>RGB</dt><dd>244, 244, 246</dd><dt>On white</dt><dd>1.1:1</dd><dt>On black</dt><dd>17.3:1</dd></dl><p>Page and panel backgrounds, dividers.</p></div></div>
+    <div class="ratio" role="img" aria-label="Proportion of colour in a typical layout">
+      <i style="flex:58;background:#F4F4F6"></i><i style="flex:10;background:#fff"></i><i style="flex:22;background:#101014"></i><i style="flex:5;background:#24242B"></i><i style="flex:3;background:#A78BFA"></i><i style="flex:2;background:#7952F5"></i>
+    </div>
+    <div class="ratio-l"><span>Light Gray 58%</span><span>White 10%</span><span>Deep Black 22%</span><span>Charcoal 5%</span><span>Lavender 3%</span><span>Purple 2%</span></div>
+    <div class="accent-rule">
+      <div class="tile light"><div class="dot" style="background:#7952F5"></div><p><b style="color:var(--ink)">On light, purple.</b><br>Electric Purple is 4.8:1 on white, so it passes for text and graphics. Use it sparingly anyway: it is the accent, not the voice.</p></div>
+      <div class="tile dark"><div class="dot" style="background:#A78BFA"></div><p><b style="color:#fff">On dark, lavender.</b><br>Electric Purple is only 3.9:1 on Deep Black. Soft Lavender reaches 7.0:1, so the accent shifts to it on dark backgrounds and in the dark favicon.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="type">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="num">05 — TYPE</div>
+      <div>
+        <h2>Drawn capitals, quiet type.</h2>
+        <p class="lead">The wordmark is custom geometric capitals, outlined so it never depends on a font. Everything around it is set in Manrope.</p>
+      </div>
+    </div>
+    <div class="tile light wm-tile" style="margin-bottom:16px"><span class="tag">Wordmark construction · cap height 100</span><div style="width:100%;padding-top:14px"><svg class="diagram wide" viewBox="0 0 790.24 240" role="img" aria-label="Wordmark construction"><style>.dim{font:600 12px Manrope,sans-serif;letter-spacing:.04em;fill:#101014}</style><g transform="translate(40 70)"><path fill="#101014" fill-rule="evenodd" d="M0 50A51 51 0 1 0 102 50A51 51 0 1 0 0 50ZM15 50A36 37 0 1 0 87 50A36 37 0 1 0 15 50ZM123 0H157A31 31 0 0 1 157 62H138V100H123ZM138 14H157A16 17 0 0 1 157 48H138ZM207.5 0H261.5V14H222.5V40H254.5V54H222.5V86H261.5V100H207.5ZM280.5 0H297L339.74 74.02V0H354.74V100H338.24L295.5 25.98V100H280.5ZM380.74 0H432.74V14H395.74V40H424.74V54H395.74V100H380.74ZM450.24 0H465.24V100H450.24ZM490.24 0H544.24V14H505.24V40H537.24V54H505.24V86H544.24V100H490.24ZM562.74 0H577.74V86H614.74V100H562.74ZM632.24 0H660.24A50 50 0 0 1 660.24 100H632.24ZM647.24 14H660.24A35 36 0 0 1 660.24 86H647.24Z"/></g><path d="M0 70H790.24" stroke="#7952F5" stroke-width="1" stroke-dasharray="4 5"/><text x="40" y="62" class="dim" fill="#7952F5">cap height  100</text><path d="M0 170H790.24" stroke="#7952F5" stroke-width="1" stroke-dasharray="4 5"/><text x="40" y="190" class="dim" fill="#7952F5">baseline</text><path d="M490.24 204H505.24" stroke="#101014" stroke-width="1.4"/><path d="M490.24 198v12M505.24 198v12" stroke="#101014" stroke-width="1.4"/><text x="497.74" y="228" text-anchor="middle" class="dim">stem 15</text></svg></div></div>
+    <div class="type">
+      <div class="tile light">
+        <p class="spec-name">Wordmark</p>
+        <p class="s-body" style="margin-top:0;max-width:48ch">Capitals built from lines and true arcs on a single grid: a perfect circle for O, semicircular bowls for P and D, one stem weight throughout, arms a touch lighter to look equal. Letterspacing is balanced by white area, then tracked +5%.</p>
+        <p class="meta">cap 100 · stem 15 · arm 14 · N diagonal 60° · O overshoot 1 · tracking +5<br>Spelled exactly: O-P-E-N-F-I-E-L-D, always uppercase.</p>
+      </div>
+      <div class="tile light">
+        <p class="spec-name">Brand typeface · Manrope</p>
+        <p class="s-display">Open fields, open minds.</p>
+        <p class="s-head">Design that makes room for what comes next.</p>
+        <p class="s-body">Manrope Regular at 16/1.6 for running text. Headlines in ExtraBold with −4% tracking; labels in Bold capitals with +14% tracking.</p>
+        <p class="s-label">Brand identity</p>
+        <div class="weights"><span style="font-weight:400">Regular 400</span><span style="font-weight:500">Medium 500</span><span style="font-weight:700">Bold 700</span><span style="font-weight:800">ExtraBold 800</span></div>
+        <p class="meta">Free under the SIL Open Font License 1.1. Bundled in <code>brand-preview/fonts/</code>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="usage">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="num">06 — USAGE</div>
+      <div>
+        <h2>Use it well.</h2>
+        <p class="lead">The mark is strong because it is simple. Keep it that way.</p>
+      </div>
+    </div>
+    <div class="dont">
+      <figure><div class="tile light bad"><img src="../public/brand/openfield-primary.svg" alt="" style="width:100%;max-width:150px;transform:scaleX(1.4)"></div><figcaption>Don’t stretch or squash<span>Scale proportionally only.</span></figcaption></figure>
+      <figure><div class="tile light bad"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="112" height="112" role="img" aria-label="OPENFIELD">
+  <title>OPENFIELD</title>
+  <g id="symbol">
+    <path fill="#E8590C" d="M103.3 35A50 50 0 1 1 85 16.7L79.05 27.01A38.1 38.1 0 1 0 92.99 40.95Z"/>
+    <circle fill="#12B886" cx="92.83" cy="27.17" r="7.74"/>
+  </g>
+</svg>
+</div><figcaption>Don’t recolour<span>Ring in ink or white, bead in purple or lavender.</span></figcaption></figure>
+      <figure><div class="tile light bad"><img src="../public/brand/openfield-primary.svg" alt="" style="width:100%;max-width:220px;filter:drop-shadow(5px 7px 4px rgba(0,0,0,.45))"></div><figcaption>Don’t add effects<span>No shadows, glows, outlines or gradients.</span></figcaption></figure>
+      <figure><div class="tile bad" style="background:#A78BFA"><img src="../public/brand/openfield-primary.svg" alt="" style="width:100%;max-width:220px"></div><figcaption>Don’t use low contrast<span>Never place purple on lavender or on busy images.</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="files">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="num">07 — FILES</div>
+      <div>
+        <h2>What’s in the box.</h2>
+        <p class="lead">All assets live in <code>/public/brand/</code>. Plain SVG: no raster, no filters, no live text, no external dependencies.</p>
+      </div>
+    </div>
+    <table class="table">
+      <thead><tr><th>File</th><th>Use</th><th>Default size</th></tr></thead>
+      <tbody><tr><td><a href="../public/brand/openfield-primary.svg"><code>openfield-primary.svg</code></a></td><td>Primary horizontal lockup, full colour. Master artwork for light backgrounds.</td><td class="num">449 × 66</td></tr><tr><td><a href="../public/brand/openfield-horizontal.svg"><code>openfield-horizontal.svg</code></a></td><td>Horizontal lockup that follows CSS: ring + wordmark use <code>currentColor</code>, bead uses <code>--openfield-accent</code>.</td><td class="num">449 × 66</td></tr><tr><td><a href="../public/brand/openfield-stacked.svg"><code>openfield-stacked.svg</code></a></td><td>Vertical lockup, symbol above wordmark, full colour.</td><td class="num">356 × 166</td></tr><tr><td><a href="../public/brand/openfield-icon.svg"><code>openfield-icon.svg</code></a></td><td>Standalone symbol for avatars, social and app contexts.</td><td class="num">120 × 120</td></tr><tr><td><a href="../public/brand/favicon.svg"><code>favicon.svg</code></a></td><td>Simplified 32 × 32 symbol. Heavier ring, larger bead; switches to white + lavender in dark browser themes.</td><td class="num">32 × 32</td></tr><tr><td><a href="../public/brand/openfield-light.svg"><code>openfield-light.svg</code></a></td><td>Light-background lockup (same artwork as primary, semantic alias for themes).</td><td class="num">449 × 66</td></tr><tr><td><a href="../public/brand/openfield-dark.svg"><code>openfield-dark.svg</code></a></td><td>Dark-background lockup: white wordmark, Soft Lavender bead.</td><td class="num">449 × 66</td></tr><tr><td><a href="../public/brand/openfield-monochrome.svg"><code>openfield-monochrome.svg</code></a></td><td>Single colour, pure black. For print, stamps, embossing, fax-grade reproduction.</td><td class="num">449 × 66</td></tr><tr><td><a href="../public/brand/openfield-monochrome-white.svg"><code>openfield-monochrome-white.svg</code></a></td><td>Single colour, pure white, for dark or photographic backgrounds.</td><td class="num">449 × 66</td></tr><tr><td><a href="../public/brand/openfield-wordmark.svg"><code>openfield-wordmark.svg</code></a></td><td>Wordmark only (and <code>-white</code> variant).</td><td class="num">356 × 50</td></tr><tr><td><a href="../public/brand/openfield-stacked-dark.svg"><code>openfield-stacked-dark.svg</code></a></td><td>Vertical lockup for dark backgrounds.</td><td class="num">356 × 166</td></tr><tr><td><a href="../public/brand/openfield-icon-dark.svg"><code>openfield-icon-dark.svg</code></a></td><td>Symbol for dark backgrounds.</td><td class="num">120 × 120</td></tr><tr><td><a href="../public/brand/openfield-icon-monochrome.svg"><code>openfield-icon-monochrome.svg</code></a></td><td>Symbol in one colour (and <code>-white</code> variant).</td><td class="num">120 × 120</td></tr><tr><td><a href="../public/brand/openfield-stacked-monochrome.svg"><code>openfield-stacked-monochrome.svg</code></a></td><td>Vertical lockup in one colour.</td><td class="num">356 × 166</td></tr></tbody>
+    </table>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap"><div>
+    <span>OPENFIELD · Brand identity v1.0</span>
+    <span>Assets in /public/brand · Typeface Manrope (SIL OFL 1.1)</span>
+  </div></div>
+</footer>
+</body>
+</html>
