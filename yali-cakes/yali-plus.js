@@ -67,52 +67,6 @@
     document.addEventListener('click', fitSoon);
     [500, 1500, 3500].forEach(function (ms) { setTimeout(fit, ms); });
 
-    /* Workshop film: plays silently while in view, pauses when it leaves; the button turns sound on and off.
-       With reduced motion it waits for a tap. Listeners are delegated because the runtime can re-render. */
-    var film = function () { return document.querySelector('.yp-film-video'); };
-    var soundBtn = function () { return document.querySelector('.yp-film-sound'); };
-    var setSound = function (on) {
-      var v = film(), b = soundBtn();
-      if (!v || !b) return;
-      v.muted = !on;
-      b.setAttribute('data-muted', on ? 'false' : 'true');
-      var l = on ? 'השתקת סאונד' : 'הפעלת סאונד';
-      b.setAttribute('aria-label', l); b.title = l;
-    };
-    var play = function (v) { var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); };
-    document.addEventListener('click', function (e) {
-      var v = film();
-      if (!v) return;
-      if (e.target.closest('.yp-film-sound')) {
-        var on = v.muted;
-        setSound(on);
-        if (on && v.paused) play(v);
-      } else if (e.target === v) {
-        if (v.paused) play(v); else v.pause();
-      }
-    });
-    // Checked on scroll against whatever video element is current, since the runtime may replace it.
-    if (!reduce) {
-      var userPaused = false;
-      // A tap on a playing video pauses it; remember that so scrolling doesn't restart it until it leaves view.
-      document.addEventListener('click', function (e) { var v = film(); if (v && e.target === v) userPaused = !v.paused; }, true);
-      var tick = function () {
-        var v = film();
-        if (!v) return;
-        var r = v.getBoundingClientRect(), vh = window.innerHeight;
-        if (r.top < vh + 600 && r.bottom > -600 && v.preload !== 'auto') v.preload = 'auto';
-        var shown = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0)) / (r.height || 1);
-        if (shown >= 0.4) {
-          if (v.paused && !userPaused) { var b = soundBtn(); v.muted = !b || b.getAttribute('data-muted') !== 'false'; play(v); }
-        }
-        else { if (!v.paused) v.pause(); userPaused = false; }
-      };
-      var queued = false;
-      window.addEventListener('scroll', function () { if (queued) return; queued = true; requestAnimationFrame(function () { queued = false; tick(); }); }, { passive: true });
-      window.addEventListener('resize', tick);
-      tick();
-    }
-
     /* FAQ answers and the footer's legal sections open and close smoothly */
     if (reduce) return;
     $$('#faq details, #legal details').forEach(function (d) {
