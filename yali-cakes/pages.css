@@ -1,0 +1,85 @@
+/* YALI CAKES: shared styles for the standalone pages (gallery, baking tips).
+   Uses the same tokens and top menu as the home page (yali-plus.css). */
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body.yp-page{margin:0;background:var(--yp-cream);color:var(--yp-ink);font-family:'Heebo',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased}
+.yp-page img{max-width:100%;display:block}
+.yp-page a{color:inherit}
+.yp-page :focus-visible{outline:2px solid var(--yp-cocoa);outline-offset:3px;border-radius:6px}
+.yp-wrap{width:100%;max-width:1240px;margin:0 auto;padding-inline:var(--yp-gutter)}
+.yp-skip{position:absolute;top:-100px;right:16px;z-index:200;background:var(--yp-cocoa);color:#fff;padding:12px 20px;border-radius:999px;text-decoration:none}
+.yp-skip:focus{top:12px}
+.yp-main{padding-top:var(--yp-head)}
+
+/* Page heading band with the pink glow */
+.yp-hero-band{background:
+  radial-gradient(55% 70% at 12% 20%,rgba(244,195,209,.8),rgba(255,249,250,0) 70%),
+  radial-gradient(45% 60% at 92% 80%,rgba(244,195,209,.45),rgba(255,249,250,0) 70%),
+  var(--yp-cream);padding:clamp(40px,7vw,96px) 0 clamp(28px,4vw,48px)}
+.yp-hero-band h1{margin:0 0 24px;font-weight:800;font-size:clamp(38px,6vw,72px);line-height:1.05;letter-spacing:-.03em}
+.yp-lead{margin:0;max-width:40em;color:var(--yp-muted);font-size:clamp(17px,1.5vw,19px)}
+
+/* Buttons (same look as the home page) */
+.yp-btn{display:inline-flex;align-items:center;gap:14px;min-height:52px;padding:6px 7px 6px 26px;border-radius:999px;background:var(--yp-cocoa);color:#fff!important;text-decoration:none;font-weight:500;transition:background-color .3s ease,box-shadow .4s ease}
+.yp-btn-arrow{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:var(--yp-ink);font-style:normal}
+@media (hover:hover){.yp-btn:hover{background:var(--yp-ink);box-shadow:0 18px 36px -18px rgba(59,42,32,.55)}}
+.yp-cta-band{display:flex;justify-content:center;padding-block:clamp(40px,6vw,80px)}
+
+/* Filter chips */
+.yp-chips{display:flex;flex-wrap:wrap;gap:10px}
+.yp-chip{min-height:44px;padding:6px 18px;border-radius:999px;border:1px solid #A08373;background:#fff;color:var(--yp-ink);font:inherit;font-size:15px;cursor:pointer;transition:background-color .25s ease,color .25s ease,border-color .25s ease}
+@media (hover:hover){.yp-chip:hover{border-color:var(--yp-cocoa)}}
+.yp-chip[aria-pressed="true"]{background:var(--yp-cocoa);border-color:var(--yp-cocoa);color:#fff}
+
+/* Masonry grid */
+.yp-grid{list-style:none;margin:clamp(24px,4vw,48px) 0 0;padding:0;columns:4 260px;column-gap:16px}
+.yp-grid li{break-inside:avoid;margin:0 0 16px}
+.yp-tile{display:block;width:100%;padding:0;border:1px solid var(--yp-line);border-radius:22px;overflow:hidden;background:#fff;cursor:zoom-in;transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s ease}
+.yp-tile img{width:100%;height:auto;transition:transform 1s cubic-bezier(.2,.7,.2,1)}
+@media (hover:hover){.yp-tile:hover{transform:translateY(-4px);box-shadow:0 30px 60px -38px rgba(59,42,32,.45)}.yp-tile:hover img{transform:scale(1.03)}}
+.yp-grid li.is-in{animation:ypIn .6s cubic-bezier(.2,.7,.2,1) both}
+@keyframes ypIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (max-width:600px){.yp-grid{columns:2;column-gap:10px}.yp-grid li{margin-bottom:10px}.yp-tile{border-radius:16px}}
+
+/* Lightbox */
+.yp-lightbox{position:fixed;inset:0;z-index:300;background:rgba(59,42,32,.88);display:flex;align-items:center;justify-content:center;padding:64px 72px}
+.yp-lightbox[hidden]{display:none}
+.yp-lb-figure{margin:0;max-width:min(92vw,900px);max-height:86vh;display:flex}
+.yp-lb-figure img{max-width:100%;max-height:86vh;width:auto;height:auto;border-radius:18px;background:#fff;object-fit:contain}
+.yp-lb-close,.yp-lb-nav{position:absolute;width:48px;height:48px;border-radius:50%;border:0;background:rgba(255,249,250,.94);color:var(--yp-ink);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.yp-lb-close{top:16px;left:16px}
+.yp-lb-prev{right:16px;top:50%;margin-top:-24px}
+.yp-lb-next{left:16px;top:50%;margin-top:-24px}
+@media (max-width:600px){.yp-lightbox{padding:72px 12px}.yp-lb-nav{top:auto;bottom:16px;margin:0}}
+
+/* Footer */
+.yp-foot{background:#F4C3D1;padding:48px 0 32px}
+.yp-foot-in{display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
+.yp-foot-logo{width:110px;height:auto}
+.yp-foot-links{display:flex;flex-wrap:wrap;justify-content:center;gap:0 20px;font-size:14px}
+.yp-foot-links a{display:inline-flex;align-items:center;min-height:44px;text-decoration:underline}
+.yp-copy{font-size:14px;color:#735A4B}
+
+/* Articles (baking tips) */
+.yp-crumbs{font-size:14px;color:var(--yp-muted);margin:0 0 14px}
+.yp-crumbs a{color:var(--yp-cocoa)}
+.yp-article{max-width:760px;margin:0 auto;padding:clamp(28px,4vw,56px) var(--yp-gutter) clamp(48px,6vw,88px)}
+.yp-article h2{font-size:clamp(24px,2.6vw,32px);line-height:1.2;letter-spacing:-.02em;margin:44px 0 12px}
+.yp-article h3{font-size:20px;margin:28px 0 8px}
+.yp-article p,.yp-article li{color:#4F3B2F}
+.yp-article ul,.yp-article ol{padding-inline-start:22px}
+.yp-article li{margin-bottom:8px}
+.yp-article table{width:100%;border-collapse:collapse;margin:16px 0;font-size:16px}
+.yp-article th,.yp-article td{border-bottom:1px solid var(--yp-line);padding:10px 8px;text-align:start}
+.yp-article th{color:var(--yp-cocoa);font-weight:700}
+.yp-note{background:#fff;border:1px solid var(--yp-line);border-radius:20px;padding:18px 22px;margin:24px 0}
+.yp-article-cta{margin-top:40px;padding-top:28px;border-top:1px solid var(--yp-line);display:flex;flex-direction:column;align-items:flex-start;gap:14px}
+.yp-cards{list-style:none;margin:clamp(24px,4vw,48px) 0 clamp(48px,6vw,88px);padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.yp-card{display:flex;flex-direction:column;gap:10px;height:100%;padding:26px;background:#fff;border:1px solid var(--yp-line);border-radius:24px;text-decoration:none;transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s ease}
+.yp-card h2{margin:0;font-size:22px;line-height:1.25;letter-spacing:-.01em}
+.yp-card p{margin:0;color:var(--yp-muted);font-size:16px}
+.yp-card-more{margin-top:auto;color:var(--yp-cocoa);font-weight:600;font-size:15px}
+@media (hover:hover){.yp-card:hover{transform:translateY(-4px);box-shadow:0 30px 60px -38px rgba(59,42,32,.45)}}
+
+@media (prefers-reduced-motion:reduce){.yp-page *{animation:none!important;transition:none!important}}

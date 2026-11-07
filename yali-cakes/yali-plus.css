@@ -148,3 +148,7 @@ footer span[style*="735A4B"]{color:#5E4637!important}
 
 /* Phone: keep the summary's WhatsApp button on one line. */
 @media (max-width:520px){#order-panel aside .cta{white-space:nowrap;padding-inline-start:18px!important;font-size:17px}}
+
+/* ---------- "העבודות שלי" button under the inspiration gallery (styled by the original .btn-primary) ---------- */
+.yp-works-more{display:flex;justify-content:center;padding-top:28px}
+a.yp-works-link{text-decoration:none}
