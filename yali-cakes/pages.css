@@ -32,15 +32,15 @@ body.yp-page{margin:0;background:var(--yp-cream);color:var(--yp-ink);font-family
 @media (hover:hover){.yp-chip:hover{border-color:var(--yp-cocoa)}}
 .yp-chip[aria-pressed="true"]{background:var(--yp-cocoa);border-color:var(--yp-cocoa);color:#fff}
 
-/* Masonry grid */
-.yp-grid{list-style:none;margin:clamp(24px,4vw,48px) 0 0;padding:0;columns:4 260px;column-gap:16px}
-.yp-grid li{break-inside:avoid;margin:0 0 16px}
-.yp-tile{display:block;width:100%;padding:0;border:1px solid var(--yp-line);border-radius:22px;overflow:hidden;background:#fff;cursor:zoom-in;transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s ease}
-.yp-tile img{width:100%;height:auto;transition:transform 1s cubic-bezier(.2,.7,.2,1)}
-@media (hover:hover){.yp-tile:hover{transform:translateY(-4px);box-shadow:0 30px 60px -38px rgba(59,42,32,.45)}.yp-tile:hover img{transform:scale(1.03)}}
+/* Gallery grid: square white tiles, like the home page's inspiration carousel */
+.yp-grid{list-style:none;margin:clamp(24px,4vw,48px) 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
+.yp-grid li{margin:0}
+.yp-tile{display:block;width:100%;aspect-ratio:1;padding:0;border:0;border-radius:28px;overflow:hidden;background:#fff;cursor:zoom-in;box-shadow:0 14px 34px -18px rgba(59,42,32,.35);transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s ease}
+.yp-tile img{width:100%;height:100%;object-fit:contain;transition:transform 1s cubic-bezier(.2,.7,.2,1)}
+@media (hover:hover){.yp-tile:hover{transform:translateY(-4px);box-shadow:0 30px 60px -30px rgba(59,42,32,.45)}.yp-tile:hover img{transform:scale(1.03)}}
 .yp-grid li.is-in{animation:ypIn .6s cubic-bezier(.2,.7,.2,1) both}
 @keyframes ypIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-@media (max-width:600px){.yp-grid{columns:2;column-gap:10px}.yp-grid li{margin-bottom:10px}.yp-tile{border-radius:16px}}
+@media (max-width:600px){.yp-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.yp-tile{border-radius:18px}}
 
 /* Lightbox */
 .yp-lightbox{position:fixed;inset:0;z-index:300;background:rgba(59,42,32,.88);display:flex;align-items:center;justify-content:center;padding:64px 72px}

@@ -30,6 +30,18 @@
   })();
 
   function start() {
+    /* Arriving with a #hash from another page (e.g. "להזמנת עוגה" on the gallery page): the
+       sections are drawn after load, so the browser could not jump there. Do it now. */
+    if (location.hash.length > 1) {
+      var goTo = function () {
+        var t = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+        if (!t) return;
+        var y = t.getBoundingClientRect().top + window.scrollY - 84;
+        window.scrollTo(0, Math.max(0, y));
+      };
+      // Again after the opening screen lifts, since it can hold the page at the top.
+      [60, 700, 1600, 3700, 5400].forEach(function (ms) { setTimeout(goTo, ms); });
+    }
     /* Underline the section in view */
     if ('IntersectionObserver' in window) {
       var links = $$('#yp-nav .yp-link');
