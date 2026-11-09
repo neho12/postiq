@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>שרון דוברת · Behind The Chair | עיצוב שיער לגברים ולנשים</title>
+<meta name="description" content="שרון דוברת – Behind The Chair. עיצוב שיער, תספורות גברים ונשים, זקן וגילוח בתער. אומנות. טכנולוגיה. דיוק ללא פשרות. מאז 1993.">
+<meta name="theme-color" content="#14130F">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:title" content="שרון דוברת · Behind The Chair">
+<meta property="og:description" content="אומנות. טכנולוגיה. דיוק ללא פשרות. עיצוב שיער לגברים ולנשים מאז 1993.">
+<meta property="og:image" content="assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;900&family=Assistant:wght@400;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F2F3E5;
+    --paper-2:#E7E8D8;
+    --ink:#14130F;
+    --ink-2:#1E1C17;
+    --ink-3:#2A2720;
+    --muted:#6B6858;
+    --muted-dark:#A9A68F;
+    --copper:#B8733F;
+    --copper-2:#D08A52;
+    --line:rgba(20,19,15,.14);
+    --line-dark:rgba(242,243,229,.14);
+    --radius:14px;
+    --wrap:1120px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--ink);color:var(--paper);font-family:"Assistant",system-ui,sans-serif;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  img{max-width:100%;display:block}
+  a{color:inherit}
+  .wrap{max-width:var(--wrap);margin:0 auto;padding:0 20px}
+  .type{font-family:"Special Elite",ui-monospace,monospace;letter-spacing:.04em}
+  h1,h2,h3{font-family:"Frank Ruhl Libre",Georgia,serif;line-height:1.15;margin:0}
+
+  /* draft note */
+  .note{background:var(--copper);color:var(--ink);text-align:center;font-size:14px;font-weight:600;padding:7px 16px}
+
+  /* nav */
+  .nav{position:sticky;top:0;z-index:30;background:rgba(20,19,15,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line-dark)}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:62px;gap:16px}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .brand b{font-family:"Frank Ruhl Libre",serif;font-size:19px;font-weight:700}
+  .brand span{font-size:12px;color:var(--muted-dark)}
+  .links{display:flex;gap:26px;font-size:15px}
+  .links a{text-decoration:none;color:var(--muted-dark);transition:color .2s}
+  .links a:hover{color:var(--paper)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:13px 22px;border-radius:999px;font-weight:700;font-size:16px;text-decoration:none;border:1.5px solid transparent;transition:transform .2s,background .2s,color .2s,border-color .2s;cursor:pointer;white-space:nowrap}
+  .btn:hover{transform:translateY(-2px)}
+  .btn svg{width:19px;height:19px;flex:none}
+  .btn-copper{background:var(--copper);color:var(--ink)}
+  .btn-copper:hover{background:var(--copper-2)}
+  .btn-ink{background:var(--ink);color:var(--paper)}
+  .btn-line{border-color:currentColor;background:transparent}
+  .nav .btn{padding:9px 16px;font-size:14px}
+
+  /* hero */
+  .hero{background:var(--paper);color:var(--ink);position:relative;overflow:hidden}
+  .hero .wrap{position:relative;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:40px;padding-top:56px;padding-bottom:64px}
+  .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:14px;color:var(--copper);margin-bottom:18px}
+  .eyebrow::before{content:"";width:28px;height:1.5px;background:currentColor}
+  .hero h1{font-size:clamp(40px,6.4vw,76px);font-weight:900;letter-spacing:-.01em}
+  .hero h1 em{font-style:normal;color:var(--copper)}
+  .tag{font-family:"Frank Ruhl Libre",serif;font-size:clamp(20px,2.4vw,26px);font-weight:500;margin:20px 0 10px}
+  .lead{color:var(--muted);max-width:30em;margin:0 0 30px}
+  .cta{display:flex;flex-wrap:wrap;gap:12px}
+  .hero .btn-line{color:var(--ink)}
+  .logo-card{position:relative;justify-self:center;width:min(100%,460px)}
+  .logo-card img{width:100%;height:auto;-webkit-mask-image:radial-gradient(circle at 50% 50%,#000 80%,transparent 99%);mask-image:radial-gradient(circle at 50% 50%,#000 80%,transparent 99%)}
+  .stamp{position:absolute;top:2%;left:-2%;width:108px;height:108px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;text-align:center;transform:rotate(-12deg);box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  .stamp b{display:block;font-family:"Frank Ruhl Libre",serif;font-size:34px;line-height:1;color:var(--copper-2)}
+  .stamp small{font-size:12px;line-height:1.25;display:block;margin-top:4px}
+
+  /* marquee */
+  .ticker{background:var(--ink);border-block:1px solid var(--line-dark);overflow:hidden;white-space:nowrap;padding:14px 0}
+  .ticker-track{display:inline-flex;gap:38px;animation:tick 32s linear infinite;font-size:18px;color:var(--muted-dark)}
+  .ticker-track span{display:inline-flex;align-items:center;gap:38px}
+  .ticker-track span::after{content:"✂";color:var(--copper)}
+  @keyframes tick{from{transform:translateX(0)}to{transform:translateX(50%)}}
+
+  /* sections */
+  section{padding:96px 0;scroll-margin-top:62px}
+  .head{max-width:640px;margin-bottom:48px}
+  .head .eyebrow{color:var(--copper-2)}
+  .head h2{font-size:clamp(32px,4.4vw,52px);font-weight:700}
+  .head p{color:var(--muted-dark);margin:14px 0 0}
+
+  /* pillars */
+  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line-dark);border:1px solid var(--line-dark);border-radius:var(--radius);overflow:hidden}
+  .pillar{background:var(--ink);padding:34px 28px}
+  .pillar .num{font-size:14px;color:var(--copper-2)}
+  .pillar h3{font-size:30px;margin:12px 0 10px}
+  .pillar p{margin:0;color:var(--muted-dark)}
+
+  /* services */
+  .services{background:var(--ink-2)}
+  .svc-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .svc{background:var(--ink);border:1px solid var(--line-dark);border-radius:var(--radius);padding:34px 30px}
+  .svc-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line-dark);padding-bottom:18px;margin-bottom:8px}
+  .svc-top h3{font-size:30px}
+  .svc-top span{font-size:14px;color:var(--copper-2)}
+  .svc ul{list-style:none;margin:0;padding:0}
+  .svc li{display:flex;justify-content:space-between;gap:16px;padding:15px 0;border-bottom:1px dashed var(--line-dark)}
+  .svc li:last-child{border-bottom:0}
+  .svc li b{font-weight:600}
+  .svc li small{display:block;color:var(--muted-dark);font-size:14px}
+  .svc li i{font-style:normal;color:var(--muted-dark);font-size:14px;white-space:nowrap;align-self:center}
+
+  /* about */
+  .about .wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:center}
+  .about-img{position:relative}
+  .about-img img{border-radius:var(--radius);aspect-ratio:4/5;object-fit:cover;width:100%;filter:saturate(.9) contrast(1.03)}
+  .about-img::after{content:"";position:absolute;inset:14px -14px -14px 14px;border:1.5px solid var(--copper);border-radius:var(--radius);z-index:-1}
+  .about-img{z-index:0}
+  .about h2{font-size:clamp(32px,4.4vw,50px);margin-bottom:22px}
+  .about p{color:var(--muted-dark);margin:0 0 16px}
+  .about blockquote{margin:28px 0 0;padding:6px 20px 6px 0;border-right:3px solid var(--copper);font-family:"Frank Ruhl Libre",serif;font-size:24px;color:var(--paper)}
+  .facts{display:flex;gap:36px;margin-top:32px;flex-wrap:wrap}
+  .facts div b{display:block;font-family:"Frank Ruhl Libre",serif;font-size:40px;color:var(--copper-2);line-height:1}
+  .facts div span{font-size:14px;color:var(--muted-dark)}
+
+  /* gallery */
+  .gallery{background:var(--paper);color:var(--ink)}
+  .gallery .head p{color:var(--muted)}
+  .gallery .head .eyebrow{color:var(--copper)}
+  .g-grid{display:grid;grid-template-columns:1.25fr 1fr 1fr;grid-template-rows:280px 280px;gap:14px}
+  .g-grid figure{margin:0;position:relative;overflow:hidden;border-radius:var(--radius);background:var(--paper-2)}
+  .g-grid img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+  .g-grid figure:hover img{transform:scale(1.04)}
+  .g-grid .big{grid-row:span 2}
+  .g-ig{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:24px;text-decoration:none;background:var(--ink)!important;color:var(--paper)}
+  .g-ig svg{width:38px;height:38px;color:var(--copper-2)}
+  .g-ig b{font-family:"Frank Ruhl Libre",serif;font-size:22px}
+  .g-ig span{font-size:14px;color:var(--muted-dark);direction:ltr}
+
+  /* process */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;counter-reset:s}
+  .step{border-top:1.5px solid var(--copper);padding-top:20px}
+  .step::before{counter-increment:s;content:"0" counter(s);font-family:"Special Elite",monospace;color:var(--copper-2);font-size:14px}
+  .step h3{font-size:22px;margin:8px 0 6px}
+  .step p{margin:0;color:var(--muted-dark);font-size:15px}
+
+  /* contact */
+  .contact{background:var(--ink-2)}
+  .contact-box{display:grid;grid-template-columns:1.1fr .9fr;gap:0;border:1px solid var(--line-dark);border-radius:20px;overflow:hidden}
+  .contact-main{padding:48px 44px;background:radial-gradient(600px 300px at 100% 0,rgba(184,115,63,.18),transparent 70%),var(--ink)}
+  .contact-main h2{font-size:clamp(32px,4.2vw,48px);margin-bottom:14px}
+  .contact-main p{color:var(--muted-dark);margin:0 0 28px}
+  .contact-info{padding:40px 36px;background:var(--ink-3);display:grid;gap:22px;align-content:center}
+  .ci{display:flex;gap:14px;align-items:flex-start}
+  .ci svg{width:22px;height:22px;color:var(--copper-2);flex:none;margin-top:3px}
+  .ci b{display:block;font-size:14px;color:var(--muted-dark);font-weight:600}
+  .ci a,.ci span{text-decoration:none;font-size:17px}
+  .ph{border-bottom:1.5px dashed var(--copper-2)}
+
+  footer{background:var(--ink);border-top:1px solid var(--line-dark);padding:30px 0 100px;font-size:14px;color:var(--muted-dark)}
+  footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+  /* floating whatsapp */
+  .fab{position:fixed;bottom:18px;left:18px;z-index:40;width:58px;height:58px;border-radius:50%;background:#25D366;color:#fff;display:grid;place-items:center;box-shadow:0 10px 26px rgba(0,0,0,.35);transition:transform .2s}
+  .fab:hover{transform:scale(1.07)}
+  .fab svg{width:30px;height:30px}
+
+  /* reveal */
+  .rv{opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s ease}
+  .rv.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.ticker-track{animation:none}html{scroll-behavior:auto}}
+
+  /* responsive */
+  @media (max-width:900px){
+    .links{display:none}
+    .hero .wrap{grid-template-columns:1fr;text-align:center;padding-top:28px;padding-bottom:48px;gap:8px}
+    .logo-card{order:-1;width:min(82%,340px)}
+    .stamp{width:88px;height:88px;left:-2%}
+    .stamp b{font-size:27px}
+    .eyebrow{justify-content:center}
+    .lead{margin-inline:auto}
+    .cta{justify-content:center}
+    section{padding:72px 0}
+    .pillars,.svc-grid{grid-template-columns:1fr}
+    .about .wrap{grid-template-columns:1fr;gap:44px}
+    .about-img{max-width:440px;margin-inline:auto;width:calc(100% - 14px)}
+    .about-img img{aspect-ratio:1}
+    .g-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+    .g-grid figure{aspect-ratio:1}
+    .g-grid .big{grid-row:auto;grid-column:span 2;aspect-ratio:4/3}
+    .g-grid .g-ig{aspect-ratio:auto;min-height:150px}
+    .steps{grid-template-columns:1fr 1fr;gap:28px 20px}
+    .contact-box{grid-template-columns:1fr}
+    .contact-main{padding:36px 24px}
+    .contact-info{padding:30px 24px}
+  }
+  @media (max-width:520px){
+    body{font-size:16px}
+    .wrap{padding:0 16px}
+    .brand span{display:none}
+    .cta .btn{flex:1 1 100%}
+    .svc{padding:26px 20px}
+    .steps{grid-template-columns:1fr}
+    .contact-main .btn{width:100%}
+  }
+</style>
+</head>
+<body>
+
+<div class="note">סקיצה לעיון · פרטי קשר ומחירים יעודכנו</div>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="שרון דוברת – לראש העמוד">
+      <b>שרון דוברת</b><span class="type">BEHIND THE CHAIR</span>
+    </a>
+    <nav class="links" aria-label="ניווט ראשי">
+      <a href="#services">שירותים</a>
+      <a href="#about">עליי</a>
+      <a href="#gallery">עבודות</a>
+      <a href="#contact">צור קשר</a>
+    </nav>
+    <a class="btn btn-copper" href="#contact">לקביעת תור</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero" style="padding:0">
+    <div class="wrap">
+      <div>
+        <div class="eyebrow type">SINCE 1993 · MEN &amp; WOMEN</div>
+        <h1>מאחורי הכיסא<br>כבר <em>מעל 30 שנה</em></h1>
+        <p class="tag">אומנות. טכנולוגיה. דיוק ללא פשרות.</p>
+        <p class="lead">עיצוב שיער לגברים ולנשים: תספורות, פן, זקן וגילוח בתער. כל לקוח מקבל לוק שנבנה במיוחד בשבילו.</p>
+        <div class="cta">
+          <a class="btn btn-ink" href="https://wa.me/972500000000?text=%D7%94%D7%99%D7%99%20%D7%A9%D7%A8%D7%95%D7%9F%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A7%D7%91%D7%95%D7%A2%20%D7%AA%D7%95%D7%A8" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 1.9 17.6L.3 23.7l6.3-1.6a11.8 11.8 0 0 0 5.6 1.4 11.8 11.8 0 0 0 8.3-20zm-8.3 18.2a9.8 9.8 0 0 1-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4a9.8 9.8 0 1 1 8.3 4.6zm5.4-7.3c-.3-.1-1.8-.9-2-1s-.5-.1-.7.1-.8 1-.9 1.2-.3.2-.6.1a8 8 0 0 1-4-3.5c-.3-.5.3-.5.9-1.6.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6a1.1 1.1 0 0 0-.8.4 3.4 3.4 0 0 0-1 2.5 5.9 5.9 0 0 0 1.2 3.1 13.5 13.5 0 0 0 5.2 4.6c1.9.8 2.7.9 3.6.7a3.1 3.1 0 0 0 2-1.4 2.5 2.5 0 0 0 .2-1.4c-.1-.2-.3-.3-.6-.4z"/></svg>
+            קביעת תור בוואטסאפ
+          </a>
+          <a class="btn btn-line" href="#gallery">לראות עבודות</a>
+        </div>
+      </div>
+      <div class="logo-card rv">
+        <img src="assets/logo.webp" width="720" height="718" alt="הלוגו של שרון דוברת – Behind The Chair, Since 1993">
+        <div class="stamp"><div><b>33+</b><small>שנות<br>ניסיון</small></div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track type">
+      <span>CUTS</span><span>FADES</span><span>BEARD &amp; RAZOR</span><span>BLOW-DRY</span><span>STYLING</span><span>MEN &amp; WOMEN</span><span>SINCE 1993</span>
+      <span>CUTS</span><span>FADES</span><span>BEARD &amp; RAZOR</span><span>BLOW-DRY</span><span>STYLING</span><span>MEN &amp; WOMEN</span><span>SINCE 1993</span>
+    </div>
+  </div>
+
+  <!-- PILLARS -->
+  <section>
+    <div class="wrap">
+      <div class="head rv">
+        <div class="eyebrow type">THE METHOD</div>
+        <h2>שלושה דברים שלא מתפשרים עליהם</h2>
+      </div>
+      <div class="pillars rv">
+        <div class="pillar"><div class="num type">01 / ART</div><h3>אומנות</h3><p>כל תספורת מתחילה בהתבוננות: מבנה פנים, סוג שיער וסגנון חיים. ככה יוצא לוק שמתאים רק לך.</p></div>
+        <div class="pillar"><div class="num type">02 / TECH</div><h3>טכנולוגיה</h3><p>עבודה עם הכלים והמכונות המתקדמים בתחום, כדי להגיע לגימור נקי ומדויק.</p></div>
+        <div class="pillar"><div class="num type">03 / PRECISION</div><h3>דיוק</h3><p>שלושים ושלוש שנים של ניסיון בכל פרט קטן, מקו הזקן ועד הפן האחרון.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="wrap">
+      <div class="head rv">
+        <div class="eyebrow type">SERVICES</div>
+        <h2>שירותים</h2>
+        <p>גברים ונשים, באותה רמת דיוק. המחירים יעודכנו בהמשך, ובינתיים אפשר לשאול בוואטסאפ.</p>
+      </div>
+      <div class="svc-grid">
+        <div class="svc rv">
+          <div class="svc-top"><h3>גברים</h3><span class="type">GENTS</span></div>
+          <ul>
+            <li><div><b>תספורת גברים</b><small>קלאסית, מודרנית או פייד</small></div><i>לפי תיאום</i></li>
+            <li><div><b>עיצוב זקן</b><small>קווים חדים וסימטריה</small></div><i>לפי תיאום</i></li>
+            <li><div><b>גילוח בתער</b><small>מגבת חמה וגימור קלאסי</small></div><i>לפי תיאום</i></li>
+            <li><div><b>תספורת וזקן</b><small>הטיפול המלא</small></div><i>לפי תיאום</i></li>
+          </ul>
+        </div>
+        <div class="svc rv">
+          <div class="svc-top"><h3>נשים</h3><span class="type">LADIES</span></div>
+          <ul>
+            <li><div><b>תספורת נשים</b><small>עיצוב לפי מבנה הפנים והשיער</small></div><i>לפי תיאום</i></li>
+            <li><div><b>פן ועיצוב</b><small>חלק, גלי או נפח</small></div><i>לפי תיאום</i></li>
+            <li><div><b>פוני ושכבות</b><small>רענון מהיר בין תספורות</small></div><i>לפי תיאום</i></li>
+            <li><div><b>עיצוב לאירוע</b><small>תסרוקת לערב מיוחד</small></div><i>לפי תיאום</i></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="wrap">
+      <div class="about-img rv">
+        <img src="assets/work-2.webp" width="1100" height="1100" loading="lazy" alt="שרון דוברת מעצב שיער של לקוחה בסטודיו">
+      </div>
+      <div class="rv">
+        <div class="eyebrow type" style="color:var(--copper-2)">BEHIND THE CHAIR</div>
+        <h2>נעים מאוד, שרון דוברת</h2>
+        <p>אני מאחורי הכיסא מאז 1993. בשנים האלה ראיתי הרבה טרנדים באים והולכים, ולמדתי שתספורת טובה היא שילוב של עין אומנותית, כלים נכונים וסבלנות לפרטים.</p>
+        <p>הסטודיו שלי הוא מקום של יצירה: קירות מלאים באומנות, מוזיקה טובה וזמן אמיתי לכל לקוח. אני בונה ויוצר כל לוק מחדש, כדי שתצאו מכאן מרגישים הכי טוב שאפשר.</p>
+        <blockquote>״בונה, יוצר ומגדיר מחדש איכות וסטייל.״</blockquote>
+        <div class="facts">
+          <div><b>1993</b><span>שנת התחלה</span></div>
+          <div><b>33+</b><span>שנות ניסיון</span></div>
+          <div><b>♂ ♀</b><span>גברים ונשים</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery" id="gallery">
+    <div class="wrap">
+      <div class="head rv">
+        <div class="eyebrow type">THE WORK</div>
+        <h2>מהסטודיו</h2>
+        <p>עוד עבודות, לפני ואחרי וסטוריז עדכניים יש באינסטגרם.</p>
+      </div>
+      <div class="g-grid rv">
+        <figure class="big"><img src="assets/work-1.webp" width="1100" height="1100" loading="lazy" alt="שרון בעבודה: פן ועיצוב לשיער ארוך"></figure>
+        <figure><img src="assets/team.webp" width="530" height="540" loading="lazy" alt="שרון דוברת עם עמיתים לתחום"></figure>
+        <figure><img src="assets/logo.webp" width="720" height="718" loading="lazy" alt="הלוגו Behind The Chair" style="object-fit:contain;padding:18px;background:#F2F3E5"></figure>
+        <a class="g-ig" style="grid-column:span 2" href="https://www.instagram.com/sharon_dovrat.b.c/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1" fill="currentColor"/></svg>
+          <b>עוד באינסטגרם</b>
+          <span>@sharon_dovrat.b.c</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section>
+    <div class="wrap">
+      <div class="head rv">
+        <div class="eyebrow type">HOW IT WORKS</div>
+        <h2>איך זה עובד</h2>
+      </div>
+      <div class="steps rv">
+        <div class="step"><h3>קובעים תור</h3><p>הודעה קצרה בוואטסאפ, ומתאמים מועד שנוח לך.</p></div>
+        <div class="step"><h3>שיחת התאמה</h3><p>מדברים על מה שאתם אוהבים, מה מפריע ומה מתאים לשגרה שלכם.</p></div>
+        <div class="step"><h3>עבודה מדויקת</h3><p>תספורת ועיצוב בקצב רגוע, בלי פס ייצור.</p></div>
+        <div class="step"><h3>טיפים לבית</h3><p>איך לסדר ולשמור על הלוק עד הפעם הבאה.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <div class="contact-box rv">
+        <div class="contact-main">
+          <div class="eyebrow type" style="color:var(--copper-2)">BOOK A CHAIR</div>
+          <h2>הכיסא מחכה לך</h2>
+          <p>שלחו הודעה, ונחזור אליכם עם התור הפנוי הקרוב.</p>
+          <div class="cta">
+            <a class="btn btn-copper" href="https://wa.me/972500000000?text=%D7%94%D7%99%D7%99%20%D7%A9%D7%A8%D7%95%D7%9F%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A7%D7%91%D7%95%D7%A2%20%D7%AA%D7%95%D7%A8" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 1.9 17.6L.3 23.7l6.3-1.6a11.8 11.8 0 0 0 5.6 1.4 11.8 11.8 0 0 0 8.3-20zm-8.3 18.2a9.8 9.8 0 0 1-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4a9.8 9.8 0 1 1 8.3 4.6zm5.4-7.3c-.3-.1-1.8-.9-2-1s-.5-.1-.7.1-.8 1-.9 1.2-.3.2-.6.1a8 8 0 0 1-4-3.5c-.3-.5.3-.5.9-1.6.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6a1.1 1.1 0 0 0-.8.4 3.4 3.4 0 0 0-1 2.5 5.9 5.9 0 0 0 1.2 3.1 13.5 13.5 0 0 0 5.2 4.6c1.9.8 2.7.9 3.6.7a3.1 3.1 0 0 0 2-1.4 2.5 2.5 0 0 0 .2-1.4c-.1-.2-.3-.3-.6-.4z"/></svg>
+              וואטסאפ
+            </a>
+            <a class="btn btn-line" style="color:var(--paper)" href="tel:+972500000000">התקשרו</a>
+          </div>
+        </div>
+        <div class="contact-info">
+          <div class="ci">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+            <div><b>כתובת</b><span class="ph">כתובת הסטודיו</span></div>
+          </div>
+          <div class="ci">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            <div><b>שעות פעילות</b><span class="ph">א׳–ה׳ 00:00–00:00</span></div>
+          </div>
+          <div class="ci">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
+            <div><b>טלפון</b><a class="ph" href="tel:+972500000000" dir="ltr">050-000-0000</a></div>
+          </div>
+          <div class="ci">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/></svg>
+            <div><b>אינסטגרם</b><a href="https://www.instagram.com/sharon_dovrat.b.c/" target="_blank" rel="noopener" dir="ltr">@sharon_dovrat.b.c</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© שרון דוברת · Behind The Chair · Since 1993</span>
+    <span class="type">ART · TECH · PRECISION</span>
+  </div>
+</footer>
+
+<a class="fab" href="https://wa.me/972500000000" target="_blank" rel="noopener" aria-label="שליחת הודעה בוואטסאפ">
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 1.9 17.6L.3 23.7l6.3-1.6a11.8 11.8 0 0 0 5.6 1.4 11.8 11.8 0 0 0 8.3-20zm-8.3 18.2a9.8 9.8 0 0 1-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4a9.8 9.8 0 1 1 8.3 4.6zm5.4-7.3c-.3-.1-1.8-.9-2-1s-.5-.1-.7.1-.8 1-.9 1.2-.3.2-.6.1a8 8 0 0 1-4-3.5c-.3-.5.3-.5.9-1.6.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6a1.1 1.1 0 0 0-.8.4 3.4 3.4 0 0 0-1 2.5 5.9 5.9 0 0 0 1.2 3.1 13.5 13.5 0 0 0 5.2 4.6c1.9.8 2.7.9 3.6.7a3.1 3.1 0 0 0 2-1.4 2.5 2.5 0 0 0 .2-1.4c-.1-.2-.3-.3-.6-.4z"/></svg>
+</a>
+
+<script>
+  (function(){
+    var els=document.querySelectorAll('.rv');
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});
+    },{rootMargin:'0px 0px -8% 0px',threshold:.08});
+    els.forEach(function(e){io.observe(e)});
+  })();
+</script>
+</body>
+</html>
