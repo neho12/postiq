@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>בונה אתרים לעסקים | דקה אחת ויש אתר</title>
+<meta name="description" content="ממלאים כמה פרטים, מעלים תמונות, ומקבלים אתר מונפש בעברית לעסק. בלי קוד ובלי מעצב.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0B0A09;--panel:#151310;--panel2:#1D1A16;--line:rgba(255,255,255,.1);--text:#F4F3EA;--muted:#9C9885;--acc:#E09A60;--acc2:#C17A44}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:"Heebo",system-ui,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .app{display:grid;grid-template-columns:420px 1fr;height:100svh}
+  .side{background:var(--panel);border-left:1px solid var(--line);overflow-y:auto;padding:22px 22px 120px}
+  h1{font-size:26px;font-weight:900;letter-spacing:-.02em;margin:0 0 4px;line-height:1.15}
+  h1 em{font-style:normal;color:var(--acc)}
+  .sub{color:var(--muted);margin:0 0 22px;font-size:14px}
+  fieldset{border:0;padding:0;margin:0 0 22px}
+  legend{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);margin-bottom:10px;padding:0}
+  label{display:block;font-size:13px;color:var(--muted);margin:10px 0 5px}
+  input[type=text],input[type=tel],textarea,select{width:100%;font:inherit;color:var(--text);background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:11px 13px;outline:none;transition:border-color .2s}
+  input:focus,textarea:focus,select:focus{border-color:var(--acc)}
+  textarea{min-height:110px;resize:vertical;line-height:1.5}
+  .types,.themes{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font:inherit;font-size:14px;font-weight:600;color:var(--text);background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:8px 15px;cursor:pointer;transition:all .2s}
+  .chip:hover{border-color:var(--acc)}
+  .chip[aria-pressed="true"]{background:var(--acc);color:#14110D;border-color:var(--acc)}
+  .sw{width:34px;height:34px;border-radius:50%;border:2px solid transparent;cursor:pointer;padding:0;outline:2px solid transparent;outline-offset:2px}
+  .sw[aria-pressed="true"]{outline-color:var(--text)}
+  .drop{display:flex;align-items:center;justify-content:center;gap:8px;padding:16px;border:1.5px dashed var(--line);border-radius:12px;color:var(--muted);font-size:14px;cursor:pointer;transition:all .2s;text-align:center}
+  .drop:hover{border-color:var(--acc);color:var(--text)}
+  .drop input{display:none}
+  .thumbs{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .thumbs img{width:58px;height:58px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
+  .bar{position:fixed;bottom:0;right:0;width:420px;padding:14px 22px;background:linear-gradient(transparent,var(--panel) 40%);display:flex;gap:10px;z-index:5}
+  .btn{flex:1;font:inherit;font-weight:800;font-size:15px;border:0;border-radius:999px;padding:13px 18px;cursor:pointer;transition:transform .2s,opacity .2s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-a{background:var(--acc);color:#14110D}
+  .btn-b{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+  .btn[disabled]{opacity:.5;cursor:not-allowed;transform:none}
+  .stage{position:relative;background:#050505;display:flex;flex-direction:column;min-width:0}
+  .tabs{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--line);background:var(--panel)}
+  .tabs .dots{display:flex;gap:6px}.tabs .dots i{width:11px;height:11px;border-radius:50%;background:#3a3631}
+  .dev{display:flex;gap:6px}
+  .frame-wrap{flex:1;display:grid;place-items:center;padding:18px;min-height:0}
+  iframe{width:100%;height:100%;border:0;border-radius:14px;background:#000;box-shadow:0 30px 80px rgba(0,0,0,.6);transition:width .5s cubic-bezier(.2,.8,.2,1),height .5s cubic-bezier(.2,.8,.2,1)}
+  .frame-wrap.mobile iframe{width:390px;height:min(100%,844px)}
+  .note{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);font-size:12.5px;color:var(--muted);background:rgba(21,19,16,.9);border:1px solid var(--line);padding:6px 14px;border-radius:999px;white-space:nowrap}
+  @media (max-width:900px){
+    .app{grid-template-columns:1fr;grid-template-rows:auto 60svh;height:auto}
+    .side{overflow:visible;padding-bottom:110px}
+    .bar{width:100%;left:0}
+    .stage{min-height:70svh}
+    .dev{display:none}
+    .note{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <h1>אתר לעסק שלך<br><em>תוך דקה.</em></h1>
+    <p class="sub">ממלאים, מעלים תמונות, ורואים את האתר נבנה לצד הטופס.</p>
+
+    <fieldset>
+      <legend>1 · סוג העסק</legend>
+      <div class="types" id="types"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>2 · פרטים</legend>
+      <label for="name">שם העסק</label>
+      <input type="text" id="name" value="שרון דוברת">
+      <label for="tagline">משפט קצר שמתאר אתכם</label>
+      <input type="text" id="tagline" value="אומנות. טכנולוגיה. דיוק ללא פשרות.">
+      <label for="since">שנת הקמה</label>
+      <input type="text" id="since" value="1993" inputmode="numeric">
+      <label for="city">עיר</label>
+      <input type="text" id="city" value="תל אביב">
+      <label for="phone">טלפון / וואטסאפ</label>
+      <input type="tel" id="phone" value="050-000-0000" dir="ltr" style="text-align:right">
+      <label for="insta">אינסטגרם (שם משתמש)</label>
+      <input type="text" id="insta" value="" dir="ltr" style="text-align:right" placeholder="username">
+    </fieldset>
+
+    <fieldset>
+      <legend>3 · שירותים</legend>
+      <label for="services">שורה לכל שירות. אפשר להוסיף תיאור אחרי קו אנכי</label>
+      <textarea id="services"></textarea>
+    </fieldset>
+
+    <fieldset>
+      <legend>4 · תמונות</legend>
+      <label class="drop"><input type="file" id="hero" accept="image/*">⬆ תמונה ראשית או לוגו</label>
+      <div class="thumbs" id="heroThumb"></div>
+      <label class="drop" style="margin-top:10px"><input type="file" id="gal" accept="image/*" multiple>⬆ תמונות לגלריה (עד 6)</label>
+      <div class="thumbs" id="galThumbs"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>5 · צבע</legend>
+      <div class="themes" id="themes"></div>
+    </fieldset>
+  </aside>
+
+  <main class="stage">
+    <div class="tabs">
+      <div class="dots"><i></i><i></i><i></i></div>
+      <div class="dev">
+        <button class="chip" id="dDesk" aria-pressed="true">מחשב</button>
+        <button class="chip" id="dMob" aria-pressed="false">נייד</button>
+      </div>
+    </div>
+    <div class="frame-wrap" id="fw"><iframe id="pv" title="תצוגה מקדימה של האתר"></iframe></div>
+    <div class="note">תצוגה חיה · הפרטים שבדוגמה הם זמניים</div>
+  </main>
+</div>
+
+<div class="bar">
+  <button class="btn btn-b" id="dl">הורדת קובץ האתר</button>
+  <button class="btn btn-a" id="pub" disabled title="בקרוב">פרסום בכתובת משלך · בקרוב</button>
+</div>
+
+<script>
+(function(){
+  var TYPES = {
+    barber:{label:'מספרה / ספר', eyebrow:'מעצב שיער', cta:'קביעת תור',
+      services:'תספורת גברים | קלאסית, מודרנית או פייד\nעיצוב זקן | קווים חדים וסימטריה\nגילוח בתער | מגבת חמה וגימור קלאסי\nתספורת נשים | עיצוב לפי מבנה הפנים\nפן ועיצוב | חלק, גלי או נפח',
+      marquee:['תספורות','זקן ותער','פן ועיצוב','צבע','גברים ונשים']},
+    beauty:{label:'קוסמטיקה / ציפורניים', eyebrow:'מכון יופי', cta:'קביעת תור',
+      services:'טיפול פנים | ניקוי עמוק והזנה\nלק ג׳ל | צבעים ועיצובים\nשיקום ציפורניים | חיזוק וטיפוח\nשעווה | נעימה ומהירה\nעיצוב גבות | מדויק ועדין',
+      marquee:['טיפולי פנים','לק ג׳ל','גבות','שעווה','טיפוח']},
+    fitness:{label:'מאמן כושר', eyebrow:'אימון אישי', cta:'שיחת היכרות',
+      services:'אימון אישי | תוכנית מותאמת אליכם\nאימון זוגי | לאמן ביחד\nאימון קבוצתי | אנרגיה של קבוצה\nליווי תזונתי | תפריט שמתאים לחיים\nליווי אונליין | מכל מקום',
+      marquee:['אימון אישי','כוח','סיבולת','תזונה','תוצאות']},
+    bakery:{label:'קונדיטוריה / אפייה', eyebrow:'קונדיטוריה', cta:'הזמנת עוגה',
+      services:'עוגות יום הולדת | בעיצוב אישי\nעוגות אירועים | לכל גודל\nשולחן קינוחים | לאירועים\nסדנאות אפייה | לילדים ולמבוגרים\nמארזי מתנה | מתוקים בקופסה',
+      marquee:['עוגות','קינוחים','סדנאות','אירועים','מתנות']},
+    other:{label:'אחר', eyebrow:'עסק מקומי', cta:'יצירת קשר',
+      services:'שירות ראשון | תיאור קצר\nשירות שני | תיאור קצר\nשירות שלישי | תיאור קצר',
+      marquee:['איכות','אמינות','שירות','מקצועיות']}
+  };
+  var THEMES = {
+    copper:{a:'#C17A44',b:'#E09A60',name:'נחושת'},
+    emerald:{a:'#2F9E73',b:'#6FD3A5',name:'ירוק'},
+    rose:{a:'#D9658A',b:'#F2A5BE',name:'ורוד'},
+    blue:{a:'#4C8DFF',b:'#9BBFFF',name:'כחול'}
+  };
+  var state = {type:'barber', theme:'copper', hero:'', gal:[]};
+  var $ = function(id){return document.getElementById(id)};
+
+  function esc(s){return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]});}
+  function waNum(p){var d=String(p||'').replace(/\D/g,''); if(!d) return ''; if(d.indexOf('972')===0) return d; if(d[0]==='0') return '972'+d.slice(1); return d;}
+
+  /* ---------- the generated site ---------- */
+  function render(d){
+    var t = THEMES[d.theme], ty = TYPES[d.type], wa = waNum(d.phone);
+    var waLink = wa ? 'https://wa.me/'+wa+'?text='+encodeURIComponent('היי, אשמח לפרטים') : '#contact';
+    var tel = wa ? 'tel:+'+wa : '#contact';
+    var svc = (d.services||'').split('\n').map(function(l){return l.trim()}).filter(Boolean).slice(0,8).map(function(l,i){
+      var p=l.split('|'); return '<li class="rv"><span class="i">'+String(i+1).padStart(2,'0')+'</span><div><h3>'+esc(p[0].trim())+'</h3>'+(p[1]?'<p>'+esc(p[1].trim())+'</p>':'')+'</div><span class="ar">←</span></li>';
+    }).join('');
+    var gal = d.gal.length ? d.gal.map(function(src,i){return '<figure class="tile rv"><img src="'+src+'" alt="" loading="lazy"></figure>'}).join('')
+      : [1,2,3,4].map(function(i){return '<figure class="tile ph rv"><span>תמונה '+i+'</span></figure>'}).join('');
+    var mq = ty.marquee.map(function(w){return '<span>'+esc(w)+'</span><b>✦</b>'}).join('');
+    var nameWords = esc(d.name||'שם העסק').split(/\s+/);
+    var h1 = nameWords.map(function(w,i){return '<span class="ln"><span'+(i===1?' class="cp"':(i===nameWords.length-1&&i>0?' class="fill"':''))+'>'+w+'</span></span>'}).join('');
+    var heroImg = d.hero ? '<div class="disc"><img src="'+d.hero+'" alt=""></div>' : '<div class="disc empty"><span>'+esc((d.name||'?').trim().charAt(0))+'</span></div>';
+    var insta = d.insta ? '<a class="ci" href="https://www.instagram.com/'+esc(d.insta.replace('@',''))+'/" target="_blank" rel="noopener"><small>אינסטגרם</small><b dir="ltr">@'+esc(d.insta.replace('@',''))+'</b></a>' : '';
+    var year = parseInt(d.since,10), yrs = year ? (new Date().getFullYear()-year) : 0;
+
+    return '<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(d.name)+'</title>'
+    +'<meta name="description" content="'+esc(d.name)+' · '+esc(d.tagline)+'">'
+    +'<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">'
+    +'<style>'
+    +':root{--bg:#0E0D0B;--bg2:#161411;--text:#F2F3E5;--muted:#A39F8A;--line:rgba(242,243,229,.12);--a:'+t.a+';--b:'+t.b+';--e:cubic-bezier(.2,.8,.2,1)}'
+    +'*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Heebo,system-ui,sans-serif;font-size:17px;line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}'
+    +'a{color:inherit;text-decoration:none}h1,h2,h3{margin:0;line-height:1.05;font-weight:800;letter-spacing:-.02em}.w{max-width:1120px;margin:0 auto;padding:0 20px}'
+    +'.lbl{font-size:13px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--b);display:inline-flex;align-items:center;gap:10px}.lbl:before{content:"";width:26px;height:1.5px;background:currentColor}'
+    +'.pre{position:fixed;inset:0;z-index:99;pointer-events:none}.pre i{position:absolute;left:0;right:0;height:50.5%;background:#F2F3E5;transition:transform 1s var(--e)}.pre .t{top:0}.pre .bt{bottom:0}.pre.go .t{transform:translateY(-101%)}.pre.go .bt{transform:translateY(101%)}'
+    +'.pre b{position:absolute;inset:0;display:grid;place-items:center;color:#0E0D0B;font-size:clamp(34px,7vw,64px);font-weight:900;z-index:2;transition:opacity .3s}.pre.go b{opacity:0}'
+    +'.nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .4s}.nav.s{background:rgba(14,13,11,.75);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}.nav .w{display:flex;align-items:center;justify-content:space-between;height:66px}.nav b{font-size:18px;font-weight:800}'
+    +'.btn{display:inline-flex;align-items:center;justify-content:center;padding:14px 26px;border-radius:999px;font-weight:700;background:var(--a);color:#14110D;border:1.5px solid var(--a);transition:transform .3s,background .3s}.btn:hover{transform:translateY(-3px);background:var(--b)}.btn.g{background:transparent;color:var(--text);border-color:var(--line)}.nav .btn{padding:9px 18px;font-size:14px}'
+    +'.hero{position:relative;min-height:100svh;display:flex;align-items:center;padding:100px 0 60px;overflow:hidden}.hero:before{content:"";position:absolute;inset:0;background:radial-gradient(520px circle at var(--mx,28%) var(--my,40%),color-mix(in srgb,var(--a) 24%,transparent),transparent 62%)}'
+    +'.hero .w{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;width:100%}.hero h1{font-size:clamp(46px,8.4vw,120px);font-weight:900;letter-spacing:-.045em;line-height:.95;margin-top:20px}'
+    +'.ln{display:block;overflow:hidden;padding-bottom:.08em}.ln>span{display:inline-block;transform:translateY(110%);transition:transform 1.1s var(--e)}.ok .ln>span{transform:none}.ok .ln:nth-child(2)>span{transition-delay:.12s}.ok .ln:nth-child(3)>span{transition-delay:.24s}'
+    +'.cp{color:transparent;-webkit-text-stroke:1.5px var(--b)}.fill{background:linear-gradient(100deg,var(--b),var(--a));-webkit-background-clip:text;background-clip:text;color:transparent}'
+    +'.tag{font-size:clamp(18px,2.1vw,24px);font-weight:300;margin:24px 0 30px}.fd{opacity:0;transform:translateY(18px);transition:opacity .9s var(--e),transform .9s var(--e)}.ok .fd{opacity:1;transform:none;transition-delay:.5s}.cta{display:flex;flex-wrap:wrap;gap:12px}'
+    +'.medal{position:relative;justify-self:center;width:min(100%,420px);aspect-ratio:1}.disc{position:absolute;inset:8%;border-radius:32px;overflow:hidden;background:var(--bg2);box-shadow:0 40px 80px -20px #000;transform:scale(.85) rotate(-7deg);opacity:0;transition:transform 1.4s var(--e) .3s,opacity 1s .3s}.ok .disc{transform:none;opacity:1}.disc img{width:100%;height:100%;object-fit:cover}.disc.empty{display:grid;place-items:center;background:linear-gradient(135deg,var(--a),var(--b))}.disc.empty span{font-size:140px;font-weight:900;color:#14110D}'
+    +'.ring{position:absolute;inset:0;width:100%;height:100%;animation:sp 26s linear infinite}.ring text{font-size:14px;letter-spacing:.3em;fill:var(--muted);font-family:Heebo}@keyframes sp{to{transform:rotate(360deg)}}'
+    +'.mq{padding:24px 0;border-block:1px solid var(--line);background:var(--bg2);overflow:hidden}.mqi{display:flex;width:max-content;animation:mq 28s linear infinite}.mqr{display:flex;align-items:center;gap:40px;padding-left:40px;font-size:clamp(30px,5vw,60px);font-weight:900;letter-spacing:-.03em;white-space:nowrap}.mqr span:nth-child(4n+1){color:transparent;-webkit-text-stroke:1.2px rgba(242,243,229,.55)}.mqr b{color:var(--b);font-size:.5em}@keyframes mq{to{transform:translateX(50%)}}'
+    +'section{padding:110px 0;scroll-margin-top:66px}.hd h2{font-size:clamp(36px,5.2vw,68px);margin-top:14px;margin-bottom:46px}.rv{opacity:0;transform:translateY(34px);transition:opacity 1s var(--e),transform 1s var(--e)}.rv.in{opacity:1;transform:none}'
+    +'.sv{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}.sv li{position:relative;display:grid;grid-template-columns:64px 1fr auto;align-items:center;gap:18px;padding:26px 4px;border-bottom:1px solid var(--line);transition:padding .4s var(--e)}.sv li:hover{padding-right:20px}.sv li:hover h3{color:var(--b)}.sv h3{font-size:clamp(22px,3vw,36px);font-weight:700;transition:color .3s}.sv p{margin:4px 0 0;color:var(--muted);font-size:15px}.sv .i{color:#6F6B5C;font-size:14px}.sv .ar{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:all .4s}.sv li:hover .ar{background:var(--b);color:#14110D;border-color:var(--b)}'
+    +'.gl{background:var(--bg2)}.gg{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));grid-auto-rows:320px;gap:14px}.tile{margin:0;border-radius:18px;overflow:hidden;background:#201D18}.tile img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--e)}.tile:hover img{transform:scale(1.07)}.tile.ph{display:grid;place-items:center;color:#6F6B5C;background:linear-gradient(135deg,#1d1a16,#272320)}'
+    +'.st{display:flex;gap:30px;flex-wrap:wrap;margin-top:34px}.st div b{display:block;direction:ltr;text-align:right;font-size:46px;font-weight:900;color:var(--b);line-height:1}.st div span{font-size:14px;color:var(--muted)}'
+    +'.cb{position:relative;border-radius:28px;overflow:hidden;padding:clamp(36px,7vw,84px);background:linear-gradient(120deg,var(--a),var(--b));color:#14110D}.cb h2{font-size:clamp(42px,8vw,110px);font-weight:900;letter-spacing:-.05em;line-height:.92;margin:16px 0 18px}.cb p{max-width:28em;margin:0 0 30px;font-size:18px}.cb .btn{background:#0E0D0B;color:#F2F3E5;border-color:#0E0D0B}.cb .btn.g{background:transparent;color:#0E0D0B;border-color:rgba(14,13,11,.4)}.cb .lbl{color:#0E0D0B}'
+    +'.inf{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}.ci,.inf>div{padding:20px;border-radius:16px;border:1px solid var(--line);background:var(--bg2);transition:border-color .3s,transform .4s}.ci:hover{border-color:var(--b);transform:translateY(-4px)}.ci small,.inf small{display:block;font-size:13px;color:var(--muted)}.ci b,.inf b{font-weight:600}'
+    +'footer{border-top:1px solid var(--line);padding:26px 0 100px;font-size:14px;color:#6F6B5C}footer .w{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}'
+    +'.fab{position:fixed;bottom:18px;left:18px;z-index:60;width:58px;height:58px;border-radius:50%;background:#25D366;color:#fff;display:grid;place-items:center;font-size:28px;box-shadow:0 12px 28px rgba(0,0,0,.45)}'
+    +'@media(max-width:860px){.nav .links{display:none}.hero .w{grid-template-columns:1fr;text-align:center}.medal{order:-1;width:min(68vw,290px)}.cta{justify-content:center}section{padding:80px 0}.gg{grid-template-columns:1fr 1fr;grid-auto-rows:190px}.inf{grid-template-columns:1fr}.sv li{grid-template-columns:1fr auto}.sv .i{display:none}}'
+    +'@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv,.fd,.ln>span{opacity:1!important;transform:none!important}.disc{opacity:1;transform:none}.pre{display:none}}'
+    +'</style></head><body>'
+    +'<div class="pre" id="pre"><i class="t"></i><i class="bt"></i><b>'+esc(d.name)+'</b></div>'
+    +'<header class="nav" id="nav"><div class="w"><b>'+esc(d.name)+'</b><a class="btn" href="'+waLink+'" target="_blank" rel="noopener">'+esc(ty.cta)+'</a></div></header>'
+    +'<section class="hero" id="hero" style="padding:100px 0 60px"><div class="w"><div><div class="lbl fd">'+esc(ty.eyebrow)+(d.city?' · '+esc(d.city):'')+'</div><h1>'+h1+'</h1><p class="tag fd">'+esc(d.tagline)+'</p><div class="cta fd"><a class="btn" href="'+waLink+'" target="_blank" rel="noopener">'+esc(ty.cta)+' בוואטסאפ</a><a class="btn g" href="#services">השירותים</a></div></div>'
+    +'<div class="medal"><svg class="ring" viewBox="0 0 400 400" aria-hidden="true" style="direction:ltr"><defs><path id="c" d="M200,200 m-186,0 a186,186 0 1,1 372,0 a186,186 0 1,1 -372,0"/></defs><text><textPath href="#c" textLength="1150" lengthAdjust="spacing">'+esc((d.name||'').toUpperCase().replace(/[^\u0000-\u007F]/g,'')||'WELCOME')+' • '+esc(d.city?'':'')+(d.since?'SINCE '+esc(d.since)+' • ':'')+'QUALITY • SERVICE • </textPath></text></svg>'+heroImg+'</div></div></section>'
+    +'<div class="mq" aria-hidden="true"><div class="mqi"><div class="mqr">'+mq+'</div><div class="mqr">'+mq+'</div></div></div>'
+    +'<section id="services"><div class="w"><div class="hd rv"><span class="lbl">Services</span><h2>מה אנחנו עושים</h2></div><ul class="sv">'+svc+'</ul></div></section>'
+    +'<section class="gl" id="gallery"><div class="w"><div class="hd rv"><span class="lbl">The Work</span><h2>העבודות שלנו</h2></div><div class="gg">'+gal+'</div>'
+    +(yrs>0?'<div class="st rv"><div><b>'+esc(d.since)+'</b><span>שנת הקמה</span></div><div><b>'+yrs+'+</b><span>שנות ניסיון</span></div></div>':'')+'</div></section>'
+    +'<section id="contact"><div class="w"><div class="cb rv"><span class="lbl">Contact</span><h2>בואו נדבר.</h2><p>שלחו הודעה ונחזור אליכם בהקדם.</p><div class="cta"><a class="btn" href="'+waLink+'" target="_blank" rel="noopener">וואטסאפ</a><a class="btn g" href="'+tel+'">התקשרו</a></div></div>'
+    +'<div class="inf"><div class="rv"><small>טלפון</small><b dir="ltr">'+esc(d.phone)+'</b></div><div class="rv"><small>עיר</small><b>'+esc(d.city)+'</b></div>'+insta+'</div></div></section>'
+    +'<footer><div class="w"><span>© '+esc(d.name)+'</span><span>'+esc(d.tagline)+'</span></div></footer>'
+    +'<a class="fab" href="'+waLink+'" target="_blank" rel="noopener" aria-label="וואטסאפ">✆</a>'
+    +'<script>(function(){var h=document.documentElement,p=document.getElementById("pre"),n=document.getElementById("nav");'
+    +'setTimeout(function(){p.classList.add("go");h.classList.add("ok")},500);setTimeout(function(){p.style.display="none"},1800);'
+    +'addEventListener("scroll",function(){n.classList.toggle("s",scrollY>40)},{passive:true});'
+    +'var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{threshold:.12});document.querySelectorAll(".rv").forEach(function(e){io.observe(e)});'
+    +'var hr=document.getElementById("hero");hr.addEventListener("pointermove",function(e){var r=hr.getBoundingClientRect();hr.style.setProperty("--mx",(e.clientX-r.left)+"px");hr.style.setProperty("--my",(e.clientY-r.top)+"px")});'
+    +'})();<\/script></body></html>';
+  }
+
+  /* ---------- builder UI ---------- */
+  function data(){
+    return {type:state.type, theme:state.theme, hero:state.hero, gal:state.gal,
+      name:$('name').value.trim(), tagline:$('tagline').value.trim(), since:$('since').value.trim(),
+      city:$('city').value.trim(), phone:$('phone').value.trim(), insta:$('insta').value.trim(), services:$('services').value};
+  }
+  var tmr;
+  function update(){ clearTimeout(tmr); tmr=setTimeout(function(){ $('pv').srcdoc = render(data()); }, 350); }
+
+  var tw = $('types');
+  Object.keys(TYPES).forEach(function(k){
+    var b=document.createElement('button'); b.className='chip'; b.type='button'; b.textContent=TYPES[k].label; b.dataset.k=k; b.setAttribute('aria-pressed', k===state.type);
+    b.onclick=function(){ state.type=k; tw.querySelectorAll('.chip').forEach(function(c){c.setAttribute('aria-pressed',c.dataset.k===k)}); $('services').value=TYPES[k].services; update(); };
+    tw.appendChild(b);
+  });
+  var th = $('themes');
+  Object.keys(THEMES).forEach(function(k){
+    var b=document.createElement('button'); b.className='sw'; b.type='button'; b.title=THEMES[k].name; b.dataset.k=k; b.style.background='linear-gradient(135deg,'+THEMES[k].a+','+THEMES[k].b+')'; b.setAttribute('aria-pressed',k===state.theme); b.setAttribute('aria-label',THEMES[k].name);
+    b.onclick=function(){ state.theme=k; th.querySelectorAll('.sw').forEach(function(c){c.setAttribute('aria-pressed',c.dataset.k===k)}); update(); };
+    th.appendChild(b);
+  });
+  $('services').value = TYPES.barber.services;
+
+  ['name','tagline','since','city','phone','insta','services'].forEach(function(id){ $(id).addEventListener('input', update); });
+
+  function shrink(file){ return new Promise(function(res){
+    var r=new FileReader(); r.onload=function(){ var im=new Image(); im.onload=function(){
+      var m=1100, s=Math.min(1,m/Math.max(im.width,im.height)), c=document.createElement('canvas'); c.width=Math.round(im.width*s); c.height=Math.round(im.height*s);
+      c.getContext('2d').drawImage(im,0,0,c.width,c.height); res(c.toDataURL('image/jpeg',.82)); }; im.src=r.result; }; r.readAsDataURL(file); }); }
+  function thumbs(el,arr){ el.innerHTML=''; arr.forEach(function(s){ var i=document.createElement('img'); i.src=s; i.alt=''; el.appendChild(i); }); }
+  $('hero').addEventListener('change', function(e){ var f=e.target.files[0]; if(!f) return; shrink(f).then(function(s){ state.hero=s; thumbs($('heroThumb'),[s]); update(); }); });
+  $('gal').addEventListener('change', function(e){ var fs=Array.prototype.slice.call(e.target.files,0,6); Promise.all(fs.map(shrink)).then(function(a){ state.gal=a; thumbs($('galThumbs'),a); update(); }); });
+
+  var fw=$('fw');
+  $('dDesk').onclick=function(){ fw.classList.remove('mobile'); $('dDesk').setAttribute('aria-pressed',true); $('dMob').setAttribute('aria-pressed',false); };
+  $('dMob').onclick=function(){ fw.classList.add('mobile'); $('dMob').setAttribute('aria-pressed',true); $('dDesk').setAttribute('aria-pressed',false); };
+
+  $('dl').onclick=function(){
+    var d=data(), blob=new Blob([render(d)],{type:'text/html;charset=utf-8'}), a=document.createElement('a');
+    a.href=URL.createObjectURL(blob); a.download=(d.name.replace(/[^\w֐-׿]+/g,'-')||'site')+'.html'; document.body.appendChild(a); a.click(); a.remove();
+  };
+
+  update();
+})();
+</script>
+</body>
+</html>
