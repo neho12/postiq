@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>בונה האתרים</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0B0A09;--panel:#141210;--panel2:#1D1A16;--line:rgba(255,255,255,.09);--text:#F4F3EA;--muted:#9C9885;--acc:#E09A60;--acc2:#C17A44;--me:#2A241D;--ok:#4ADE80;--err:#F08A8A}
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:"Heebo",system-ui,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  [hidden]{display:none!important}
+  button{font:inherit}
+  a{color:var(--acc)}
+  .btn{font-weight:800;font-size:15px;border:0;border-radius:999px;padding:12px 22px;cursor:pointer;background:var(--acc);color:#14110D;transition:transform .2s,opacity .2s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn[disabled]{opacity:.5;cursor:not-allowed;transform:none}
+  .ghost{font-size:13px;font-weight:600;color:var(--muted);background:none;border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer}
+  .ghost:hover{color:var(--text);border-color:var(--muted)}
+  input[type=email],input[type=text],input[inputmode=numeric]{width:100%;font:inherit;color:var(--text);background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:12px 14px;outline:none}
+  input:focus{border-color:var(--acc)}
+
+  /* sign-in */
+  .auth{min-height:100svh;display:grid;place-items:center;padding:24px 16px}
+  .auth-card{width:min(100%,400px);background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:30px 26px}
+  .auth h1{margin:0 0 6px;font-size:26px;font-weight:900;letter-spacing:-.02em}
+  .auth h1 em{font-style:normal;color:var(--acc)}
+  .auth p{margin:0 0 20px;color:var(--muted)}
+  .auth form{display:grid;gap:12px}
+  .auth .row{display:flex;justify-content:space-between;gap:10px;margin-top:4px}
+  .auth .msg{font-size:14px;color:var(--err);min-height:1.2em;margin:0}
+  .auth .fine{font-size:12.5px;margin:16px 0 0}
+
+  /* builder */
+  .app{display:grid;grid-template-columns:440px 1fr;height:100svh}
+  .chat{display:flex;flex-direction:column;background:var(--panel);border-left:1px solid var(--line);min-height:0}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);position:relative}
+  .top b{font-size:18px;font-weight:900}
+  .top b em{font-style:normal;color:var(--acc)}
+  .menu{position:absolute;top:52px;left:12px;z-index:20;background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:6px;min-width:200px;box-shadow:0 20px 40px rgba(0,0,0,.5)}
+  .menu button,.menu a{display:block;width:100%;text-align:right;background:none;border:0;color:var(--text);padding:10px 12px;border-radius:10px;cursor:pointer;font-size:14px;text-decoration:none}
+  .menu button:hover,.menu a:hover{background:rgba(255,255,255,.06)}
+  .menu .danger{color:var(--err)}
+  .menu small{display:block;padding:8px 12px 4px;color:var(--muted);font-size:12px}
+  .usage{padding:6px 16px;font-size:12.5px;color:var(--muted);border-bottom:1px solid var(--line)}
+  .log{flex:1;overflow-y:auto;padding:18px 16px;display:flex;flex-direction:column;gap:12px;min-height:0}
+  .msg{max-width:88%;padding:11px 15px;border-radius:18px;white-space:pre-wrap;word-wrap:break-word;animation:pop .35s cubic-bezier(.2,.8,.2,1)}
+  @keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .msg.bot{align-self:flex-start;background:var(--panel2);border-top-right-radius:6px}
+  .msg.me{align-self:flex-end;background:var(--me);border:1px solid rgba(224,154,96,.25);border-top-left-radius:6px}
+  .msg.note{align-self:center;background:none;color:var(--muted);font-size:13px;padding:2px 8px}
+  .msg.err{align-self:center;background:rgba(220,80,80,.12);border:1px solid rgba(220,80,80,.35);font-size:14px}
+  .typing{align-self:flex-start;display:flex;gap:5px;padding:14px 16px;background:var(--panel2);border-radius:18px;border-top-right-radius:6px}
+  .typing i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:bl 1.2s infinite}
+  .typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+  @keyframes bl{0%,80%,100%{opacity:.25}40%{opacity:1}}
+  .pay{align-self:stretch;padding:18px;border-radius:18px;background:linear-gradient(135deg,rgba(224,154,96,.18),rgba(193,122,68,.06));border:1px solid rgba(224,154,96,.35)}
+  .pay h3{margin:0 0 6px;font-size:18px}
+  .pay p{margin:0 0 14px;color:var(--muted);font-size:14px}
+  .photos{display:flex;gap:6px;padding:0 16px 8px;overflow-x:auto}
+  .photos:empty{display:none}
+  .photos div{position:relative;flex:none}
+  .photos img{width:46px;height:46px;object-fit:cover;border-radius:10px;border:1px solid var(--line);display:block}
+  .photos button{position:absolute;top:-6px;left:-6px;width:20px;height:20px;border-radius:50%;border:0;background:#000;color:#fff;font-size:12px;line-height:20px;cursor:pointer;padding:0}
+  .composer{display:flex;align-items:flex-end;gap:8px;padding:12px 14px 16px;border-top:1px solid var(--line)}
+  .composer textarea{flex:1;resize:none;font:inherit;color:var(--text);background:var(--panel2);border:1px solid var(--line);border-radius:18px;padding:11px 14px;max-height:160px;outline:none}
+  .composer textarea:focus{border-color:var(--acc)}
+  .icon{flex:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--panel2);color:var(--text);display:grid;place-items:center;cursor:pointer;font-size:18px}
+  .icon.send{background:var(--acc);color:#14110D;border-color:var(--acc);font-weight:900}
+  .icon[disabled]{opacity:.45;cursor:not-allowed}
+  .stage{display:flex;flex-direction:column;background:#050505;min-width:0;min-height:0}
+  .bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--panel);flex-wrap:wrap}
+  .status{display:flex;align-items:center;gap:10px;min-width:0}
+  .pill{font-size:12.5px;font-weight:700;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.07);color:var(--muted);white-space:nowrap}
+  .pill.live{background:rgba(74,222,128,.14);color:var(--ok)}
+  .status a{font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr}
+  .actions{display:flex;gap:6px;align-items:center}
+  .actions .btn{padding:8px 16px;font-size:14px}
+  .dev button[aria-pressed="true"]{background:var(--acc);color:#14110D;border-color:var(--acc)}
+  .frame{flex:1;display:grid;place-items:center;padding:16px;min-height:0;position:relative}
+  iframe{width:100%;height:100%;border:0;border-radius:14px;background:#0E0D0B;box-shadow:0 30px 80px rgba(0,0,0,.6);transition:width .5s cubic-bezier(.2,.8,.2,1)}
+  .frame.mobile iframe{width:390px}
+  .empty{position:absolute;inset:16px;display:grid;place-items:center;text-align:center;color:var(--muted);border:1.5px dashed var(--line);border-radius:14px;padding:30px}
+  .empty b{display:block;font-size:22px;color:var(--text);margin-bottom:6px}
+  .tabs{display:none}
+
+  dialog{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:22px;padding:26px;width:min(92vw,460px)}
+  dialog::backdrop{background:rgba(0,0,0,.6)}
+  dialog h2{margin:0 0 6px;font-size:22px}
+  dialog p{margin:0 0 16px;color:var(--muted);font-size:14.5px}
+  .slug{display:flex;align-items:center;border:1px solid var(--line);border-radius:14px;background:var(--panel2);direction:ltr;overflow:hidden}
+  .slug span{padding:0 4px 0 12px;color:var(--muted);font-size:14px;white-space:nowrap}
+  .slug input{border:0!important;background:none!important;padding-left:2px!important}
+  .dlg-msg{font-size:14px;color:var(--err);min-height:1.3em;margin:10px 0}
+  .dlg-actions{display:flex;gap:8px;justify-content:flex-start;margin-top:8px}
+
+  @media (max-width:900px){
+    .app{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+    .tabs{display:flex;gap:6px;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line)}
+    .tabs button{flex:1}
+    .tabs button[aria-pressed="true"]{background:var(--acc);color:#14110D;border-color:var(--acc)}
+    .chat,.stage{grid-row:2;grid-column:1;min-height:0}
+    .app[data-view="chat"] .stage{display:none}
+    .app[data-view="site"] .chat{display:none}
+    .dev{display:none!important}
+    .frame{padding:10px}
+  }
+</style>
+</head>
+<body>
+
+<!-- sign-in -->
+<section class="auth" id="authView" hidden>
+  <div class="auth-card">
+    <h1 data-brand>בונה <em>האתרים</em></h1>
+    <p id="authLead">מתחברים עם אימייל, ומתחילים לבנות. בלי סיסמה.</p>
+    <form id="emailForm">
+      <label for="email" class="fine" style="margin:0;color:var(--muted)">אימייל</label>
+      <input type="email" id="email" autocomplete="email" required dir="ltr" placeholder="you@example.com">
+      <button class="btn" type="submit">שליחת קוד כניסה</button>
+    </form>
+    <form id="codeForm" hidden>
+      <label for="code" class="fine" style="margin:0;color:var(--muted)">הקוד שנשלח אל <b id="sentTo" dir="ltr"></b></label>
+      <input inputmode="numeric" id="code" autocomplete="one-time-code" required dir="ltr" maxlength="10" placeholder="123456">
+      <button class="btn" type="submit">כניסה</button>
+      <div class="row"><button class="ghost" type="button" id="back">אימייל אחר</button><button class="ghost" type="button" id="resend">שליחה מחדש</button></div>
+    </form>
+    <p class="msg" id="authMsg" role="alert"></p>
+    <p class="fine">בהתחברות אתם מסכימים ל<a href="/terms">תנאי השימוש</a> ול<a href="/privacy">מדיניות הפרטיות</a>.</p>
+  </div>
+</section>
+
+<!-- builder -->
+<div class="app" id="app" data-view="chat" hidden>
+  <div class="tabs" role="tablist">
+    <button class="ghost" id="vChat" aria-pressed="true">שיחה</button>
+    <button class="ghost" id="vSite" aria-pressed="false">האתר</button>
+  </div>
+
+  <section class="chat" aria-label="שיחה">
+    <div class="top">
+      <b>בונה <em>האתרים</em></b>
+      <button class="ghost" id="menuBtn" aria-haspopup="true" aria-expanded="false">החשבון ▾</button>
+      <div class="menu" id="menu" hidden>
+        <small id="who" dir="ltr"></small>
+        <button id="cancelSub" hidden>ביטול המנוי</button>
+        <a id="support" target="_blank" rel="noopener" hidden>תמיכה בוואטסאפ</a>
+        <button id="signOut">התנתקות</button>
+        <button id="deleteAcc" class="danger">מחיקת החשבון</button>
+      </div>
+    </div>
+    <div class="usage" id="usage"></div>
+    <div class="log" id="log" aria-live="polite"></div>
+    <div class="photos" id="photos"></div>
+    <form class="composer" id="form">
+      <label class="icon" title="העלאת תמונות" aria-label="העלאת תמונות">📷<input type="file" id="files" accept="image/jpeg,image/png,image/webp" multiple hidden></label>
+      <textarea id="input" rows="1" placeholder="כתבו כאן..." aria-label="ההודעה שלכם"></textarea>
+      <button class="icon send" id="send" type="submit" aria-label="שליחה">↑</button>
+    </form>
+  </section>
+
+  <main class="stage" aria-label="האתר שלכם">
+    <div class="bar">
+      <div class="status"><span class="pill" id="pill">טיוטה</span><a id="liveLink" target="_blank" rel="noopener" hidden></a></div>
+      <div class="actions">
+        <span class="dev"><button class="ghost" id="dDesk" aria-pressed="true">מחשב</button> <button class="ghost" id="dMob" aria-pressed="false">נייד</button></span>
+        <button class="btn" id="publishBtn" disabled>פרסום האתר</button>
+      </div>
+    </div>
+    <div class="frame" id="frame">
+      <iframe id="preview" title="תצוגה מקדימה של האתר" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
+      <div class="empty" id="empty"><div><b>האתר שלכם יופיע כאן</b>ספרו בצ'אט על העסק, והוא ייבנה תוך כדי שיחה.</div></div>
+    </div>
+  </main>
+</div>
+
+<dialog id="publishDlg">
+  <form method="dialog" id="publishForm">
+    <h2 id="pubTitle">פרסום האתר</h2>
+    <p id="pubLead">בחרו כתובת לאתר, באותיות באנגלית, מספרים ומקפים.</p>
+    <div class="slug"><span id="slugPrefix"></span><input type="text" id="slug" required minlength="3" maxlength="40" pattern="[a-z0-9-]+" autocomplete="off" spellcheck="false" placeholder="my-business" aria-label="כתובת האתר"></div>
+    <p class="dlg-msg" id="pubMsg" role="alert"></p>
+    <div class="dlg-actions">
+      <button class="btn" id="pubGo" type="submit" value="go">פרסום</button>
+      <button class="ghost" id="unpublish" type="button" hidden>הסרה מהאוויר</button>
+      <button class="ghost" type="button" id="pubClose">סגירה</button>
+    </div>
+  </form>
+</dialog>
+
+<script type="module" src="builder.js"></script>
+</body>
+</html>

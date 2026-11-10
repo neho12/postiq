@@ -20,7 +20,7 @@ export function waNumber(phone) {
   return d;
 }
 
-export function renderSite(spec, photos = []) {
+export function renderSite(spec, photos = [], opts = {}) {
   const s = spec || {};
   const [a, b] = THEME_COLORS[s.theme] || THEME_COLORS.copper;
   const wa = waNumber(s.phone);
@@ -48,6 +48,7 @@ export function renderSite(spec, photos = []) {
   return `<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(name)}${s.business_type ? ' · ' + esc(s.business_type) : ''}</title>
 <meta name="description" content="${esc(s.intro || s.tagline || name)}">
+<meta property="og:type" content="website"><meta property="og:locale" content="he_IL"><meta property="og:title" content="${esc(name)}"><meta property="og:description" content="${esc(s.tagline || s.intro || '')}">${hero ? `<meta property="og:image" content="${esc(hero)}">` : ''}${opts.canonical ? `<link rel="canonical" href="${esc(opts.canonical)}"><meta property="og:url" content="${esc(opts.canonical)}">` : ''}
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0E0D0B;--bg2:#161411;--text:#F2F3E5;--muted:#A39F8A;--line:rgba(242,243,229,.12);--a:${a};--b:${b};--e:cubic-bezier(.2,.8,.2,1)}
@@ -88,7 +89,7 @@ ${s.about_text ? `<section class="ab"><div class="w"><div class="hd rv"><span cl
 ${gallery.length ? `<section class="gl"><div class="w"><div class="hd rv"><span class="lbl">Gallery</span><h2>מהעבודות</h2></div><div class="gg">${gallery.map((src) => `<figure class="rv"><img src="${src}" alt="" loading="lazy"></figure>`).join('')}</div></div></section>` : ''}
 ${faq ? `<section><div class="w"><div class="hd rv"><span class="lbl">FAQ</span><h2>שאלות נפוצות</h2></div>${faq}</div></section>` : ''}
 <section id="contact"><div class="w"><div class="cb rv"><span class="lbl">Contact</span><h2>בואו נדבר.</h2><p>שלחו הודעה ונחזור אליכם בהקדם.</p><div class="cta"><a class="btn" href="${waLink}" target="_blank" rel="noopener">וואטסאפ</a>${wa ? `<a class="btn g" href="${tel}">התקשרו</a>` : ''}</div></div>${info ? `<div class="inf">${info}</div>` : ''}</div></section>
-<footer><div class="w"><span>© ${esc(name)}</span><span>${esc(s.tagline || '')}</span></div></footer>
+<footer><div class="w"><span>© ${esc(name)}</span>${opts.credit ? `<a href="${esc(opts.credit.url)}" target="_blank" rel="noopener" style="opacity:.75">נבנה עם ${esc(opts.credit.label)}</a>` : `<span>${esc(s.tagline || '')}</span>`}</div></footer>
 ${wa ? `<a class="fab" href="${waLink}" target="_blank" rel="noopener" aria-label="וואטסאפ">✆</a>` : ''}
 <script>(function(){var h=document.documentElement,n=document.getElementById("nav");requestAnimationFrame(function(){setTimeout(function(){h.classList.add("ok")},80)});
 addEventListener("scroll",function(){n.classList.toggle("s",scrollY>40)},{passive:true});
