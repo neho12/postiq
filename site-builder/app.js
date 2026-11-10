@@ -1,12 +1,20 @@
 import { renderSite } from './render.js';
 import { PADDLE, PRICE_LABEL } from './config.js';
+import { SYSTEM_PROMPT } from './lib/prompt.js';
+import { SITE_SPEC_SCHEMA, normalizeSpec } from './lib/site-spec.js';
 
 const GREETING = 'היי! אני אבנה לכם אתר לעסק תוך כדי שיחה. ספרו לי במילים שלכם: מה העסק עושה, ולמי?';
 const KEY = 'site_builder_v1';
 const $ = (id) => document.getElementById(id);
 
+// Preview mode: when this page runs inside a claude.ai artifact viewer, it talks
+// to Claude through the viewer's own account (the `sample` capability) instead
+// of /api/chat, and payment is skipped. Anywhere else window.claude is absent
+// and the real server path below is used.
+const previewSample = window.claude?.use ? window.claude.use('sample').catch(() => null) : Promise.resolve(null);
+
 // ---------- state (kept in this browser only) ----------
-const blank = () => ({ history: [], bubbles: [{ who: 'bot', text: GREETING }], spec: null, photos: [], subscriptionId: '', pending: '' });
+const blank = () => ({ history: [], turns: [], bubbles: [{ who: 'bot', text: GREETING }], spec: null, photos: [], subscriptionId: '', pending: '' });
 let state = load();
 
 function load() {
@@ -100,6 +108,8 @@ function setBusy(on) { busy = on; $('send').disabled = on; typing(on); }
 
 async function send(text) {
   if (busy || !text.trim()) return;
+  const sample = await previewSample;
+  if (sample) return sendPreview(sample, text);
   setBusy(true);
   let res, data;
   try {
@@ -139,6 +149,74 @@ async function send(text) {
       back(); return bubble('err', 'יש עומס כרגע. נסו שוב בעוד דקה.', false);
     default:
       back(); return bubble('err', 'משהו השתבש. ההודעה שלכם חזרה לתיבה, נסו לשלוח שוב.', false);
+  }
+}
+
+// ---------- preview mode (claude.ai artifact) ----------
+const PREVIEW_ERRORS = {
+  not_granted: 'כדי שהתצוגה המקדימה תעבוד, צריך לאשר לעמוד להשתמש ב־Claude.',
+  sampling_disabled: 'Claude לא זמין בחשבון הזה.',
+  rate_limited: 'הגעתם למגבלת השימוש כרגע. נסו שוב מאוחר יותר.',
+  session_expired: 'צריך להתחבר מחדש ל־claude.ai.',
+  refused: 'Claude לא טיפל בבקשה הזו. נסו לנסח אחרת.',
+};
+
+async function sendPreview(sample, text) {
+  setBusy(true);
+  const context = `Context: mode=${state.spec ? 'edit' : 'interview'}; photos uploaded=${state.photos.length}.`;
+  const userTurn = { role: 'user', content: `${context}\n\n${text}` };
+  // sample() is memoryless and has no system prompt: the instructions and the
+  // current site go in a leading user turn, then the page's own turn history.
+  const intro = `${SYSTEM_PROMPT}\n\nThe site content right now (JSON): ${state.spec ? JSON.stringify(state.spec) : 'none yet'}\n\nThe conversation follows.`;
+  const turns = [{ role: 'user', content: intro }, ...state.turns.slice(-60), userTurn];
+
+  const applySpec = (input) => {
+    const { spec, warnings } = normalizeSpec(input);
+    state.spec = spec; save(); refreshPreview();
+    return `Site updated and shown to the owner.${warnings.length ? ` Notes: ${warnings.join('; ')}.` : ''}`;
+  };
+
+  let el = null;
+  const onText = ({ text: t }) => {
+    typing(false);
+    if (!el) el = bubble('bot', '', false);
+    el.innerHTML = fmt(t);
+    log.scrollTop = log.scrollHeight;
+  };
+
+  try {
+    const limits = await sample.limits().catch(() => null);
+    let reply;
+    if (limits?.tools) {
+      const tool = {
+        name: 'update_site',
+        description: 'Replace the whole site content with this version and show it to the owner. Always send every field; use empty strings or empty arrays for anything unknown. Returns a short confirmation.',
+        inputSchema: SITE_SPEC_SCHEMA,
+        execute: (input) => applySpec(input),
+      };
+      reply = (await sample(turns, { tools: [tool], onText })).text;
+    } else {
+      // This view cannot run page tools: ask for the reply and the site as JSON instead.
+      const fields = Object.keys(SITE_SPEC_SCHEMA.properties).join(', ');
+      const asJson = { role: 'user', content: `${userTurn.content}\n\nReply with only a JSON object: {"reply": "<your chat message>", "site": <the complete site content with the fields ${fields}, or null if you are not changing the site>}.` };
+      const data = await sample.json([...turns.slice(0, -1), asJson]);
+      if (data?.site && typeof data.site === 'object') applySpec(data.site);
+      reply = String(data?.reply || (data?.site ? 'עדכנתי את האתר.' : ''));
+      if (reply) onText({ text: reply });
+    }
+    setBusy(false);
+    state.turns.push(userTurn, { role: 'assistant', content: reply || 'עדכנתי את האתר.' });
+    if (reply) state.bubbles.push({ who: 'bot', text: reply });
+    save();
+  } catch (e) {
+    setBusy(false);
+    if (e?.code === 'refused' && el) { el.remove(); el = null; }
+    if (el && e?.text) state.bubbles.push({ who: 'bot', text: e.text });
+    if (e?.code !== 'cancelled') {
+      if (!['not_granted', 'sampling_disabled', 'rate_limited'].includes(e?.code)) $('input').value = text;
+      bubble('err', PREVIEW_ERRORS[e?.code] || 'משהו השתבש. ההודעה שלכם חזרה לתיבה, נסו לשלוח שוב.', false);
+    }
+    save();
   }
 }
 
@@ -227,12 +305,20 @@ $('reset').onclick = () => {
   log.innerHTML = ''; state.bubbles.forEach((b) => bubble(b.who, b.text, false));
   drawPhotos(); refreshPreview(); $('preview').srcdoc = '';
 };
-$('download').onclick = () => {
+$('download').onclick = async () => {
   if (!state.spec) return;
-  const blob = new Blob([renderSite(state.spec, state.photos)], { type: 'text/html;charset=utf-8' });
+  const html = renderSite(state.spec, state.photos);
+  const filename = `${(state.spec.business_name || 'site').replace(/[^\w֐-׿]+/g, '-')}.html`;
+  // Inside a claude.ai artifact, plain download links are blocked; use the platform's save dialog.
+  const downloads = window.claude?.use ? await window.claude.use('downloads').catch(() => null) : null;
+  if (downloads) {
+    try { await downloads.save({ filename, data: html }); } catch (e) { /* viewer declined or unavailable */ }
+    return;
+  }
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `${(state.spec.business_name || 'site').replace(/[^\w֐-׿]+/g, '-')}.html`;
+  a.download = filename;
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 5000);
 };
@@ -247,4 +333,7 @@ $('vSite').onclick = () => { app.dataset.view = 'site'; $('vSite').setAttribute(
 state.bubbles.forEach((b) => bubble(b.who, b.text, false));
 drawPhotos();
 refreshPreview();
-if (state.pending && state.spec && !state.subscriptionId) paywall();
+previewSample.then((s) => {
+  if (s) note('תצוגה מקדימה: השיחה רצה על חשבון Claude שלכם, והתשלום מושבת.');
+  else if (state.pending && state.spec && !state.subscriptionId) paywall();
+});
