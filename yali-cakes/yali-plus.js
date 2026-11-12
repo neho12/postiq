@@ -30,6 +30,18 @@
   })();
 
   function start() {
+    /* Opening video: if the browser held it back (autoplay blocked, battery saver, background tab),
+       start it on the next sign of life. Not when the visitor paused it, or asked for reduced motion. */
+    if (!reduce) {
+      var resumeHero = function () {
+        var v = document.querySelector('.banner-video'), btn = document.querySelector('.vpause');
+        if (!v || !v.paused || (btn && btn.getAttribute('data-paused') === 'true')) return;
+        var pr = v.play(); if (pr && pr.catch) pr.catch(function () {});
+      };
+      ['pointerdown', 'keydown', 'touchstart', 'wheel', 'scroll', 'mousemove'].forEach(function (ev) { window.addEventListener(ev, resumeHero, { passive: true }); });
+      document.addEventListener('visibilitychange', function () { if (!document.hidden) resumeHero(); });
+      [800, 2500, 5000].forEach(function (ms) { setTimeout(resumeHero, ms); });
+    }
     /* Arriving with a #hash from another page (e.g. "להזמנת עוגה" on the gallery page): the
        sections are drawn after load, so the browser could not jump there. Do it now. */
     if (location.hash.length > 1) {
