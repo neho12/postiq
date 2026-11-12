@@ -152,3 +152,15 @@ footer span[style*="735A4B"]{color:#5E4637!important}
 /* ---------- "העבודות שלי" button under the inspiration gallery (styled by the original .btn-primary) ---------- */
 .yp-works-more{display:flex;justify-content:center;padding-top:28px}
 a.yp-works-link{text-decoration:none}
+
+/* ---------- Opening section buttons: side by side on every screen, and "להזמנת סדנא" gets the same arrow ---------- */
+.hero-full a.btn-soft{display:inline-flex!important;align-items:center;gap:16px!important;padding:8px 24px 8px 8px!important;justify-content:space-between}
+.hero-full a.btn-soft::after{content:"\2190";display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:#3B2A20;color:#FFFFFF;font-size:18px;line-height:1;flex:none}
+@media (max-width:900px){
+  .hero-full div:has(> a.cta):has(> a.btn-soft){flex-direction:row!important;flex-wrap:nowrap!important;align-items:stretch!important;gap:10px!important}
+  .hero-full div:has(> a.cta):has(> a.btn-soft)>a{flex:1 1 0;width:auto!important;min-width:0;white-space:nowrap;font-size:15px;gap:10px!important;padding:6px 14px 6px 6px!important}
+  .hero-full div:has(> a.cta):has(> a.btn-soft)>a::after{width:34px;height:34px;font-size:16px}
+}
+@media (max-width:359px){
+  .hero-full div:has(> a.cta):has(> a.btn-soft)>a{font-size:14px;padding-inline-start:10px!important}
+}
