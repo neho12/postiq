@@ -30,51 +30,34 @@
   })();
 
   function start() {
-    /* "מה יש בתוך העוגה": the layers separate when the section comes into view. The visitor can put the
-       cake back together, switch the base between vanilla and chocolate, and point at a layer or its label. */
+    /* "מה יש בתוך העוגה?": the section is pinned while you scroll through it; the layers of Mia's cake
+       move apart with the scroll position (computed from the rest pose every frame, so scrolling back puts
+       the cake back together), then the labels appear one by one. */
     (function layers() {
-      var open = false, shown = false, want = null;
-      var sec = function () { return document.getElementById('layers'); };
-      var apply = function () {
-        var s = sec(); if (!s) return;
-        s.classList.toggle('is-open', open);
-        var t = document.getElementById('yl-toggle');
-        if (t) { t.setAttribute('aria-pressed', open ? 'true' : 'false'); t.textContent = open ? 'להרכיב את העוגה' : 'לפרק לשכבות'; }
-        var st = document.getElementById('yl-stage');
-        if (st && want) st.setAttribute('data-base', want);
-        $$('.yl-chip').forEach(function (c) { c.setAttribute('aria-pressed', c.getAttribute('data-base') === (want || 'vanilla') ? 'true' : 'false'); });
+      if (reduce) return;
+      var clamp = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
+      var ease = function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+      var keys = ['disc', 'top', 'cream', 'swag', 'ruffle'];
+      var ticking = false;
+      var draw = function () {
+        ticking = false;
+        var sec = document.getElementById('layers'), st = document.getElementById('yl-stage');
+        if (!sec || !st) return;
+        var r = sec.getBoundingClientRect(), run = r.height - window.innerHeight;
+        var p = run > 0 ? clamp(-r.top / run) : 0;
+        /* 0–.12 assembled, .12–.55 separate, .55–.85 labels appear, then hold */
+        st.style.setProperty('--e', ease(clamp((p - .12) / .43)).toFixed(4));
+        keys.forEach(function (k, i) {
+          var li = st.parentNode.querySelector('.yl-labels li[data-k="' + k + '"]');
+          if (li) li.style.setProperty('--l', ease(clamp((p - .5 - i * .06) / .1)).toFixed(3));
+        });
       };
-      var setFocus = function (n) {
-        var st = document.getElementById('yl-stage'); if (!st) return;
-        if (n) st.setAttribute('data-focus', n); else st.removeAttribute('data-focus');
-      };
-      document.addEventListener('click', function (e) {
-        var t = e.target.closest && e.target.closest('#yl-toggle');
-        if (t) { open = !open; apply(); return; }
-        var c = e.target.closest && e.target.closest('.yl-chip');
-        if (c) { want = c.getAttribute('data-base'); apply(); }
-      });
-      var over = function (e) { var el = e.target.closest && e.target.closest('.yl-ly, .yl-l-list li'); if (el) setFocus(el.getAttribute('data-n')); };
-      var out = function (e) { var el = e.target.closest && e.target.closest('.yl-ly, .yl-l-list li'); if (el) setFocus(null); };
-      document.addEventListener('mouseover', over); document.addEventListener('mouseout', out);
-      document.addEventListener('focusin', function (e) { if (e.target.closest && e.target.closest('.yl-l-list li')) over(e); });
-      document.addEventListener('focusout', out);
-      var s0 = sec();
-      if (!s0) return;
-      if (reduce) { open = true; apply(); return; }
-      /* The design runtime can swap the page's elements, so look the stage up fresh instead of observing one node. */
-      var look = function () {
-        if (shown) return;
-        var st = document.getElementById('yl-stage'); if (!st) return;
-        var r = st.getBoundingClientRect(), vh = window.innerHeight;
-        var seen = Math.min(r.bottom, vh) - Math.max(r.top, 0);
-        if (seen >= Math.min(r.height, vh) * 0.5) { shown = true; setTimeout(function () { open = true; apply(); }, 350); }
-      };
-      window.addEventListener('scroll', look, { passive: true });
-      window.addEventListener('resize', look);
-      [1000, 3000, 6000].forEach(function (ms) { setTimeout(look, ms); });
-      /* the design runtime can redraw the page and drop added classes: put them back */
-      new MutationObserver(function () { var s = sec(); if (s && open !== s.classList.contains('is-open')) apply(); }).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class'] });
+      var req = function () { if (!ticking) { ticking = true; requestAnimationFrame(draw); } };
+      window.addEventListener('scroll', req, { passive: true });
+      window.addEventListener('resize', req);
+      /* the design runtime can redraw the section and drop the inline values: draw again after any change */
+      new MutationObserver(req).observe(document.body, { childList: true, subtree: true });
+      req();
     })();
 
     /* Opening video: if the browser held it back (autoplay blocked, battery saver, background tab),
