@@ -30,6 +30,53 @@
   })();
 
   function start() {
+    /* "מה יש בתוך העוגה": the layers separate when the section comes into view. The visitor can put the
+       cake back together, switch the base between vanilla and chocolate, and point at a layer or its label. */
+    (function layers() {
+      var open = false, shown = false, want = null;
+      var sec = function () { return document.getElementById('layers'); };
+      var apply = function () {
+        var s = sec(); if (!s) return;
+        s.classList.toggle('is-open', open);
+        var t = document.getElementById('yl-toggle');
+        if (t) { t.setAttribute('aria-pressed', open ? 'true' : 'false'); t.textContent = open ? 'להרכיב את העוגה' : 'לפרק לשכבות'; }
+        var st = document.getElementById('yl-stage');
+        if (st && want) st.setAttribute('data-base', want);
+        $$('.yl-chip').forEach(function (c) { c.setAttribute('aria-pressed', c.getAttribute('data-base') === (want || 'vanilla') ? 'true' : 'false'); });
+      };
+      var setFocus = function (n) {
+        var st = document.getElementById('yl-stage'); if (!st) return;
+        if (n) st.setAttribute('data-focus', n); else st.removeAttribute('data-focus');
+      };
+      document.addEventListener('click', function (e) {
+        var t = e.target.closest && e.target.closest('#yl-toggle');
+        if (t) { open = !open; apply(); return; }
+        var c = e.target.closest && e.target.closest('.yl-chip');
+        if (c) { want = c.getAttribute('data-base'); apply(); }
+      });
+      var over = function (e) { var el = e.target.closest && e.target.closest('.yl-ly, .yl-l-list li'); if (el) setFocus(el.getAttribute('data-n')); };
+      var out = function (e) { var el = e.target.closest && e.target.closest('.yl-ly, .yl-l-list li'); if (el) setFocus(null); };
+      document.addEventListener('mouseover', over); document.addEventListener('mouseout', out);
+      document.addEventListener('focusin', function (e) { if (e.target.closest && e.target.closest('.yl-l-list li')) over(e); });
+      document.addEventListener('focusout', out);
+      var s0 = sec();
+      if (!s0) return;
+      if (reduce) { open = true; apply(); return; }
+      /* The design runtime can swap the page's elements, so look the stage up fresh instead of observing one node. */
+      var look = function () {
+        if (shown) return;
+        var st = document.getElementById('yl-stage'); if (!st) return;
+        var r = st.getBoundingClientRect(), vh = window.innerHeight;
+        var seen = Math.min(r.bottom, vh) - Math.max(r.top, 0);
+        if (seen >= Math.min(r.height, vh) * 0.5) { shown = true; setTimeout(function () { open = true; apply(); }, 350); }
+      };
+      window.addEventListener('scroll', look, { passive: true });
+      window.addEventListener('resize', look);
+      [1000, 3000, 6000].forEach(function (ms) { setTimeout(look, ms); });
+      /* the design runtime can redraw the page and drop added classes: put them back */
+      new MutationObserver(function () { var s = sec(); if (s && open !== s.classList.contains('is-open')) apply(); }).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class'] });
+    })();
+
     /* Opening video: if the browser held it back (autoplay blocked, battery saver, background tab),
        start it on the next sign of life. Not when the visitor paused it, or asked for reduced motion. */
     if (!reduce) {
