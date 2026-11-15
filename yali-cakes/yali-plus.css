@@ -178,23 +178,24 @@ html body section#layers{background:
 .yl-sub{margin:0;color:var(--yp-muted)}
 .yl-stage{--e:0;flex:1;min-height:0;width:100%;display:flex;justify-content:center;align-items:center;gap:clamp(12px,4vw,64px)}
 /* the cake keeps the 536:910 proportions of its exploded layout so every layer is placed in percent */
-.yl-cake{position:relative;height:100%;max-height:760px;aspect-ratio:536/910;flex:none;translate:0 calc((1 - var(--e)) * -18%)}
-.yl-p{position:absolute;left:0;width:100%;height:auto;top:calc((360 + var(--o) * var(--e)) / 910 * 100%);will-change:top}
-.yl-p[data-k="disc"]{--o:-360}.yl-p[data-k="top"]{--o:-270}.yl-p[data-k="cream"]{--o:-190;opacity:min(1,calc(var(--e) * 6))}.yl-p[data-k="swag"]{--o:-100}.yl-p[data-k="ruffle"]{--o:0}
+.yl-cake{position:relative;height:100%;max-height:760px;aspect-ratio:500/870;flex:none;translate:0 calc((1 - var(--e)) * -18%)}
+.yl-p{position:absolute;left:0;width:100%;height:auto;top:calc((330 + var(--o) * var(--e)) / 870 * 100%);will-change:top}
+.yl-p[data-k="disc"]{--o:-330}.yl-p[data-k="top"]{--o:-250}.yl-p[data-k="cream"]{--o:-170}.yl-p[data-k="filling"]{--o:-85}.yl-p[data-k="body"],.yl-p[data-k="sponge"]{--o:0}
+.yl-p[data-k="cream"],.yl-p[data-k="filling"],.yl-p[data-k="sponge"]{opacity:min(1,calc(var(--e) * 6))}
 /* labels sit level with their layer once it has moved out */
-.yl-labels{list-style:none;margin:0;padding:0;position:relative;height:100%;max-height:760px;aspect-ratio:536/910;flex:none;width:clamp(150px,26vw,300px);aspect-ratio:auto}
+.yl-labels{list-style:none;margin:0;padding:0;position:relative;height:100%;max-height:760px;flex:none;width:clamp(150px,26vw,300px);aspect-ratio:auto}
 .yl-labels li{position:absolute;inset-inline:0;transform:translateY(-50%);display:flex;align-items:center;gap:12px;opacity:var(--l,0);translate:calc((1 - var(--l,0)) * 18px) 0}
 .yl-labels li::before{content:"";position:absolute;inset-inline-start:calc(-1 * clamp(12px,4vw,64px));width:clamp(12px,4vw,64px);top:50%;height:1.5px;background:linear-gradient(to right,rgba(105,75,58,0),rgba(105,75,58,.55))}
-.yl-labels li[data-k="disc"]{top:15.7%}.yl-labels li[data-k="top"]{top:29%}.yl-labels li[data-k="cream"]{top:40%}.yl-labels li[data-k="swag"]{top:56%}.yl-labels li[data-k="ruffle"]{top:77%}
+.yl-labels li[data-k="disc"]{top:17%}.yl-labels li[data-k="top"]{top:30%}.yl-labels li[data-k="cream"]{top:41.5%}.yl-labels li[data-k="filling"]{top:51.5%}.yl-labels li[data-k="body"]{top:63%}
 .yl-num{flex:none;width:28px;height:28px;border-radius:50%;background:var(--yp-cocoa);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
 .yl-t{display:flex;flex-direction:column;line-height:1.3}
 .yl-t b{font-size:clamp(15px,1.6vw,20px);font-weight:700}
 .yl-t span{font-size:clamp(12px,1.2vw,15px);color:var(--yp-muted)}
 .yl-note{margin:0;font-size:12px;color:var(--yp-muted);opacity:.8}
 @media (max-width:700px){
-  .yl-stage{--cw:min(54vw,calc((100svh - 250px) * 536 / 910));gap:10px;flex:none;height:calc(var(--cw) * 910 / 536);margin-block:auto}
+  .yl-stage{--cw:min(50vw,calc((100svh - 250px) * 500 / 870));gap:10px;flex:none;height:calc(var(--cw) * 870 / 500);margin-block:auto}
   .yl-cake{height:100%;width:var(--cw);max-height:none;translate:calc((1 - var(--e)) * -20vw) calc((1 - var(--e)) * -18%)}
-  .yl-labels{width:38vw;max-height:none}
+  .yl-labels{width:36vw;max-height:none}
   .yl-t b{font-size:13px}
   .yl-t span{display:none}
   .yl-num{width:22px;height:22px;font-size:11px}

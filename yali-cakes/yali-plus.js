@@ -37,7 +37,7 @@
       if (reduce) return;
       var clamp = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
       var ease = function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
-      var keys = ['disc', 'top', 'cream', 'swag', 'ruffle'];
+      var keys = ['disc', 'top', 'cream', 'filling', 'body'];
       var ticking = false;
       var draw = function () {
         ticking = false;
