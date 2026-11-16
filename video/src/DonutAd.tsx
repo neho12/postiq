@@ -349,7 +349,7 @@ type ArcProps = {
   x?: number;
   y: number; // y of the arc's middle point
   radius: number;
-  shape: 'rainbow' | 'smile';
+  shape: 'rainbow' | 'smile' | 'flat';
   variant: PalKey;
   size: number;
   stagger?: number; // frames between letters
@@ -390,8 +390,8 @@ const ArcTitle: React.FC<ArcProps> = ({text, from, to, x = 540, y, radius, shape
 
   // the line starts flat and bends into its curve
   const bend = kf(local, [5, 5 + chars.length * stagger * 0.8 + 6], [0.6, 1], Easing.bezier(0.45, 0, 0.2, 1));
-  const R = radius / Math.max(0.02, bend);
-  const dir = shape === 'rainbow' ? 1 : -1;
+  const R = shape === 'flat' ? 1e7 : radius / Math.max(0.02, bend);
+  const dir = shape === 'smile' ? -1 : 1;
   // whole arc slowly rocks
   const rock = 0;
   const exitStart = end - 9;
@@ -570,7 +570,7 @@ export const DonutAd: React.FC = () => {
       <HaBurst />
 
       {/* 1. מצאנו תחנת המתנות */}
-      <ArcTitle text="מצאנו תחנת המתנות 🎁" from={T.found} to={3.15} y={250} radius={720} shape="rainbow" variant="pink" size={112} stagger={1.4} />
+      <ArcTitle text="מצאנו תחנת המתנות 🎁" from={T.found} to={3.15} y={260} radius={720} shape="flat" variant="pink" size={104} stagger={1.4} />
       <Decorations at={0.25} until={3.1} items={[
         {x: 120, y: 190, kind: 'sparkle', size: 70, delay: 0},
         {x: 960, y: 420, kind: 'star', size: 70, delay: 4, rot: 12},
@@ -589,9 +589,9 @@ export const DonutAd: React.FC = () => {
       <Arrow from={T.donuts} to={10.42} />
 
       {/* 5. גם כיף וגם טעים */}
-      <ArcTitle text="גם כיף וגם טעים!" from={T.fun} to={13.0} y={150} radius={620} shape="rainbow" variant="mint" size={128} stagger={1.8} />
+      <ArcTitle text="גם כיף וגם טעים!" from={T.fun} to={13.0} y={170} radius={620} shape="flat" variant="mint" size={124} stagger={1.8} />
       <Decorations at={T.fun + 0.2} until={12.95} items={[
-        {x: 140, y: 300, kind: 'candy', size: 110, delay: 0, rot: -15},
+        {x: 130, y: 330, kind: 'candy', size: 100, delay: 0, rot: -15},
         {x: 950, y: 290, kind: 'star', size: 62, delay: 6},
       ]} />
 
@@ -605,14 +605,14 @@ export const DonutAd: React.FC = () => {
       {/* 7. ורק... 38 ₪ */}
       <Title text="ורק..." from={T.andOnly} to={T.price - 0.05} y={880} variant="butter" size={140} anim="type" tilt={-3} />
       <PriceMoment />
-      <ArcTitle text="רק 38 ₪ למארז" from={T.price + 0.35} to={T.end + 1} y={1290} radius={700} shape="smile" variant="butter" size={120} stagger={1.6} />
+      <ArcTitle text="רק 38 ₪ למארז" from={T.price + 0.35} to={T.end + 1} y={1290} radius={700} shape="flat" variant="butter" size={120} stagger={1.6} />
       <Decorations at={T.price + 0.1} until={T.end + 1} items={[
         {x: 170, y: 560, kind: 'star', size: 95, delay: 0, rot: -12},
         {x: 925, y: 610, kind: 'sparkle', size: 90, delay: 3},
         {x: 905, y: 1170, kind: 'star', size: 75, delay: 6, rot: 18},
         {x: 165, y: 1150, kind: 'heart', size: 70, delay: 9},
         {x: 120, y: 860, kind: 'sparkle', size: 60, delay: 12},
-        {x: 960, y: 880, kind: 'candy', size: 100, delay: 14, rot: 20},
+        {x: 930, y: 1460, kind: 'candy', size: 100, delay: 14, rot: 20},
       ]} />
     </AbsoluteFill>
   );
