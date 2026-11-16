@@ -615,10 +615,10 @@ export const DonutAd: React.FC = () => {
       <HaBurst />
 
       {/* 1. מצאנו תחנת המתנות */}
-      <ArcTitle text="מצאנו תחנת המתנות 🎁" from={0} to={3.12} wordTimes={[W.matzanu, W.lachem, W.hamatana, W.mat]} y={260} radius={720} shape="flat" variant="pink" size={104} stagger={1.4} />
+      <ArcTitle text="מצאנו תחנת המתנות 🎁" from={0} to={3.12} wordTimes={[W.matzanu, W.lachem, W.hamatana, W.mat]} y={250} radius={720} shape="rainbow" variant="pink" size={112} stagger={1.4} />
       <Decorations at={0.25} until={3.1} items={[
         {x: 120, y: 190, kind: 'sparkle', size: 70, delay: 0},
-        {x: 960, y: 420, kind: 'star', size: 70, delay: 4, rot: 12},
+        {x: 1000, y: 560, kind: 'star', size: 64, delay: 4, rot: 12},
         {x: 980, y: 170, kind: 'heart', size: 60, delay: 7},
       ]} />
 
@@ -631,13 +631,12 @@ export const DonutAd: React.FC = () => {
 
       {/* 4. ערכת הכנת סופגניות */}
       <Title text="ערכת הכנת סופגניות 🍩" from={T.kit - 0.2} to={10.75} wordTimes={[W.erkat, W.hachanat, W.sufganiyot, W.sufTail]} y={1700} variant="peach" size={108} anim="stretch" tilt={-1.5} />
-      <Arrow from={T.donuts} to={10.75} />
 
       {/* 5. גם כיף וגם טעים */}
-      <ArcTitle text="גם כיף וגם טעים!" from={T.fun - 0.2} to={13.02} wordTimes={[W.gam, W.kef, W.vegam, W.taim]} y={170} radius={620} shape="flat" variant="mint" size={124} stagger={1.8} />
+      <ArcTitle text="גם כיף וגם טעים!" from={T.fun - 0.2} to={13.02} wordTimes={[W.gam, W.kef, W.vegam, W.taim]} y={150} radius={680} shape="rainbow" variant="mint" size={116} stagger={1.8} />
       <Decorations at={T.fun + 0.2} until={12.95} items={[
-        {x: 130, y: 330, kind: 'candy', size: 100, delay: 0, rot: -15},
-        {x: 950, y: 290, kind: 'star', size: 62, delay: 6},
+        {x: 120, y: 440, kind: 'candy', size: 100, delay: 0, rot: -15},
+        {x: 990, y: 440, kind: 'star', size: 58, delay: 6},
       ]} />
 
       {/* 6. פעילות מתוקה עם הילדים */}
@@ -650,11 +649,11 @@ export const DonutAd: React.FC = () => {
       {/* 7. ורק... 38 ₪ */}
       <Title text="ורק..." from={T.andOnly} to={T.price - 0.17} wordTimes={[W.verak, W.rak + 0.25]} y={880} variant="butter" size={140} anim="type" tilt={-3} />
       <PriceMoment />
-      <ArcTitle text="רק 38 ₪ למארז" from={T.price} to={T.end + 1} wordTimes={[18.6, W.ushmone, W.shkalim, W.shkalimEnd]} y={1290} radius={700} shape="flat" variant="butter" size={120} stagger={1.6} />
+      <ArcTitle text="רק 38 ₪ למארז" from={T.price} to={T.end + 1} wordTimes={[18.6, W.ushmone, W.shkalim, W.shkalimEnd]} y={1290} radius={700} shape="smile" variant="butter" size={120} stagger={1.6} />
       <Decorations at={T.price + 0.1} until={T.end + 1} items={[
         {x: 170, y: 560, kind: 'star', size: 95, delay: 0, rot: -12},
         {x: 925, y: 610, kind: 'sparkle', size: 90, delay: 3},
-        {x: 905, y: 1170, kind: 'star', size: 75, delay: 6, rot: 18},
+        {x: 1000, y: 1360, kind: 'star', size: 66, delay: 6, rot: 18},
         {x: 165, y: 1150, kind: 'heart', size: 70, delay: 9},
         {x: 120, y: 860, kind: 'sparkle', size: 60, delay: 12},
         {x: 930, y: 1460, kind: 'candy', size: 100, delay: 14, rot: 20},
