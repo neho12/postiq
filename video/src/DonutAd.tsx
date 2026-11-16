@@ -27,9 +27,31 @@ if (typeof document !== 'undefined' && !(window as any).__fontLoading) {
 }
 
 // Brand palette
-const PINK = '#FF6B9A';
-const RED = '#E3263F';
-const CREAM = '#FFF5E9';
+// Soft pastel rainbow palette
+const PAL = {
+  pink: '#F6B8C8',
+  peach: '#F8C6A0',
+  butter: '#F9E6A5',
+  mint: '#B9DEC5',
+  sky: '#AFCFE8',
+  lilac: '#B9B8E5',
+  lavender: '#D4B8E8',
+};
+// slightly deeper tone of each colour, used for the 3D bottom edge
+const SHADE: Record<keyof typeof PAL, string> = {
+  pink: '#E390A8',
+  peach: '#E6A06F',
+  butter: '#E2C66C',
+  mint: '#86C09C',
+  sky: '#7FAED6',
+  lilac: '#8D8BD0',
+  lavender: '#B48DD3',
+};
+type PalKey = keyof typeof PAL;
+const DEEP = '#4E3A66'; // text colour – deep plum for contrast on pastels
+const PINK = PAL.pink;
+const RED = PAL.lavender;
+const CREAM = '#FFF8F0';
 const WHITE = '#FFFFFF';
 
 const FPS = 30;
@@ -101,21 +123,21 @@ const Flashes: React.FC = () => {
 type Ha = {beat: number; dt: number; x: number; y: number; text: string; size: number; rot: number; color: string; fill: string};
 const HA_WORDS: Ha[] = [
   // beat 1
-  {beat: 0, dt: 0, x: 230, y: 330, text: 'HA', size: 170, rot: -12, color: WHITE, fill: PINK},
-  {beat: 0, dt: 2, x: 790, y: 1390, text: 'ha ha', size: 110, rot: 8, color: RED, fill: CREAM},
-  {beat: 0, dt: 4, x: 910, y: 160, text: 'ha!', size: 96, rot: 14, color: WHITE, fill: RED},
+  {beat: 0, dt: 0, x: 230, y: 330, text: 'HA', size: 170, rot: -12, color: DEEP, fill: PAL.pink},
+  {beat: 0, dt: 2, x: 790, y: 1390, text: 'ha ha', size: 110, rot: 8, color: DEEP, fill: PAL.peach},
+  {beat: 0, dt: 4, x: 910, y: 160, text: 'ha!', size: 96, rot: 14, color: DEEP, fill: PAL.butter},
   // beat 2
-  {beat: 1, dt: 0, x: 790, y: 400, text: 'HA HA', size: 136, rot: 10, color: WHITE, fill: RED},
-  {beat: 1, dt: 2, x: 210, y: 1720, text: 'ha', size: 124, rot: -10, color: WHITE, fill: PINK},
-  {beat: 1, dt: 4, x: 150, y: 130, text: 'ha!', size: 90, rot: -16, color: RED, fill: CREAM},
+  {beat: 1, dt: 0, x: 790, y: 400, text: 'HA HA', size: 136, rot: 10, color: DEEP, fill: PAL.mint},
+  {beat: 1, dt: 2, x: 210, y: 1720, text: 'ha', size: 124, rot: -10, color: DEEP, fill: PAL.sky},
+  {beat: 1, dt: 4, x: 150, y: 130, text: 'ha!', size: 90, rot: -16, color: DEEP, fill: PAL.lilac},
   // beat 3
-  {beat: 2, dt: 0, x: 260, y: 1300, text: 'HA!', size: 156, rot: -8, color: RED, fill: CREAM},
-  {beat: 2, dt: 2, x: 870, y: 1740, text: 'haha', size: 104, rot: 12, color: WHITE, fill: PINK},
-  {beat: 2, dt: 4, x: 530, y: 140, text: 'ha', size: 100, rot: 4, color: WHITE, fill: RED},
+  {beat: 2, dt: 0, x: 260, y: 1300, text: 'HA!', size: 156, rot: -8, color: DEEP, fill: PAL.lavender},
+  {beat: 2, dt: 2, x: 870, y: 1740, text: 'haha', size: 104, rot: 12, color: DEEP, fill: PAL.pink},
+  {beat: 2, dt: 4, x: 530, y: 140, text: 'ha', size: 100, rot: 4, color: DEEP, fill: PAL.mint},
   // beat 4 – biggest
-  {beat: 3, dt: 0, x: 540, y: 1545, text: 'HA HA HA!', size: 160, rot: -5, color: WHITE, fill: PINK},
-  {beat: 3, dt: 2, x: 500, y: 340, text: 'HA', size: 136, rot: 12, color: WHITE, fill: RED},
-  {beat: 3, dt: 3, x: 940, y: 1180, text: 'ha!', size: 92, rot: -12, color: RED, fill: CREAM},
+  {beat: 3, dt: 0, x: 540, y: 1545, text: 'HA HA HA!', size: 160, rot: -5, color: DEEP, fill: PAL.peach},
+  {beat: 3, dt: 2, x: 500, y: 340, text: 'HA', size: 136, rot: 12, color: DEEP, fill: PAL.sky},
+  {beat: 3, dt: 3, x: 940, y: 1180, text: 'ha!', size: 92, rot: -12, color: DEEP, fill: PAL.butter},
 ];
 
 const HaBurst: React.FC = () => {
@@ -148,9 +170,9 @@ const HaBurst: React.FC = () => {
               whiteSpace: 'nowrap',
               direction: 'ltr',
               letterSpacing: 2,
-              WebkitTextStroke: `${Math.round(h.size / 9)}px ${h.fill}`,
+              WebkitTextStroke: `${Math.round(h.size / 7)}px ${h.fill}`,
               paintOrder: 'stroke fill',
-              filter: 'drop-shadow(0 8px 0 rgba(142,16,38,0.55)) drop-shadow(0 14px 18px rgba(120,10,40,0.35))',
+              filter: 'drop-shadow(0 6px 0 rgba(255,255,255,0.95)) drop-shadow(0 12px 16px rgba(78,58,102,0.35))',
             }}
           >
             {h.text}
@@ -174,9 +196,9 @@ const Heart: React.FC<{size: number; color: string}> = ({size, color}) => (
 );
 const Candy: React.FC<{size: number}> = ({size}) => (
   <svg width={size} height={size} viewBox="0 0 120 60">
-    <path d="M4 10 L30 30 L4 50Z" fill={PINK} stroke={WHITE} strokeWidth={4} strokeLinejoin="round" />
-    <path d="M116 10 L90 30 L116 50Z" fill={PINK} stroke={WHITE} strokeWidth={4} strokeLinejoin="round" />
-    <circle cx="60" cy="30" r="26" fill={RED} stroke={WHITE} strokeWidth={5} />
+    <path d="M4 10 L30 30 L4 50Z" fill={PAL.peach} stroke={WHITE} strokeWidth={4} strokeLinejoin="round" />
+    <path d="M116 10 L90 30 L116 50Z" fill={PAL.peach} stroke={WHITE} strokeWidth={4} strokeLinejoin="round" />
+    <circle cx="60" cy="30" r="26" fill={PAL.mint} stroke={WHITE} strokeWidth={5} />
     <path d="M44 22 Q60 34 76 22" stroke={WHITE} strokeWidth={5} fill="none" strokeLinecap="round" />
   </svg>
 );
@@ -201,7 +223,7 @@ const Decorations: React.FC<{at: number; until: number; items: Deco[]}> = ({at, 
         if (frame < start || frame > f(until)) return null;
         const rot = (d.rot ?? 0) + (d.kind === 'sparkle' ? (frame - start) * 3 : Math.sin((frame - start) / 12) * 8);
         const node =
-          d.kind === 'star' ? <Star size={d.size} color={d.color ?? '#FFC93C'} /> :
+          d.kind === 'star' ? <Star size={d.size} color={d.color ?? PAL.butter} /> :
           d.kind === 'heart' ? <Heart size={d.size} color={d.color ?? PINK} /> :
           d.kind === 'candy' ? <Candy size={d.size} /> : <Sparkle size={d.size} />;
         return (
@@ -212,7 +234,7 @@ const Decorations: React.FC<{at: number; until: number; items: Deco[]}> = ({at, 
               left: d.x - d.size / 2,
               top: d.y - d.size / 2 + floatY,
               transform: `scale(${s * out}) rotate(${rot}deg)`,
-              filter: 'drop-shadow(0 6px 10px rgba(180,20,60,0.35))',
+              filter: 'drop-shadow(0 6px 10px rgba(78,58,102,0.30))',
             }}
           >
             {node}
@@ -229,13 +251,13 @@ type TitleProps = {
   from: number;
   to: number;
   y: number; // center y in px
-  variant?: 'cream' | 'pink' | 'red';
+  variant?: PalKey;
   size?: number;
   anim?: 'pop' | 'bounce' | 'soft' | 'wiggle';
   tilt?: number;
 };
 
-const Title: React.FC<TitleProps> = ({text, from, to, y, variant = 'cream', size = 84, anim = 'pop', tilt = 0}) => {
+const Title: React.FC<TitleProps> = ({text, from, to, y, variant = 'pink', size = 84, anim = 'pop', tilt = 0}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const start = f(from);
@@ -262,9 +284,7 @@ const Title: React.FC<TitleProps> = ({text, from, to, y, variant = 'cream', size
   const opacity = (anim === 'soft' ? s : Math.min(1, s * 3)) * out;
 
   const colors =
-    variant === 'pink' ? {bg: PINK, fg: WHITE, edge: WHITE, shadow: RED} :
-    variant === 'red' ? {bg: RED, fg: WHITE, edge: CREAM, shadow: '#8E1026'} :
-    {bg: CREAM, fg: RED, edge: WHITE, shadow: PINK};
+{bg: PAL[variant], fg: DEEP, edge: WHITE, shadow: SHADE[variant]};
 
   return (
     <div
@@ -289,9 +309,9 @@ const Title: React.FC<TitleProps> = ({text, from, to, y, variant = 'cream', size
           color: colors.fg,
           background: colors.bg,
           padding: '22px 46px 26px',
-          borderRadius: 999,
+          borderRadius: 18,
           border: `7px solid ${colors.edge}`,
-          boxShadow: `0 10px 0 ${colors.shadow}, 0 18px 40px rgba(120,10,40,0.30)`,
+          boxShadow: `0 10px 0 ${colors.shadow}, 0 18px 40px rgba(78,58,102,0.28)`,
           transform: `scale(${scale}) rotate(${rotate}deg)`,
           textAlign: 'center',
           maxWidth: 960,
@@ -315,12 +335,12 @@ const Arrow: React.FC<{from: number; to: number}> = ({from, to}) => {
   const L = 420;
   return (
     <svg width={1080} height={1920} style={{position: 'absolute', inset: 0, opacity: out}}>
-      <g style={{filter: 'drop-shadow(0 4px 6px rgba(140,10,40,0.45))'}}>
+      <g style={{filter: 'drop-shadow(0 4px 6px rgba(78,58,102,0.4))'}}>
         <path d="M600 1560 C 640 1420, 760 1360, 805 1245" fill="none" stroke={WHITE} strokeWidth={16} strokeLinecap="round" strokeDasharray={L} strokeDashoffset={L * (1 - draw)} />
-        <path d="M600 1560 C 640 1420, 760 1360, 805 1245" fill="none" stroke={PINK} strokeWidth={8} strokeLinecap="round" strokeDasharray={L} strokeDashoffset={L * (1 - draw)} />
+        <path d="M600 1560 C 640 1420, 760 1360, 805 1245" fill="none" stroke={PAL.lilac} strokeWidth={8} strokeLinecap="round" strokeDasharray={L} strokeDashoffset={L * (1 - draw)} />
         <g transform={`translate(805 1245) rotate(-20) scale(${head})`}>
           <path d="M-34 30 L0 -8 L34 30" fill="none" stroke={WHITE} strokeWidth={16} strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M-34 30 L0 -8 L34 30" fill="none" stroke={PINK} strokeWidth={8} strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M-34 30 L0 -8 L34 30" fill="none" stroke={PAL.lilac} strokeWidth={8} strokeLinecap="round" strokeLinejoin="round" />
         </g>
       </g>
     </svg>
@@ -338,8 +358,15 @@ const Burst: React.FC<{size: number}> = ({size}) => {
   }
   return (
     <svg width={size} height={size} viewBox="0 0 100 100" style={{position: 'absolute', inset: 0}}>
-      <polygon points={pts.join(' ')} fill={RED} stroke={WHITE} strokeWidth={2.2} strokeLinejoin="round" />
-      <circle cx="50" cy="50" r="36.5" fill="none" stroke={CREAM} strokeWidth={1.2} strokeDasharray="2 2.2" />
+      <defs>
+        <linearGradient id="rainbow" x1="0" y1="0" x2="1" y2="1">
+          {Object.values(PAL).map((c, i, a) => (
+            <stop key={c} offset={i / (a.length - 1)} stopColor={c} />
+          ))}
+        </linearGradient>
+      </defs>
+      <polygon points={pts.join(' ')} fill="url(#rainbow)" stroke={WHITE} strokeWidth={2.2} strokeLinejoin="round" />
+      <circle cx="50" cy="50" r="36.5" fill="none" stroke={WHITE} strokeWidth={1.4} strokeDasharray="2 2.2" />
     </svg>
   );
 };
@@ -366,7 +393,7 @@ const PriceMoment: React.FC = () => {
           width: size,
           height: size,
           transform: `scale(${pop * breathe}) rotate(${-8 + (1 - pop) * -25}deg)`,
-          filter: 'drop-shadow(0 22px 30px rgba(120,10,40,0.45))',
+          filter: 'drop-shadow(0 22px 30px rgba(78,58,102,0.4))',
         }}
       >
         <div style={{position: 'absolute', inset: 0, transform: `rotate(${local * 0.6}deg)`}}>
@@ -381,12 +408,12 @@ const PriceMoment: React.FC = () => {
             justifyContent: 'center',
             fontFamily,
             fontWeight: 900,
-            color: WHITE,
+            color: DEEP,
             direction: 'ltr',
-            textShadow: '0 8px 0 #8E1026',
+            textShadow: '0 7px 0 rgba(255,255,255,0.95)',
           }}
         >
-          <span style={{fontSize: 300, lineHeight: 1, letterSpacing: -10}}>39</span>
+          <span style={{fontSize: 300, lineHeight: 1, letterSpacing: -10}}>38</span>
           <span style={{fontSize: 150, lineHeight: 1, marginLeft: 10, marginTop: 40}}>₪</span>
         </div>
       </div>
@@ -408,16 +435,16 @@ const PriceMoment: React.FC = () => {
             fontFamily,
             fontWeight: 800,
             fontSize: 98,
-            color: RED,
-            background: CREAM,
+            color: DEEP,
+            background: PAL.butter,
             padding: '20px 54px 24px',
-            borderRadius: 999,
+            borderRadius: 18,
             border: `7px solid ${WHITE}`,
-            boxShadow: `0 10px 0 ${PINK}, 0 18px 40px rgba(120,10,40,0.3)`,
+            boxShadow: `0 10px 0 ${SHADE.butter}, 0 18px 40px rgba(78,58,102,0.28)`,
             whiteSpace: 'nowrap',
           }}
         >
-          רק 39 ₪ למארז
+          רק 38 ₪ למארז
         </div>
       </div>
     </AbsoluteFill>
@@ -441,32 +468,32 @@ export const DonutAd: React.FC = () => {
       ]} />
 
       {/* 3. המתנה המושלמת לילדי הגן */}
-      <Title text="המתנה המושלמת לילדי הגן" from={T.perfect} to={7.3} y={1560} variant="cream" size={82} anim="pop" tilt={1.5} />
+      <Title text="המתנה המושלמת לילדי הגן" from={T.perfect} to={7.3} y={1560} variant="sky" size={82} anim="pop" tilt={1.5} />
       <Decorations at={T.perfect + 0.15} until={7.25} items={[
-        {x: 95, y: 1450, kind: 'heart', size: 64, delay: 0, color: RED},
+        {x: 95, y: 1450, kind: 'heart', size: 64, delay: 0, color: PAL.lilac},
         {x: 990, y: 1665, kind: 'sparkle', size: 64, delay: 5},
       ]} />
 
       {/* 4. ערכת הכנת סופגניות */}
-      <Title text="ערכת הכנת סופגניות 🍩" from={T.kit} to={10.42} y={1700} variant="red" size={88} anim="pop" tilt={-1.5} />
+      <Title text="ערכת הכנת סופגניות 🍩" from={T.kit} to={10.42} y={1700} variant="peach" size={88} anim="pop" tilt={-1.5} />
       <Arrow from={T.donuts} to={10.42} />
 
       {/* 5. גם כיף וגם טעים */}
-      <Title text="גם כיף וגם טעים!" from={T.fun} to={13.0} y={170} variant="pink" size={104} anim="wiggle" tilt={-2} />
+      <Title text="גם כיף וגם טעים!" from={T.fun} to={13.0} y={170} variant="mint" size={104} anim="wiggle" tilt={-2} />
       <Decorations at={T.fun + 0.2} until={12.95} items={[
         {x: 140, y: 300, kind: 'candy', size: 110, delay: 0, rot: -15},
         {x: 950, y: 290, kind: 'star', size: 62, delay: 6},
       ]} />
 
       {/* 6. פעילות מתוקה עם הילדים */}
-      <Title text="פעילות מתוקה עם הילדים" from={T.kids} to={16.1} y={1690} variant="cream" size={84} anim="soft" />
+      <Title text="פעילות מתוקה עם הילדים" from={T.kids} to={16.1} y={1690} variant="lavender" size={84} anim="soft" />
       <Decorations at={T.kids + 0.4} until={16.05} items={[
         {x: 85, y: 1545, kind: 'heart', size: 56, delay: 0},
-        {x: 1000, y: 1730, kind: 'heart', size: 46, delay: 6, color: RED},
+        {x: 1000, y: 1730, kind: 'heart', size: 46, delay: 6, color: PAL.lilac},
       ]} />
 
-      {/* 7. ורק... 39 ₪ */}
-      <Title text="ורק..." from={T.andOnly} to={T.price - 0.05} y={880} variant="pink" size={110} anim="pop" tilt={-3} />
+      {/* 7. ורק... 38 ₪ */}
+      <Title text="ורק..." from={T.andOnly} to={T.price - 0.05} y={880} variant="butter" size={110} anim="pop" tilt={-3} />
       <PriceMoment />
       <Decorations at={T.price + 0.1} until={T.end + 1} items={[
         {x: 170, y: 560, kind: 'star', size: 95, delay: 0, rot: -12},
