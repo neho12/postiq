@@ -95,7 +95,6 @@ const VideoLayer: React.FC = () => {
   const drift = 1.02 + 0.035 * Easing.inOut(Easing.sin)(Math.min(1, Math.max(0, p)));
 
   const beats =
-    T.ahs.reduce((s, a, i) => s + punch(frame, a, i % 2 === 0 ? 0.06 : 0.045), 0) +
     punch(frame, T.found, 0.03, 10) +
     punch(frame, T.perfect, 0.025, 9) +
     punch(frame, T.kit, 0.025, 9) +
@@ -103,8 +102,7 @@ const VideoLayer: React.FC = () => {
     punch(frame, T.kids, 0.02, 8) +
     punch(frame, T.price, 0.07, 12);
 
-  // alternate tiny offsets on the "ah" beats for a rhythmic feel
-  const shiftX = T.ahs.reduce((s, a, i) => s + punch(frame, a, i % 2 === 0 ? 14 : -14), 0);
+  const shiftX = 0;
 
   return (
     <AbsoluteFill style={{transform: `translateX(${shiftX}px) scale(${drift + beats})`}}>
@@ -115,7 +113,7 @@ const VideoLayer: React.FC = () => {
 
 const Flashes: React.FC = () => {
   const frame = useCurrentFrame();
-  const o = T.ahs.reduce((s, a) => s + punch(frame, a, 0.22, 5), 0) + punch(frame, T.price, 0.35, 7);
+  const o = punch(frame, T.price, 0.35, 7);
   return <AbsoluteFill style={{background: WHITE, opacity: Math.min(0.4, o)}} />;
 };
 
@@ -307,11 +305,9 @@ const Title: React.FC<TitleProps> = ({text, from, to, y, variant = 'pink', size 
           fontSize: size,
           lineHeight: 1.15,
           color: colors.fg,
-          background: colors.bg,
-          padding: '22px 46px 26px',
-          borderRadius: 18,
-          border: `7px solid ${colors.edge}`,
-          boxShadow: `0 10px 0 ${colors.shadow}, 0 18px 40px rgba(78,58,102,0.28)`,
+          WebkitTextStroke: `${Math.round(size / 6.5)}px ${colors.bg}`,
+          paintOrder: 'stroke fill',
+          filter: 'drop-shadow(0 6px 0 rgba(255,255,255,0.95)) drop-shadow(0 12px 18px rgba(78,58,102,0.35))',
           transform: `scale(${scale}) rotate(${rotate}deg)`,
           textAlign: 'center',
           maxWidth: 960,
@@ -384,7 +380,6 @@ const PriceMoment: React.FC = () => {
   const size = 640;
   return (
     <AbsoluteFill>
-      <AbsoluteFill style={{background: `radial-gradient(circle at 50% 46%, rgba(255,245,233,${0.55 * glow}) 0%, rgba(255,245,233,0) 48%)`}} />
       <div
         style={{
           position: 'absolute',
@@ -393,12 +388,9 @@ const PriceMoment: React.FC = () => {
           width: size,
           height: size,
           transform: `scale(${pop * breathe}) rotate(${-8 + (1 - pop) * -25}deg)`,
-          filter: 'drop-shadow(0 22px 30px rgba(78,58,102,0.4))',
+          
         }}
       >
-        <div style={{position: 'absolute', inset: 0, transform: `rotate(${local * 0.6}deg)`}}>
-          <Burst size={size} />
-        </div>
         <div
           style={{
             position: 'absolute',
@@ -410,11 +402,13 @@ const PriceMoment: React.FC = () => {
             fontWeight: 900,
             color: DEEP,
             direction: 'ltr',
-            textShadow: '0 7px 0 rgba(255,255,255,0.95)',
+            WebkitTextStroke: `44px ${PAL.pink}`,
+            paintOrder: 'stroke fill',
+            filter: 'drop-shadow(0 10px 0 rgba(255,255,255,0.95)) drop-shadow(0 18px 26px rgba(78,58,102,0.4))',
           }}
         >
-          <span style={{fontSize: 300, lineHeight: 1, letterSpacing: -10}}>38</span>
-          <span style={{fontSize: 150, lineHeight: 1, marginLeft: 10, marginTop: 40}}>₪</span>
+          <span style={{fontSize: 400, lineHeight: 1, letterSpacing: -6}}>38</span>
+          <span style={{fontSize: 200, lineHeight: 1, marginLeft: 10, marginTop: 40}}>₪</span>
         </div>
       </div>
       <div
@@ -434,13 +428,11 @@ const PriceMoment: React.FC = () => {
             direction: 'rtl',
             fontFamily,
             fontWeight: 800,
-            fontSize: 98,
+            fontSize: 118,
             color: DEEP,
-            background: PAL.butter,
-            padding: '20px 54px 24px',
-            borderRadius: 18,
-            border: `7px solid ${WHITE}`,
-            boxShadow: `0 10px 0 ${SHADE.butter}, 0 18px 40px rgba(78,58,102,0.28)`,
+            WebkitTextStroke: `${Math.round(118 / 6.5)}px ${PAL.butter}`,
+          paintOrder: 'stroke fill',
+          filter: 'drop-shadow(0 6px 0 rgba(255,255,255,0.95)) drop-shadow(0 12px 18px rgba(78,58,102,0.35))',
             whiteSpace: 'nowrap',
           }}
         >
@@ -460,7 +452,7 @@ export const DonutAd: React.FC = () => {
       <HaBurst />
 
       {/* 1. מצאנו תחנת המתנות */}
-      <Title text="מצאנו תחנת המתנות 🎁" from={T.found} to={3.15} y={300} variant="pink" size={90} anim="bounce" tilt={-2} />
+      <Title text="מצאנו תחנת המתנות 🎁" from={T.found} to={3.15} y={300} variant="pink" size={110} anim="bounce" tilt={-2} />
       <Decorations at={0.25} until={3.1} items={[
         {x: 120, y: 190, kind: 'sparkle', size: 70, delay: 0},
         {x: 960, y: 420, kind: 'star', size: 70, delay: 4, rot: 12},
@@ -468,32 +460,32 @@ export const DonutAd: React.FC = () => {
       ]} />
 
       {/* 3. המתנה המושלמת לילדי הגן */}
-      <Title text="המתנה המושלמת לילדי הגן" from={T.perfect} to={7.3} y={1560} variant="sky" size={82} anim="pop" tilt={1.5} />
+      <Title text="המתנה המושלמת לילדי הגן" from={T.perfect} to={7.3} y={1560} variant="sky" size={100} anim="pop" tilt={1.5} />
       <Decorations at={T.perfect + 0.15} until={7.25} items={[
         {x: 95, y: 1450, kind: 'heart', size: 64, delay: 0, color: PAL.lilac},
         {x: 990, y: 1665, kind: 'sparkle', size: 64, delay: 5},
       ]} />
 
       {/* 4. ערכת הכנת סופגניות */}
-      <Title text="ערכת הכנת סופגניות 🍩" from={T.kit} to={10.42} y={1700} variant="peach" size={88} anim="pop" tilt={-1.5} />
+      <Title text="ערכת הכנת סופגניות 🍩" from={T.kit} to={10.42} y={1700} variant="peach" size={108} anim="pop" tilt={-1.5} />
       <Arrow from={T.donuts} to={10.42} />
 
       {/* 5. גם כיף וגם טעים */}
-      <Title text="גם כיף וגם טעים!" from={T.fun} to={13.0} y={170} variant="mint" size={104} anim="wiggle" tilt={-2} />
+      <Title text="גם כיף וגם טעים!" from={T.fun} to={13.0} y={170} variant="mint" size={126} anim="wiggle" tilt={-2} />
       <Decorations at={T.fun + 0.2} until={12.95} items={[
         {x: 140, y: 300, kind: 'candy', size: 110, delay: 0, rot: -15},
         {x: 950, y: 290, kind: 'star', size: 62, delay: 6},
       ]} />
 
       {/* 6. פעילות מתוקה עם הילדים */}
-      <Title text="פעילות מתוקה עם הילדים" from={T.kids} to={16.1} y={1690} variant="lavender" size={84} anim="soft" />
+      <Title text="פעילות מתוקה עם הילדים" from={T.kids} to={16.1} y={1690} variant="lavender" size={102} anim="soft" />
       <Decorations at={T.kids + 0.4} until={16.05} items={[
         {x: 85, y: 1545, kind: 'heart', size: 56, delay: 0},
         {x: 1000, y: 1730, kind: 'heart', size: 46, delay: 6, color: PAL.lilac},
       ]} />
 
       {/* 7. ורק... 38 ₪ */}
-      <Title text="ורק..." from={T.andOnly} to={T.price - 0.05} y={880} variant="butter" size={110} anim="pop" tilt={-3} />
+      <Title text="ורק..." from={T.andOnly} to={T.price - 0.05} y={880} variant="butter" size={140} anim="pop" tilt={-3} />
       <PriceMoment />
       <Decorations at={T.price + 0.1} until={T.end + 1} items={[
         {x: 170, y: 560, kind: 'star', size: 95, delay: 0, rot: -12},
