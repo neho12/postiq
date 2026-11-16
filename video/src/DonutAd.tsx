@@ -97,6 +97,70 @@ const Flashes: React.FC = () => {
   return <AbsoluteFill style={{background: WHITE, opacity: Math.min(0.4, o)}} />;
 };
 
+/* ---------------- "ha ha" word burst on the four "ah" beats ---------------- */
+type Ha = {beat: number; dt: number; x: number; y: number; text: string; size: number; rot: number; color: string; fill: string};
+const HA_WORDS: Ha[] = [
+  // beat 1
+  {beat: 0, dt: 0, x: 230, y: 330, text: 'HA', size: 170, rot: -12, color: WHITE, fill: PINK},
+  {beat: 0, dt: 2, x: 790, y: 1390, text: 'ha ha', size: 110, rot: 8, color: RED, fill: CREAM},
+  {beat: 0, dt: 4, x: 910, y: 160, text: 'ha!', size: 96, rot: 14, color: WHITE, fill: RED},
+  // beat 2
+  {beat: 1, dt: 0, x: 790, y: 400, text: 'HA HA', size: 136, rot: 10, color: WHITE, fill: RED},
+  {beat: 1, dt: 2, x: 210, y: 1720, text: 'ha', size: 124, rot: -10, color: WHITE, fill: PINK},
+  {beat: 1, dt: 4, x: 150, y: 130, text: 'ha!', size: 90, rot: -16, color: RED, fill: CREAM},
+  // beat 3
+  {beat: 2, dt: 0, x: 260, y: 1300, text: 'HA!', size: 156, rot: -8, color: RED, fill: CREAM},
+  {beat: 2, dt: 2, x: 870, y: 1740, text: 'haha', size: 104, rot: 12, color: WHITE, fill: PINK},
+  {beat: 2, dt: 4, x: 530, y: 140, text: 'ha', size: 100, rot: 4, color: WHITE, fill: RED},
+  // beat 4 – biggest
+  {beat: 3, dt: 0, x: 540, y: 1545, text: 'HA HA HA!', size: 160, rot: -5, color: WHITE, fill: PINK},
+  {beat: 3, dt: 2, x: 500, y: 340, text: 'HA', size: 136, rot: 12, color: WHITE, fill: RED},
+  {beat: 3, dt: 3, x: 940, y: 1180, text: 'ha!', size: 92, rot: -12, color: RED, fill: CREAM},
+];
+
+const HaBurst: React.FC = () => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const allOut = f(T.perfect) - 1; // everything clears before "המושלמת"
+  return (
+    <>
+      {HA_WORDS.map((h, i) => {
+        const start = f(T.ahs[h.beat]) + h.dt;
+        if (frame < start || frame > allOut) return null;
+        const local = frame - start;
+        const pop = spring({frame: local, fps, config: {damping: 7, stiffness: 260, mass: 0.6}});
+        const out = interpolate(frame, [allOut - 4, allOut], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+        const wobble = Math.sin(local / 2.5 + i) * 3 * Math.exp(-local / 12);
+        return (
+          <div
+            key={i}
+            style={{
+              position: 'absolute',
+              left: h.x,
+              top: h.y,
+              transform: `translate(-50%, -50%) scale(${pop * (0.6 + 0.4 * out)}) rotate(${h.rot + wobble}deg)`,
+              opacity: Math.min(1, pop * 2) * out,
+              fontFamily,
+              fontWeight: 900,
+              fontSize: h.size,
+              lineHeight: 1,
+              color: h.color,
+              whiteSpace: 'nowrap',
+              direction: 'ltr',
+              letterSpacing: 2,
+              WebkitTextStroke: `${Math.round(h.size / 9)}px ${h.fill}`,
+              paintOrder: 'stroke fill',
+              filter: 'drop-shadow(0 8px 0 rgba(142,16,38,0.55)) drop-shadow(0 14px 18px rgba(120,10,40,0.35))',
+            }}
+          >
+            {h.text}
+          </div>
+        );
+      })}
+    </>
+  );
+};
+
 /* ---------------- Decorations ---------------- */
 const Star: React.FC<{size: number; color: string}> = ({size, color}) => (
   <svg width={size} height={size} viewBox="0 0 100 100">
@@ -366,6 +430,7 @@ export const DonutAd: React.FC = () => {
     <AbsoluteFill style={{background: CREAM}}>
       <VideoLayer />
       <Flashes />
+      <HaBurst />
 
       {/* 1. מצאנו תחנת המתנות */}
       <Title text="מצאנו תחנת המתנות 🎁" from={T.found} to={3.15} y={300} variant="pink" size={90} anim="bounce" tilt={-2} />
