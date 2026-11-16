@@ -72,6 +72,14 @@ const T = {
 };
 const SHOT_CUTS = [0, 6.37, 13.63, 16.5];
 
+/* ---------------- keyframe helper: hand-timed motion, no generic springs ---------------- */
+const OUT_EXPO = Easing.bezier(0.16, 1, 0.3, 1);
+const OUT_BACK = Easing.bezier(0.34, 1.4, 0.64, 1);
+const kf = (t: number, times: number[], values: number[], ease: (x: number) => number = Easing.out(Easing.cubic)) =>
+  interpolate(t, times, values, {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease});
+// small deterministic per-letter timing offset so letters don't land like a metronome
+const jitter = (i: number) => (((i * 37 + 11) % 7) / 7 - 0.5) * 1.2;
+
 /* ---------------- Video layer: drift zoom + beat punches ---------------- */
 const punch = (frame: number, at: number, amp: number, len = 7) => {
   const d = frame - f(at);
@@ -148,9 +156,10 @@ const HaBurst: React.FC = () => {
         const start = f(T.ahs[h.beat]) + h.dt;
         if (frame < start || frame > allOut) return null;
         const local = frame - start;
-        const pop = spring({frame: local, fps, config: {damping: 7, stiffness: 260, mass: 0.6}});
-        const out = interpolate(frame, [allOut - 4, allOut], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-        const wobble = Math.sin(local / 2.5 + i) * 3 * Math.exp(-local / 12);
+        // rubber-stamp: lands big and fast, tiny rebound, then holds still; cuts out on the downbeat
+        const sc = kf(local, [0, 2, 4, 7], [1.6, 0.92, 1.03, 1]);
+        const op = kf(local, [0, 1.5], [0, 1]);
+        const flick = kf(local, [0, 3, 7], [i % 2 ? 9 : -9, i % 2 ? -2 : 2, 0]);
         return (
           <div
             key={i}
@@ -158,8 +167,8 @@ const HaBurst: React.FC = () => {
               position: 'absolute',
               left: h.x,
               top: h.y,
-              transform: `translate(-50%, -50%) scale(${pop * (0.6 + 0.4 * out)}) rotate(${h.rot + wobble}deg)`,
-              opacity: Math.min(1, pop * 2) * out,
+              transform: `translate(-50%, -50%) scale(${sc}) rotate(${h.rot + flick}deg)`,
+              opacity: op,
               fontFamily,
               fontWeight: 900,
               fontSize: h.size,
@@ -251,71 +260,82 @@ type TitleProps = {
   y: number; // center y in px
   variant?: PalKey;
   size?: number;
-  anim?: 'pop' | 'bounce' | 'soft' | 'wiggle';
+  anim?: 'mask' | 'stretch' | 'rise' | 'type';
   tilt?: number;
 };
 
-const Title: React.FC<TitleProps> = ({text, from, to, y, variant = 'pink', size = 84, anim = 'pop', tilt = 0}) => {
+const Title: React.FC<TitleProps> = ({text, from, to, y, variant = 'pink', size = 84, anim = 'mask', tilt = 0}) => {
   const frame = useCurrentFrame();
-  const {fps} = useVideoConfig();
   const start = f(from);
   const end = f(to);
   if (frame < start || frame > end) return null;
-  const local = frame - start;
+  const t = frame - start;
+  const tOut = frame - (end - 7);
 
-  const cfg =
-    anim === 'bounce' ? {damping: 7, stiffness: 160, mass: 0.8} :
-    anim === 'soft' ? {damping: 18, stiffness: 90} :
-    {damping: 10, stiffness: 200};
-  const s = spring({frame: local, fps, config: cfg});
-  const out = interpolate(frame, [end - 7, end], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.in(Easing.cubic)});
+  const textStyle: React.CSSProperties = {
+    fontFamily,
+    fontWeight: 800,
+    fontSize: size,
+    lineHeight: 1.15,
+    color: DEEP,
+    WebkitTextStroke: `${Math.round(size / 6.5)}px ${PAL[variant]}`,
+    paintOrder: 'stroke fill',
+    whiteSpace: 'pre',
+  };
+  const words = text.split(' ');
 
-  let scale = s * (0.85 + 0.15 * out);
-  let translateY = 0;
-  let rotate = tilt;
-  if (anim === 'bounce') translateY = (1 - s) * 140;
-  if (anim === 'soft') {
-    scale = 0.92 + 0.08 * s;
-    translateY = (1 - s) * 50;
+  let content: React.ReactNode;
+  let wrap = '';
+  if (anim === 'mask') {
+    // words rise up from behind an invisible baseline, one after another, and exit the same way
+    content = words.map((w, i) => {
+      const t0 = i * 3;
+      const yIn = kf(t, [t0, t0 + 13], [115, 0], OUT_EXPO);
+      const yOut = kf(tOut, [i * 1.2, i * 1.2 + 7], [0, -115], Easing.in(Easing.cubic));
+      return (
+        <span key={i} style={{display: 'inline-block', overflow: 'hidden', padding: '0.18em 0.06em', margin: '-0.18em 0'}}>
+          <span style={{...textStyle, display: 'inline-block', transform: `translateY(${yIn + yOut}%)`}}>{w}{i < words.length - 1 ? ' ' : ''}</span>
+        </span>
+      );
+    });
+  } else if (anim === 'stretch') {
+    // squeezed in from a thin vertical sliver, overshoots wide, settles – then squeezes out
+    const sx = t < 13 ? kf(t, [0, 5, 9, 13], [0.15, 1.1, 0.97, 1]) : kf(tOut, [0, 6], [1, 0.05], Easing.in(Easing.cubic));
+    const sy = t < 13 ? kf(t, [0, 5, 9, 13], [1.5, 0.9, 1.03, 1]) : kf(tOut, [0, 6], [1, 1.35], Easing.in(Easing.cubic));
+    const op = kf(t, [0, 3], [0, 1]) * kf(tOut, [3, 6], [1, 0]);
+    wrap = `scale(${sx}, ${sy})`;
+    content = <span style={{...textStyle, display: 'inline-block', opacity: op}}>{text}</span>;
+  } else if (anim === 'rise') {
+    // soft word-by-word focus pull: each word drifts up out of a blur
+    content = words.map((w, i) => {
+      const t0 = i * 4;
+      const op = kf(t, [t0, t0 + 8], [0, 1]) * kf(tOut, [0, 6], [1, 0]);
+      const ty = kf(t, [t0, t0 + 14], [38, 0], OUT_EXPO) + kf(tOut, [0, 7], [0, 24], Easing.in(Easing.quad));
+      const blur = kf(t, [t0, t0 + 10], [14, 0]) + kf(tOut, [0, 6], [0, 10]);
+      return (
+        <span key={i} style={{...textStyle, display: 'inline-block', opacity: op, transform: `translateY(${ty}px)`, filter: `blur(${blur}px)`}}>
+          {w}{i < words.length - 1 ? ' ' : ''}
+        </span>
+      );
+    });
+  } else {
+    // 'type': letters are typed on, no easing at all – hard cut out
+    const chars = Array.from(text);
+    const shown = Math.min(chars.length, Math.floor(t / 2.2) + 1);
+    content = <span style={textStyle}>{chars.slice(0, shown).join('')}</span>;
   }
-  if (anim === 'wiggle') rotate = tilt + Math.sin(local / 3.2) * 4 * Math.exp(-local / 18);
-  const opacity = (anim === 'soft' ? s : Math.min(1, s * 3)) * out;
-
-  const colors =
-{bg: PAL[variant], fg: DEEP, edge: WHITE, shadow: SHADE[variant]};
 
   return (
-    <div
-      style={{
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: y,
-        display: 'flex',
-        justifyContent: 'center',
-        transform: `translateY(-50%) translateY(${translateY}px)`,
-        opacity,
-      }}
-    >
+    <div style={{position: 'absolute', left: 0, right: 0, top: y, display: 'flex', justifyContent: 'center', transform: 'translateY(-50%)'}}>
       <div
         style={{
           direction: 'rtl',
-          fontFamily,
-          fontWeight: 800,
-          fontSize: size,
-          lineHeight: 1.15,
-          color: colors.fg,
-          WebkitTextStroke: `${Math.round(size / 6.5)}px ${colors.bg}`,
-          paintOrder: 'stroke fill',
+          display: 'flex',
           filter: 'drop-shadow(0 6px 0 rgba(255,255,255,0.95)) drop-shadow(0 12px 18px rgba(78,58,102,0.35))',
-          transform: `scale(${scale}) rotate(${rotate}deg)`,
-          textAlign: 'center',
-          maxWidth: 960,
-          whiteSpace: 'nowrap',
-          letterSpacing: -0.5,
+          transform: `rotate(${tilt}deg) ${wrap}`,
         }}
       >
-        {text}
+        {content}
       </div>
     </div>
   );
@@ -369,11 +389,11 @@ const ArcTitle: React.FC<ArcProps> = ({text, from, to, x = 540, y, radius, shape
   const total = widths.reduce((a, b) => a + b, 0);
 
   // the line starts flat and bends into its curve
-  const bend = spring({frame: local - 4, fps, config: {damping: 12, stiffness: 90}});
+  const bend = kf(local, [5, 5 + chars.length * stagger * 0.8 + 6], [0.6, 1], Easing.bezier(0.45, 0, 0.2, 1));
   const R = radius / Math.max(0.02, bend);
   const dir = shape === 'rainbow' ? 1 : -1;
   // whole arc slowly rocks
-  const rock = Math.sin(local / 14) * 2.2;
+  const rock = 0;
   const exitStart = end - 9;
 
   let cum = 0;
@@ -386,13 +406,18 @@ const ArcTitle: React.FC<ArcProps> = ({text, from, to, x = 540, y, radius, shape
     const py = y + dir * R * (1 - Math.cos(theta));
     const rot = (dir * theta * 180) / Math.PI;
     const order = chars.length - 1 - i; // reading order (right to left)
-    const ls = start + order * stagger;
-    const pop = spring({frame: frame - ls, fps, config: {damping: 8, stiffness: 230, mass: 0.6}});
-    const drop = (1 - pop) * -90 * dir;
-    const wave = Math.sin((frame - ls) / 5 - order * 0.6) * 5 * Math.min(1, Math.max(0, (frame - ls) / 15));
-    const le = exitStart + order * 0.5;
-    const out = interpolate(frame, [le, le + 5], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-    return {ch, px, py: py + drop + wave - (1 - out) * 60, rot, scale: pop * out, opacity: Math.min(1, pop * 2.5) * out};
+    const ls = start + order * stagger + jitter(order);
+    const L = frame - ls;
+    // fall with gravity (ease-in), stretched while falling, squash on landing, settle
+    const fall = kf(L, [0, 5], [-150, 0], Easing.in(Easing.quad));
+    const sX = kf(L, [0, 4.5, 6, 9, 13], [0.82, 0.86, 1.2, 0.95, 1]);
+    const sY = kf(L, [0, 4.5, 6, 9, 13], [1.28, 1.22, 0.78, 1.05, 1]);
+    const tiltIn = kf(L, [0, 5, 10], [((order % 3) - 1) * 14, ((order % 3) - 1) * -4, 0]);
+    const le = exitStart + order * 0.45;
+    const E = frame - le;
+    const exitY = kf(E, [0, 5], [1, 0], Easing.in(Easing.cubic)); // squish down into the baseline
+    const vis = L >= 0 ? 1 : 0;
+    return {ch, px, py: py + fall * dir, rot: rot + tiltIn, sx: sX, sy: sY * exitY, opacity: vis * kf(L, [0, 1.5], [0, 1]) * (E > 4.5 ? 0 : 1)};
   });
 
   const base: React.CSSProperties = {
@@ -412,7 +437,8 @@ const ArcTitle: React.FC<ArcProps> = ({text, from, to, x = 540, y, radius, shape
           left: l.px,
           top: l.py,
           opacity: l.opacity,
-          transform: `translate(-50%, -50%) rotate(${l.rot}deg) scale(${l.scale})`,
+          transform: `translate(-50%, -50%) rotate(${l.rot}deg) scale(${l.sx}, ${l.sy})`,
+          transformOrigin: '50% 80%',
           color: stroke ? PAL[variant] : DEEP,
           WebkitTextStroke: stroke ? `${Math.round(size / 6.5)}px ${PAL[variant]}` : undefined,
         }}
@@ -487,7 +513,11 @@ const PriceMoment: React.FC = () => {
   const start = f(T.price);
   if (frame < start) return null;
   const local = frame - start;
-  const pop = spring({frame: local, fps, config: {damping: 6, stiffness: 220, mass: 0.9}});
+  // slams in from the camera, squashes on impact, settles; then holds still
+  const slam = kf(local, [0, 5], [2.4, 1], Easing.in(Easing.quad));
+  const pSX = kf(local, [5, 7, 11, 15], [1, 1.14, 0.97, 1]);
+  const pSY = kf(local, [5, 7, 11, 15], [1, 0.84, 1.03, 1]);
+  const pOp = kf(local, [0, 3], [0, 1]);
   const sub = spring({frame: local - 10, fps, config: {damping: 11, stiffness: 170}});
   const glow = interpolate(local, [0, 10], [0, 1], {extrapolateRight: 'clamp'});
   const breathe = 1 + Math.sin(local / 7) * 0.02 * Math.min(1, local / 20);
@@ -501,7 +531,9 @@ const PriceMoment: React.FC = () => {
           top: 880 - size / 2,
           width: size,
           height: size,
-          transform: `scale(${pop * breathe}) rotate(${-8 + (1 - pop) * -25}deg)`,
+          transform: `rotate(-6deg) scale(${slam * pSX}, ${slam * pSY})`,
+          transformOrigin: '50% 62%',
+          opacity: pOp,
           
         }}
       >
@@ -546,14 +578,14 @@ export const DonutAd: React.FC = () => {
       ]} />
 
       {/* 3. המתנה המושלמת לילדי הגן */}
-      <Title text="המתנה המושלמת לילדי הגן" from={T.perfect} to={7.3} y={1560} variant="sky" size={100} anim="pop" tilt={1.5} />
+      <Title text="המתנה המושלמת לילדי הגן" from={T.perfect} to={7.3} y={1560} variant="sky" size={100} anim="mask" tilt={1.5} />
       <Decorations at={T.perfect + 0.15} until={7.25} items={[
         {x: 95, y: 1450, kind: 'heart', size: 64, delay: 0, color: PAL.lilac},
         {x: 990, y: 1665, kind: 'sparkle', size: 64, delay: 5},
       ]} />
 
       {/* 4. ערכת הכנת סופגניות */}
-      <Title text="ערכת הכנת סופגניות 🍩" from={T.kit} to={10.42} y={1700} variant="peach" size={108} anim="pop" tilt={-1.5} />
+      <Title text="ערכת הכנת סופגניות 🍩" from={T.kit} to={10.42} y={1700} variant="peach" size={108} anim="stretch" tilt={-1.5} />
       <Arrow from={T.donuts} to={10.42} />
 
       {/* 5. גם כיף וגם טעים */}
@@ -564,14 +596,14 @@ export const DonutAd: React.FC = () => {
       ]} />
 
       {/* 6. פעילות מתוקה עם הילדים */}
-      <Title text="פעילות מתוקה עם הילדים" from={T.kids} to={16.1} y={1690} variant="lavender" size={102} anim="soft" />
+      <Title text="פעילות מתוקה עם הילדים" from={T.kids} to={16.1} y={1690} variant="lavender" size={102} anim="rise" />
       <Decorations at={T.kids + 0.4} until={16.05} items={[
         {x: 85, y: 1545, kind: 'heart', size: 56, delay: 0},
         {x: 1000, y: 1730, kind: 'heart', size: 46, delay: 6, color: PAL.lilac},
       ]} />
 
       {/* 7. ורק... 38 ₪ */}
-      <Title text="ורק..." from={T.andOnly} to={T.price - 0.05} y={880} variant="butter" size={140} anim="pop" tilt={-3} />
+      <Title text="ורק..." from={T.andOnly} to={T.price - 0.05} y={880} variant="butter" size={140} anim="type" tilt={-3} />
       <PriceMoment />
       <ArcTitle text="רק 38 ₪ למארז" from={T.price + 0.35} to={T.end + 1} y={1290} radius={700} shape="smile" variant="butter" size={120} stagger={1.6} />
       <Decorations at={T.price + 0.1} until={T.end + 1} items={[
