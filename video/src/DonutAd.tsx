@@ -58,16 +58,27 @@ const FPS = 30;
 const f = (sec: number) => Math.round(sec * FPS);
 
 // Timings measured from the song (Whisper word timestamps + audio onsets)
+// Word onsets measured on the isolated vocal track (Demucs + onset detection, cross-checked with Whisper)
+const W = {
+  matzanu: 0.13, lachem: 0.86, et: 1.16, hamatana: 1.71, mat: 2.16,
+  ah: [3.16, 3.46, 3.74, 4.03],
+  hamushlemet: 4.31, leyaldei: 5.42, hagan: 6.0,
+  erkat: 8.21, hachanat: 8.85, sufganiyot: 9.44, sufTail: 9.85,
+  gam: 11.21, kef: 11.41, vegam: 11.67, taim: 12.02,
+  biluy: 13.11, im: 13.72, hayeladim: 14.26,
+  verak: 17.4, rak: 17.68,
+  shloshim: 18.13, ushmone: 19.17, shkalim: 19.98, shkalimEnd: 20.37,
+};
 const T = {
-  found: 0.05, // "מצאנו..."
-  ahs: [3.2, 3.5, 3.8, 4.1], // "אה אה אה אה"
-  perfect: 4.36, // "המושלמת לילדי הגן"
-  kit: 7.42, // "ערכת הכנת סופגניות"
-  donuts: 9.58, // "סופגניות" – arrow to the donut mix
-  fun: 10.52, // "גם כיף וגם טעים"
-  kids: 13.1, // "בילוי עם הילדים"
-  andOnly: 16.22, // "ורק"
-  price: 18.12, // "שלושים..."
+  found: W.matzanu,
+  ahs: W.ah,
+  perfect: W.hamushlemet,
+  kit: W.erkat,
+  donuts: W.sufganiyot,
+  fun: W.gam,
+  kids: W.biluy,
+  andOnly: W.verak,
+  price: W.shloshim, // the moment the price lands
   end: 22.63,
 };
 const SHOT_CUTS = [0, 6.37, 13.63, 16.5];
@@ -153,7 +164,7 @@ const HaBurst: React.FC = () => {
   return (
     <>
       {HA_WORDS.map((h, i) => {
-        const start = f(T.ahs[h.beat]) + h.dt;
+        const start = f(T.ahs[h.beat]) - 2 + h.dt;
         if (frame < start || frame > allOut) return null;
         const local = frame - start;
         // rubber-stamp: lands big and fast, tiny rebound, then holds still; cuts out on the downbeat
@@ -262,9 +273,10 @@ type TitleProps = {
   size?: number;
   anim?: 'mask' | 'stretch' | 'rise' | 'type';
   tilt?: number;
+  wordTimes?: number[]; // seconds at which each word should be readable
 };
 
-const Title: React.FC<TitleProps> = ({text, from, to, y, variant = 'pink', size = 84, anim = 'mask', tilt = 0}) => {
+const Title: React.FC<TitleProps> = ({text, from, to, y, variant = 'pink', size = 84, anim = 'mask', tilt = 0, wordTimes}) => {
   const frame = useCurrentFrame();
   const start = f(from);
   const end = f(to);
@@ -283,13 +295,15 @@ const Title: React.FC<TitleProps> = ({text, from, to, y, variant = 'pink', size 
     whiteSpace: 'pre',
   };
   const words = text.split(' ');
+  // frame (relative to start) at which word i begins its entrance; lead = frames needed to become readable
+  const wStart = (i: number, step: number, lead: number) => (wordTimes ? f(wordTimes[i]) - start - lead : i * step);
 
   let content: React.ReactNode;
   let wrap = '';
   if (anim === 'mask') {
     // words rise up from behind an invisible baseline, one after another, and exit the same way
     content = words.map((w, i) => {
-      const t0 = i * 3;
+      const t0 = wStart(i, 3, 3);
       const yIn = kf(t, [t0, t0 + 13], [115, 0], OUT_EXPO);
       const yOut = kf(tOut, [i * 1.2, i * 1.2 + 7], [0, -115], Easing.in(Easing.cubic));
       return (
@@ -299,16 +313,23 @@ const Title: React.FC<TitleProps> = ({text, from, to, y, variant = 'pink', size 
       );
     });
   } else if (anim === 'stretch') {
-    // squeezed in from a thin vertical sliver, overshoots wide, settles – then squeezes out
-    const sx = t < 13 ? kf(t, [0, 5, 9, 13], [0.15, 1.1, 0.97, 1]) : kf(tOut, [0, 6], [1, 0.05], Easing.in(Easing.cubic));
-    const sy = t < 13 ? kf(t, [0, 5, 9, 13], [1.5, 0.9, 1.03, 1]) : kf(tOut, [0, 6], [1, 1.35], Easing.in(Easing.cubic));
-    const op = kf(t, [0, 3], [0, 1]) * kf(tOut, [3, 6], [1, 0]);
-    wrap = `scale(${sx}, ${sy})`;
-    content = <span style={{...textStyle, display: 'inline-block', opacity: op}}>{text}</span>;
+    // each word squeezes in from a thin sliver, overshoots wide and settles – exactly on its word
+    content = words.map((w, i) => {
+      const t0 = wStart(i, 4, 4);
+      const L = t - t0;
+      const sx = L < 13 ? kf(L, [0, 5, 9, 13], [0.15, 1.1, 0.97, 1]) : kf(tOut, [0, 6], [1, 0.05], Easing.in(Easing.cubic));
+      const sy = L < 13 ? kf(L, [0, 5, 9, 13], [1.5, 0.9, 1.03, 1]) : kf(tOut, [0, 6], [1, 1.35], Easing.in(Easing.cubic));
+      const op = kf(L, [0, 3], [0, 1]) * kf(tOut, [3, 6], [1, 0]);
+      return (
+        <span key={i} style={{...textStyle, display: 'inline-block', opacity: op, transform: `scale(${sx}, ${sy})`}}>
+          {w}{i < words.length - 1 ? ' ' : ''}
+        </span>
+      );
+    });
   } else if (anim === 'rise') {
     // soft word-by-word focus pull: each word drifts up out of a blur
     content = words.map((w, i) => {
-      const t0 = i * 4;
+      const t0 = wStart(i, 4, 4);
       const op = kf(t, [t0, t0 + 8], [0, 1]) * kf(tOut, [0, 6], [1, 0]);
       const ty = kf(t, [t0, t0 + 14], [38, 0], OUT_EXPO) + kf(tOut, [0, 7], [0, 24], Easing.in(Easing.quad));
       const blur = kf(t, [t0, t0 + 10], [14, 0]) + kf(tOut, [0, 6], [0, 10]);
@@ -321,7 +342,8 @@ const Title: React.FC<TitleProps> = ({text, from, to, y, variant = 'pink', size 
   } else {
     // 'type': letters are typed on, no easing at all – hard cut out
     const chars = Array.from(text);
-    const shown = Math.min(chars.length, Math.floor(t / 2.2) + 1);
+    const per = wordTimes ? Math.max(1, (f(wordTimes[1]) - start) / (chars.length - 1)) : 2.2;
+    const shown = Math.min(chars.length, Math.floor(t / per) + 1);
     content = <span style={textStyle}>{chars.slice(0, shown).join('')}</span>;
   }
 
@@ -353,6 +375,7 @@ type ArcProps = {
   variant: PalKey;
   size: number;
   stagger?: number; // frames between letters
+  wordTimes?: number[]; // seconds at which each word (logical order) should LAND
 };
 
 const widthCache: Record<string, number[]> = {};
@@ -364,7 +387,7 @@ const measure = (chars: string[], size: number) => {
   return (widthCache[key] = chars.map((c) => ctx.measureText(c).width + size * 0.02));
 };
 
-const ArcTitle: React.FC<ArcProps> = ({text, from, to, x = 540, y, radius, shape, variant, size, stagger = 1.6}) => {
+const ArcTitle: React.FC<ArcProps> = ({text, from, to, x = 540, y, radius, shape, variant, size, stagger = 1.6, wordTimes}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const start = f(from);
@@ -373,17 +396,36 @@ const ArcTitle: React.FC<ArcProps> = ({text, from, to, x = 540, y, radius, shape
   const local = frame - start;
   // visual (left-to-right) order: reverse the Hebrew, but keep number runs as written
   const logical = Array.from(text);
-  const chars: string[] = [];
+  const idx: number[] = []; // logical index of each visual slot
   for (let i = logical.length - 1; i >= 0; ) {
     if (/[0-9]/.test(logical[i])) {
       let j = i;
       while (j > 0 && /[0-9.,]/.test(logical[j - 1])) j--;
-      chars.push(...logical.slice(j, i + 1));
+      for (let k = j; k <= i; k++) idx.push(k);
       i = j - 1;
     } else {
-      chars.push(logical[i]);
+      idx.push(i);
       i--;
     }
+  }
+  const chars = idx.map((k) => logical[k]);
+  // word number and position-in-word for every logical character
+  const wordOf: number[] = [];
+  const posInWord: number[] = [];
+  {
+    let wN = 0;
+    let pos = 0;
+    logical.forEach((c) => {
+      if (c === ' ') {
+        wordOf.push(wN);
+        posInWord.push(pos);
+        wN++;
+        pos = 0;
+      } else {
+        wordOf.push(wN);
+        posInWord.push(pos++);
+      }
+    });
   }
   const widths = measure(chars, size);
   const total = widths.reduce((a, b) => a + b, 0);
@@ -405,8 +447,11 @@ const ArcTitle: React.FC<ArcProps> = ({text, from, to, x = 540, y, radius, shape
     const px = x + R * Math.sin(theta);
     const py = y + dir * R * (1 - Math.cos(theta));
     const rot = (dir * theta * 180) / Math.PI;
-    const order = chars.length - 1 - i; // reading order (right to left)
-    const ls = start + order * stagger + jitter(order);
+    const order = idx[i]; // reading order (logical index)
+    const LAND = 5; // frames from release to touching the baseline
+    const ls = wordTimes
+      ? f(wordTimes[wordOf[order]]) - LAND + posInWord[order] * 1.1 + jitter(order) * 0.5
+      : start + order * stagger + jitter(order);
     const L = frame - ls;
     // fall with gravity (ease-in), stretched while falling, squash on landing, settle
     const fall = kf(L, [0, 5], [-150, 0], Easing.in(Easing.quad));
@@ -510,7 +555,7 @@ const Burst: React.FC<{size: number}> = ({size}) => {
 const PriceMoment: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const start = f(T.price);
+  const start = f(T.price) - 5; // 5-frame slam lands exactly on the word
   if (frame < start) return null;
   const local = frame - start;
   // slams in from the camera, squashes on impact, settles; then holds still
@@ -570,7 +615,7 @@ export const DonutAd: React.FC = () => {
       <HaBurst />
 
       {/* 1. מצאנו תחנת המתנות */}
-      <ArcTitle text="מצאנו תחנת המתנות 🎁" from={T.found} to={3.15} y={260} radius={720} shape="flat" variant="pink" size={104} stagger={1.4} />
+      <ArcTitle text="מצאנו תחנת המתנות 🎁" from={0} to={3.12} wordTimes={[W.matzanu, W.lachem, W.hamatana, W.mat]} y={260} radius={720} shape="flat" variant="pink" size={104} stagger={1.4} />
       <Decorations at={0.25} until={3.1} items={[
         {x: 120, y: 190, kind: 'sparkle', size: 70, delay: 0},
         {x: 960, y: 420, kind: 'star', size: 70, delay: 4, rot: 12},
@@ -578,34 +623,34 @@ export const DonutAd: React.FC = () => {
       ]} />
 
       {/* 3. המתנה המושלמת לילדי הגן */}
-      <Title text="המתנה המושלמת לילדי הגן" from={T.perfect} to={7.3} y={1560} variant="sky" size={100} anim="mask" tilt={1.5} />
-      <Decorations at={T.perfect + 0.15} until={7.25} items={[
+      <Title text="המתנה המושלמת לילדי הגן" from={T.perfect - 0.25} to={8.05} wordTimes={[W.hamushlemet - 0.12, W.hamushlemet, W.leyaldei, W.hagan]} y={1560} variant="sky" size={100} anim="mask" tilt={1.5} />
+      <Decorations at={T.perfect + 0.15} until={8.0} items={[
         {x: 95, y: 1450, kind: 'heart', size: 64, delay: 0, color: PAL.lilac},
         {x: 990, y: 1665, kind: 'sparkle', size: 64, delay: 5},
       ]} />
 
       {/* 4. ערכת הכנת סופגניות */}
-      <Title text="ערכת הכנת סופגניות 🍩" from={T.kit} to={10.42} y={1700} variant="peach" size={108} anim="stretch" tilt={-1.5} />
-      <Arrow from={T.donuts} to={10.42} />
+      <Title text="ערכת הכנת סופגניות 🍩" from={T.kit - 0.2} to={10.75} wordTimes={[W.erkat, W.hachanat, W.sufganiyot, W.sufTail]} y={1700} variant="peach" size={108} anim="stretch" tilt={-1.5} />
+      <Arrow from={T.donuts} to={10.75} />
 
       {/* 5. גם כיף וגם טעים */}
-      <ArcTitle text="גם כיף וגם טעים!" from={T.fun} to={13.0} y={170} radius={620} shape="flat" variant="mint" size={124} stagger={1.8} />
+      <ArcTitle text="גם כיף וגם טעים!" from={T.fun - 0.2} to={13.02} wordTimes={[W.gam, W.kef, W.vegam, W.taim]} y={170} radius={620} shape="flat" variant="mint" size={124} stagger={1.8} />
       <Decorations at={T.fun + 0.2} until={12.95} items={[
         {x: 130, y: 330, kind: 'candy', size: 100, delay: 0, rot: -15},
         {x: 950, y: 290, kind: 'star', size: 62, delay: 6},
       ]} />
 
       {/* 6. פעילות מתוקה עם הילדים */}
-      <Title text="פעילות מתוקה עם הילדים" from={T.kids} to={16.1} y={1690} variant="lavender" size={102} anim="rise" />
-      <Decorations at={T.kids + 0.4} until={16.05} items={[
+      <Title text="פעילות מתוקה עם הילדים" from={T.kids - 0.2} to={17.2} wordTimes={[W.biluy, (W.biluy + W.im) / 2, W.im, W.hayeladim]} y={1690} variant="lavender" size={102} anim="rise" />
+      <Decorations at={T.kids + 0.4} until={17.15} items={[
         {x: 85, y: 1545, kind: 'heart', size: 56, delay: 0},
         {x: 1000, y: 1730, kind: 'heart', size: 46, delay: 6, color: PAL.lilac},
       ]} />
 
       {/* 7. ורק... 38 ₪ */}
-      <Title text="ורק..." from={T.andOnly} to={T.price - 0.05} y={880} variant="butter" size={140} anim="type" tilt={-3} />
+      <Title text="ורק..." from={T.andOnly} to={T.price - 0.17} wordTimes={[W.verak, W.rak + 0.25]} y={880} variant="butter" size={140} anim="type" tilt={-3} />
       <PriceMoment />
-      <ArcTitle text="רק 38 ₪ למארז" from={T.price + 0.35} to={T.end + 1} y={1290} radius={700} shape="flat" variant="butter" size={120} stagger={1.6} />
+      <ArcTitle text="רק 38 ₪ למארז" from={T.price} to={T.end + 1} wordTimes={[18.6, W.ushmone, W.shkalim, W.shkalimEnd]} y={1290} radius={700} shape="flat" variant="butter" size={120} stagger={1.6} />
       <Decorations at={T.price + 0.1} until={T.end + 1} items={[
         {x: 170, y: 560, kind: 'star', size: 95, delay: 0, rot: -12},
         {x: 925, y: 610, kind: 'sparkle', size: 90, delay: 3},
