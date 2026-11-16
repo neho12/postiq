@@ -11,13 +11,17 @@ import {
 } from 'remotion';
 import {continueRender, delayRender} from 'remotion';
 
-const fontFamily = 'RubikLocal';
-if (typeof document !== 'undefined' && !(window as any).__rubikLoading) {
-  (window as any).__rubikLoading = true;
-  const handle = delayRender('Loading Rubik');
-  const face = new FontFace(fontFamily, `url(${staticFile('Rubik.ttf')})`, {weight: '300 900'});
-  face.load().then((ff) => {
-    document.fonts.add(ff);
+const FONT = 'AdumaFOT';
+const fontFamily = `${FONT}, 'Noto Color Emoji', sans-serif`;
+if (typeof document !== 'undefined' && !(window as any).__fontLoading) {
+  (window as any).__fontLoading = true;
+  const handle = delayRender('Loading Aduma FOT');
+  const faces = [
+    new FontFace(FONT, `url(${staticFile('AdumaFOT-Bold.otf')})`, {weight: '700'}),
+    new FontFace(FONT, `url(${staticFile('AdumaFOT-Heavy.otf')})`, {weight: '800 900'}),
+  ];
+  Promise.all(faces.map((ff) => ff.load())).then((loaded) => {
+    loaded.forEach((ff) => document.fonts.add(ff));
     continueRender(handle);
   });
 }
@@ -339,7 +343,7 @@ const PriceMoment: React.FC = () => {
             direction: 'rtl',
             fontFamily,
             fontWeight: 800,
-            fontSize: 86,
+            fontSize: 98,
             color: RED,
             background: CREAM,
             padding: '20px 54px 24px',
@@ -364,7 +368,7 @@ export const DonutAd: React.FC = () => {
       <Flashes />
 
       {/* 1. מצאנו תחנת המתנות */}
-      <Title text="מצאנו תחנת המתנות 🎁" from={T.found} to={3.15} y={300} variant="pink" size={78} anim="bounce" tilt={-2} />
+      <Title text="מצאנו תחנת המתנות 🎁" from={T.found} to={3.15} y={300} variant="pink" size={90} anim="bounce" tilt={-2} />
       <Decorations at={0.25} until={3.1} items={[
         {x: 120, y: 190, kind: 'sparkle', size: 70, delay: 0},
         {x: 960, y: 420, kind: 'star', size: 70, delay: 4, rot: 12},
@@ -372,25 +376,25 @@ export const DonutAd: React.FC = () => {
       ]} />
 
       {/* 3. המתנה המושלמת לילדי הגן */}
-      <Title text="המתנה המושלמת לילדי הגן" from={T.perfect} to={7.3} y={1560} variant="cream" size={70} anim="pop" tilt={1.5} />
+      <Title text="המתנה המושלמת לילדי הגן" from={T.perfect} to={7.3} y={1560} variant="cream" size={82} anim="pop" tilt={1.5} />
       <Decorations at={T.perfect + 0.15} until={7.25} items={[
         {x: 95, y: 1450, kind: 'heart', size: 64, delay: 0, color: RED},
         {x: 990, y: 1665, kind: 'sparkle', size: 64, delay: 5},
       ]} />
 
       {/* 4. ערכת הכנת סופגניות */}
-      <Title text="ערכת הכנת סופגניות 🍩" from={T.kit} to={10.42} y={1700} variant="red" size={76} anim="pop" tilt={-1.5} />
+      <Title text="ערכת הכנת סופגניות 🍩" from={T.kit} to={10.42} y={1700} variant="red" size={88} anim="pop" tilt={-1.5} />
       <Arrow from={T.donuts} to={10.42} />
 
       {/* 5. גם כיף וגם טעים */}
-      <Title text="גם כיף וגם טעים!" from={T.fun} to={13.0} y={170} variant="pink" size={92} anim="wiggle" tilt={-2} />
+      <Title text="גם כיף וגם טעים!" from={T.fun} to={13.0} y={170} variant="pink" size={104} anim="wiggle" tilt={-2} />
       <Decorations at={T.fun + 0.2} until={12.95} items={[
         {x: 140, y: 300, kind: 'candy', size: 110, delay: 0, rot: -15},
         {x: 950, y: 290, kind: 'star', size: 62, delay: 6},
       ]} />
 
       {/* 6. פעילות מתוקה עם הילדים */}
-      <Title text="פעילות מתוקה עם הילדים" from={T.kids} to={16.1} y={1690} variant="cream" size={72} anim="soft" />
+      <Title text="פעילות מתוקה עם הילדים" from={T.kids} to={16.1} y={1690} variant="cream" size={84} anim="soft" />
       <Decorations at={T.kids + 0.4} until={16.05} items={[
         {x: 85, y: 1545, kind: 'heart', size: 56, delay: 0},
         {x: 1000, y: 1730, kind: 'heart', size: 46, delay: 6, color: RED},
