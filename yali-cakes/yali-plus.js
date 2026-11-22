@@ -4,6 +4,18 @@
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
+  /* ---------- Analytics: count every "send on WhatsApp" click as a lead, with what was ordered.
+     Only the kind of request is sent (cake type, workshop, dessert table); never names or message text. ---------- */
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="https://wa.me/"]');
+    if (!a || typeof window.gtag !== 'function') return;
+    var kind = a.closest('#quote') ? 'workshop' : a.closest('#dessert-quote') ? 'dessert_table' : 'cake';
+    var cards = $$('#cakes .typecard'), on = -1;
+    cards.forEach(function (c, i) { if (c.getAttribute('aria-pressed') === 'true') on = i; });
+    var cake = kind === 'cake' ? (['torte', 'number', 'mousse', 'bento', 'garden'][on] || '') : '';
+    window.gtag('event', 'generate_lead', { lead_type: kind, cake_type: cake, page_path: location.pathname, transport_type: 'beacon' });
+  }, true);
+
   /* ---------- Top menu: a floating capsule after scrolling. On desktop it hides on the way
      down; on phones and tablets it stays, since the section links live in it. ---------- */
   var head = document.getElementById('yp-head');
