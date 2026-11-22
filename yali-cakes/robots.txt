@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://yalicakes.co.il/sitemap.xml
+Sitemap: https://www.yalicakes.co.il/sitemap.xml

@@ -5,7 +5,7 @@ import json, os, sys, html
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from articles import ARTICLES
 
-SITE = "https://yalicakes.co.il"
+SITE = "https://www.yalicakes.co.il"
 root, date = sys.argv[1], sys.argv[2]
 
 def head(prefix, title, desc, url, jsonld):
@@ -25,6 +25,12 @@ def head(prefix, title, desc, url, jsonld):
 <meta property="og:title" content="{html.escape(title)}">
 <meta property="og:description" content="{html.escape(desc)}">
 <meta property="og:url" content="{url}">
+<meta property="og:image" content="{SITE}/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="עוגת וינטג׳ ורודה של YALI CAKES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{SITE}/og-image.jpg">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
