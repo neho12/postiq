@@ -94,3 +94,9 @@ body.yp-page{margin:0;background:var(--yp-cream);color:var(--yp-ink);font-family
 .yp-lp-q{border-bottom:1px solid var(--yp-line);padding:4px 0}
 .yp-lp-q summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:600;font-size:18px;color:var(--yp-ink)}
 .yp-lp-q p{margin:0 0 16px}
+
+/* Photo grid inside articles */
+.yp-art-pics{list-style:none;margin:24px 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.yp-art-pics li{margin:0;aspect-ratio:1;border-radius:20px;overflow:hidden;background:#fff;box-shadow:0 12px 28px -18px rgba(59,42,32,.35)}
+.yp-art-pics img{width:100%;height:100%;object-fit:cover}
+@media (max-width:600px){.yp-art-pics{gap:8px}.yp-art-pics li{border-radius:14px}}
