@@ -42,7 +42,7 @@ for a in ARTICLES:
     url = f'{SITE}/tips/{a["slug"]}/'
     jsonld = {"@context": "https://schema.org", "@graph": [
         {"@type": "Article", "headline": a["title"], "description": a["description"], "inLanguage": "he",
-         "datePublished": date, "dateModified": date, "mainEntityOfPage": url,
+         "datePublished": a.get("date", date), "dateModified": a.get("date", date), "mainEntityOfPage": url,
          "author": {"@type": "Person", "name": "יהלי זיני"},
          "publisher": {"@type": "Organization", "name": "YALI CAKES", "logo": {"@type": "ImageObject", "url": SITE + "/assets/22fcc5164c177f9f147d86b8a8319b25.svg"}}},
         {"@type": "BreadcrumbList", "itemListElement": [crumb_home, crumb_tips, {"@type": "ListItem", "position": 3, "name": a["short"], "item": url}]}]}
