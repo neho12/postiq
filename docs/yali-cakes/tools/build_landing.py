@@ -16,8 +16,10 @@ def photos(spec):
     if "files" in spec:
         out = []
         for f in spec["files"]:
-            alt = by_file[f]["alt"] if f in by_file else None
-            out.append((f, alt))
+            if isinstance(f, (list, tuple)):
+                out.append((f[0], f[1]))
+            else:
+                out.append((f, by_file[f]["alt"] if f in by_file else None))
         return out
     return [(i["file"], i["alt"]) for i in gallery if i["cat"] == spec["cat"]][: spec["count"]]
 
